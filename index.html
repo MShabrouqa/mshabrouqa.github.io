@@ -23,14 +23,21 @@
 
     .btn-custom {
         width: 200px; /* Fixed width for all buttons */
-        height: 75px; /* Fixed height for all buttons */
+        height: 45px; /* Fixed height for all buttons */
         font-size: 20px; /* Font size */
     }
+    
+    .grid-container {  display: grid;  column-gap: 50px; row-gap: 20px;  grid-template-columns: auto auto auto;  padding: 10px;}
+    .grid-item {  display: grid;  gap: 20px 20px;  grid-template-columns: auto auto; padding: 5px; background-color: rgba(200, 200, 200, 0.4);  border: 1px solid rgba(0, 0, 0, 0.7);  padding: 7px;  font-size: 30px;  text-align: center;}
+    
+    
+    
 </style>
 </head>
 <body>
+<div class="grid-container">
 
-<div class="center">
+
     <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=1', this)">LED 1</button>
     <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=2', this)">LED 2</button>
     <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=3', this)">LED 3</button>
