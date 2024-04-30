@@ -10,13 +10,14 @@
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css'>
 
 <style>
+
     .center {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 110vh;
-        margin-top: 15px;
-        margin-bottom: 15px;
+        height: 70vh;
+
+
         flex-direction: column; /* Make buttons appear vertically */
         gap: 50px; /* Add some space between buttons */
     }
@@ -35,6 +36,10 @@
 </style>
 </head>
 <body>
+
+<div class="center">
+   <h2>ESP Web Server</h2>
+
 <div class="grid-container">
 
 
@@ -46,7 +51,7 @@
     <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=6', this)">LED 6</button>
     <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=7', this)">LED 7</button>
     <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=8', this)">LED 8</button>
-</div>
+</div></div></div>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
