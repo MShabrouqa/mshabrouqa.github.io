@@ -11,7 +11,7 @@
 
     .led-container {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* Three columns */
+        grid-template-columns: repeat(4, 1fr);
         gap: 10px;
         justify-content: center;
     }
@@ -92,4 +92,21 @@ function updateValue(value) {
         <button id="led1" class="led-button" onclick="updateValue(1)">LED 1</button>
         <button id="led2" class="led-button" onclick="updateValue(2)">LED 2</button>
         <button id="led3" class="led-button" onclick="updateValue(3)">LED 3</button>
-        <button 
+        <button id="led4" class="led-button" onclick="updateValue(4)">LED 4</button>
+        <button id="led5" class="led-button" onclick="updateValue(5)">LED 5</button>
+        <button id="led6" class="led-button" onclick="updateValue(6)">LED 6</button>
+        <button id="led7" class="led-button" onclick="updateValue(7)">LED 7</button>
+        <button id="led8" class="led-button" onclick="updateValue(8)">LED 8</button>
+    </div>
+    <p id="value"></p>
+    <!-- Call checkLink function every 100 milliseconds -->
+    <script>
+        setInterval(checkLink, 100);
+    </script>
+
+    <!-- Call displayValue function every 100 milliseconds -->
+    <script>
+        setInterval(displayValue, 100);
+    </script>
+</body>
+</html>
