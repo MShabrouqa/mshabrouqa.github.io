@@ -12,13 +12,15 @@
     .led-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr); /* Three columns */
-        gap: 25px; /* Increased grid gap */
+        gap: 25px;
         justify-content: center;
     }
 
     .led-button {
         color: white;
         font-weight: bold;
+        /*width: 100px; /* Fixed width */
+        /*height: 50px; /* Fixed height */
         padding: 10px;
         box-sizing: border-box;
     }
@@ -76,42 +78,35 @@ function displayValue() {
     xhttp.send();
 }
 
-function updateValue(value, buttonId) {
+function updateValue(value) {
     var xhttp = new XMLHttpRequest();
-    var button = document.getElementById(buttonId);
-
-    // Set default color while button is pressed
-    button.style.backgroundColor = "gray";
-
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            // After successful update, do nothing as displayValue() will handle color change
-        }
-    };
     xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=" + value, true);
     xhttp.send();
 }
-
-// Call checkLink function every 100 milliseconds
-setInterval(checkLink, 100);
-
-// Call displayValue function every 100 milliseconds
-setInterval(displayValue, 100);
 </script>
 </head>
 <body>
     <h1>ESP Web Server</h1>
     <p id="result"></p>
     <div class="led-container">
-        <button id="led1" class="led-button" onclick="updateValue(1, 'led1')">LED 1</button>
-        <button id="led2" class="led-button" onclick="updateValue(2, 'led2')">LED 2</button>
-        <button id="led3" class="led-button" onclick="updateValue(3, 'led3')">LED 3</button>
-        <button id="led4" class="led-button" onclick="updateValue(4, 'led4')">LED 4</button>
-        <button id="led5" class="led-button" onclick="updateValue(5, 'led5')">LED 5</button>
-        <button id="led6" class="led-button" onclick="updateValue(6, 'led6')">LED 6</button>
-        <button id="led7" class="led-button" onclick="updateValue(7, 'led7')">LED 7</button>
-        <button id="led8" class="led-button" onclick="updateValue(8, 'led8')">LED 8</button>
+        <button id="led1" class="led-button" onclick="updateValue(1)">LED 1</button>
+        <button id="led2" class="led-button" onclick="updateValue(2)">LED 2</button>
+        <button id="led3" class="led-button" onclick="updateValue(3)">LED 3</button>
+        <button id="led4" class="led-button" onclick="updateValue(4)">LED 4</button>
+        <button id="led5" class="led-button" onclick="updateValue(5)">LED 5</button>
+        <button id="led6" class="led-button" onclick="updateValue(6)">LED 6</button>
+        <button id="led7" class="led-button" onclick="updateValue(7)">LED 7</button>
+        <button id="led8" class="led-button" onclick="updateValue(8)">LED 8</button>
     </div>
     <p id="value"></p>
+    <!-- Call checkLink function every 100 milliseconds -->
+    <script>
+        setInterval(checkLink, 100);
+    </script>
+
+    <!-- Call displayValue function every 100 milliseconds -->
+    <script>
+        setInterval(displayValue, 100);
+    </script>
 </body>
 </html>
