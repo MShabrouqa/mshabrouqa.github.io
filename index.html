@@ -1,49 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MShabrouqa</title>
-
-</head>
-    
+<title>ESP Web Server</title>
 <style>
-    .center { display: flex; align-items: center; justify-content: center; height: 50vh; flex-direction: column; gap: 50px; }
+    body {
+        text-align: center;
+    }
 
-    .grid-container {  display: grid;  column-gap: 50px; row-gap: 20px;  grid-template-columns: auto auto auto;  padding: 10px;}
-    .grid-item {  display: grid;  gap: 20px 20px;  grid-template-columns: auto auto; padding: 5px; background-color: rgba(200, 200, 200, 0.4);  border: 1px solid rgba(0, 0, 0, 0.7);  padding: 7px;  font-size: 30px;  text-align: center;}
+    .led-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .led-button {
+        color: white;
+        font-weight: bold;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    #value {
+        display: none; /* Hide the value paragraph */
+    }
 </style>
-    
-<body>
-<div class="center">
-   <h2>ESP Web Server</h2>
-  
-<div class="grid-container">
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=1', this)">LED 1</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=2', this)">LED 2</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=3', this)">LED 3</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=4', this)">LED 4</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=5', this)">LED 5</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=6', this)">LED 6</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=7', this)">LED 7</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=8', this)">LED 8</button>
-</div></div></div>
-
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js'></script>
-    </body>
-    
 <script>
-function hitWebsite(url, button) { 
-    var $button = $(button);
-    $button.button('loading');
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) { $button.button('reset'); if (xhr.status === 200) {console.log(xhr.responseText);}
-            else {console.error("Error:", xhr.status);}}};
-    xhr.send();}
-</script>
+function checkLink() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                if (this.responseText === "true") {
+                    document.getElementById("result").innerText = "Device is connected.";
+                } else {
+                    document.getElementById("result").innerText = "Device is not connected.";
+                }
+            } else {
+                document.getElementById("result").innerText = "Error: Unable to connect to the device.";
+            }
+        }
+    };
+    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/isHardwareConnected?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10", true);
+    xhttp.send();
+}
 
+function displayValue() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText !== "0" && this.responseText !== "1") {
+                document.getElementById("value").innerText = "Value: " + this.responseText;
+
+                // Iterate through each character in the response text
+                for (var i = 0; i < this.responseText.length; i++) {
+                    var digit = this.responseText.charAt(i);
+                    var buttonId = "led" + (i + 1); // ID of the LED button
+                    var button = document.getElementById(buttonId);
+
+                    // Set background color based on digit value
+                    if (digit === "0") {
+                        button.style.backgroundColor = "green";
+                    } else if (digit === "1") {
+                        button.style.backgroundColor = "red";
+                    } else {
+                        button.style.backgroundColor = ""; // Reset color if neither 0 nor 1
+                    }
+                }
+            }
+        }
+    };
+    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/get?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v2", true);
+    xhttp.send();
+}
+
+function updateValue(value) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=" + value, true);
+    xhttp.send();
+}
+</script>
+</head>
+<body>
+    <h1>ESP Web Server</h1>
+    <p id="result"></p>
+    <div class="led-container">
+        <button id="led1" class="led-button" onclick="updateValue(1)">LED 1</button>
+        <button id="led2" class="led-button" onclick="updateValue(2)">LED 2</button>
+        <button id="led3" class="led-button" onclick="updateValue(3)">LED 3</button>
+        <button id="led4" class="led-button" onclick="updateValue(4)">LED 4</button>
+        <button id="led5" class="led-button" onclick="updateValue(5)">LED 5</button>
+        <button id="led6" class="led-button" onclick="updateValue(6)">LED 6</button>
+        <button id="led7" class="led-button" onclick="updateValue(7)">LED 7</button>
+        <button id="led8" class="led-button" onclick="updateValue(8)">LED 8</button>
+    </div>
+    <p id="value"></p>
+    <!-- Call checkLink function every 100 milliseconds -->
+    <script>
+        setInterval(checkLink, 250);
+    </script>
+
+    <!-- Call displayValue function every 100 milliseconds -->
+    <script>
+        setInterval(displayValue, 250);
+    </script>
+</body>
 </html>
