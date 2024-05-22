@@ -11,7 +11,7 @@
 
     .led-container {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
         justify-content: center;
     }
@@ -19,7 +19,8 @@
     .led-button {
         color: white;
         font-weight: bold;
-        width: 100%;
+        width: 100px; /* Fixed width */
+        height: 50px; /* Fixed height */
         padding: 10px;
         box-sizing: border-box;
     }
@@ -100,12 +101,12 @@ function updateValue(value) {
     <p id="value"></p>
     <!-- Call checkLink function every 100 milliseconds -->
     <script>
-        setInterval(checkLink, 250);
+        setInterval(checkLink, 100);
     </script>
 
     <!-- Call displayValue function every 100 milliseconds -->
     <script>
-        setInterval(displayValue, 250);
+        setInterval(displayValue, 100);
     </script>
 </body>
 </html>
