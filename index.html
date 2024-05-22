@@ -29,6 +29,8 @@
 </style>
 <script>
 // Define the token variable
+
+var server = "sgp1";
 var token = "N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10";
 
 function checkLink() {
@@ -47,7 +49,7 @@ function checkLink() {
         }
     };
     // Use the token variable here
-    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
     xhttp.send();
 }
 
@@ -75,14 +77,14 @@ function displayValue() {
         }
     };
     // Use the token variable here
-    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/get?token=" + token + "&v2", true);
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
     xhttp.send();
 }
 
 function updateValue(value) {
     var xhttp = new XMLHttpRequest();
     // Use the token variable here
-    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/update?token=" + token + "&v1=" + value, true);
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value, true);
     xhttp.send();
 }
 </script>
