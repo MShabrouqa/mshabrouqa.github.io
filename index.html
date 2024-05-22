@@ -19,17 +19,18 @@
     .led-button {
         color: white;
         font-weight: bold;
-        /*width: 100px; /* Fixed width */
-        /*height: 50px; /* Fixed height */
         padding: 15px;
         box-sizing: border-box;
     }
 
     #value {
-        display: none; /* Hide the value paragraph */
+        display: none;
     }
 </style>
 <script>
+// Define the token variable
+var token = "N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10";
+
 function checkLink() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -45,7 +46,8 @@ function checkLink() {
             }
         }
     };
-    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/isHardwareConnected?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10", true);
+    // Use the token variable here
+    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
     xhttp.send();
 }
 
@@ -56,31 +58,31 @@ function displayValue() {
             if (this.responseText !== "0" && this.responseText !== "1") {
                 document.getElementById("value").innerText = "Value: " + this.responseText;
 
-                // Iterate through each character in the response text
                 for (var i = 0; i < this.responseText.length; i++) {
                     var digit = this.responseText.charAt(i);
-                    var buttonId = "led" + (i + 1); // ID of the LED button
+                    var buttonId = "led" + (i + 1);
                     var button = document.getElementById(buttonId);
 
-                    // Set background color based on digit value
                     if (digit === "0") {
                         button.style.backgroundColor = "green";
                     } else if (digit === "1") {
                         button.style.backgroundColor = "red";
                     } else {
-                        button.style.backgroundColor = ""; // Reset color if neither 0 nor 1
+                        button.style.backgroundColor = "";
                     }
                 }
             }
         }
     };
-    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/get?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v2", true);
+    // Use the token variable here
+    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/get?token=" + token + "&v2", true);
     xhttp.send();
 }
 
 function updateValue(value) {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/update?token=N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10&v1=" + value, true);
+    // Use the token variable here
+    xhttp.open("GET", "https://sgp1.blynk.cloud/external/api/update?token=" + token + "&v1=" + value, true);
     xhttp.send();
 }
 </script>
@@ -107,12 +109,9 @@ function updateValue(value) {
         <button id="led16" class="led-button" onclick="updateValue(16)">LED 16</button>
     </div>
     <p id="value"></p>
-    <!-- Call checkLink function every 100 milliseconds -->
     <script>
         setInterval(checkLink, 200);
     </script>
-
-    <!-- Call displayValue function every 100 milliseconds -->
     <script>
         setInterval(displayValue, 200);
     </script>
