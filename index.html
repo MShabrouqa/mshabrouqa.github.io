@@ -21,6 +21,7 @@
         font-weight: bold;
         padding: 15px;
         box-sizing: border-box;
+        display: none; /* Initially hide all buttons */
     }
 
     #value {
@@ -106,12 +107,54 @@ function hitWebsite(url, buttonId) {
     };
     xhr.send();
 }
+
+function checkArraySize() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var arraySize = parseInt(this.responseText);
+            // Show buttons based on array size
+            if (arraySize >= 8) {
+                for (var i = 1; i <= 8; i++) {
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }
+            }
+            if (arraySize >= 16) {
+                for (var i = 9; i <= 16; i++) {
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }
+            }
+            if (arraySize >= 24) {
+                for (var i = 17; i <= 24; i++) {
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }
+            }
+            if (arraySize >= 32) {
+                for (var i = 25; i <= 32; i++) {
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }
+            }
+            if (arraySize >= 40) {
+                for (var i = 33; i <= 40; i++) {
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }
+            }
+        }
+    };
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
+    xhttp.send();
+}
+
+setInterval(checkLink, 150);
+setInterval(displayValue, 150);
+setInterval(checkArraySize, 150);
 </script>
 </head>
 <body>
     <h1>ESP Web Server</h1>
     <p id="result"></p>
     <div class="led-container">
+        <!-- Buttons from 1 to 8 initially hidden -->
         <button id="led1" class="led-button" onclick="updateValue(1, this.id)">LED 1</button>
         <button id="led2" class="led-button" onclick="updateValue(2, this.id)">LED 2</button>
         <button id="led3" class="led-button" onclick="updateValue(3, this.id)">LED 3</button>
@@ -120,6 +163,8 @@ function hitWebsite(url, buttonId) {
         <button id="led6" class="led-button" onclick="updateValue(6, this.id)">LED 6</button>
         <button id="led7" class="led-button" onclick="updateValue(7, this.id)">LED 7</button>
         <button id="led8" class="led-button" onclick="updateValue(8, this.id)">LED 8</button>
+        
+        <!-- Buttons from 9 to 16 initially hidden -->
         <button id="led9" class="led-button" onclick="updateValue(9, this.id)">LED 9</button>
         <button id="led10" class="led-button" onclick="updateValue(10, this.id)">LED 10</button>
         <button id="led11" class="led-button" onclick="updateValue(11, this.id)">LED 11</button>
@@ -128,11 +173,37 @@ function hitWebsite(url, buttonId) {
         <button id="led14" class="led-button" onclick="updateValue(14, this.id)">LED 14</button>
         <button id="led15" class="led-button" onclick="updateValue(15, this.id)">LED 15</button>
         <button id="led16" class="led-button" onclick="updateValue(16, this.id)">LED 16</button>
+        
+        <!-- Buttons from 17 to 24 initially hidden -->
+        <button id="led17" class="led-button" onclick="updateValue(17, this.id)">LED 17</button>
+        <button id="led18" class="led-button" onclick="updateValue(18, this.id)">LED 18</button>
+        <button id="led19" class="led-button" onclick="updateValue(19, this.id)">LED 19</button>
+        <button id="led20" class="led-button" onclick="updateValue(20, this.id)">LED 20</button>
+        <button id="led21" class="led-button" onclick="updateValue(21, this.id)">LED 21</button>
+        <button id="led22" class="led-button" onclick="updateValue(22, this.id)">LED 22</button>
+        <button id="led23" class="led-button" onclick="updateValue(23, this.id)">LED 23</button>
+        <button id="led24" class="led-button" onclick="updateValue(24, this.id)">LED 24</button>
+        
+        <!-- Buttons from 25 to 32 initially hidden -->
+        <button id="led25" class="led-button" onclick="updateValue(25, this.id)">LED 25</button>
+        <button id="led26" class="led-button" onclick="updateValue(26, this.id)">LED 26</button>
+        <button id="led27" class="led-button" onclick="updateValue(27, this.id)">LED 27</button>
+        <button id="led28" class="led-button" onclick="updateValue(28, this.id)">LED 28</button>
+        <button id="led29" class="led-button" onclick="updateValue(29, this.id)">LED 29</button>
+        <button id="led30" class="led-button" onclick="updateValue(30, this.id)">LED 30</button>
+        <button id="led31" class="led-button" onclick="updateValue(31, this.id)">LED 31</button>
+        <button id="led32" class="led-button" onclick="updateValue(32, this.id)">LED 32</button>
+        
+        <!-- Buttons from 33 to 40 initially hidden -->
+        <button id="led33" class="led-button" onclick="updateValue(33, this.id)">LED 33</button>
+        <button id="led34" class="led-button" onclick="updateValue(34, this.id)">LED 34</button>
+        <button id="led35" class="led-button" onclick="updateValue(35, this.id)">LED 35</button>
+        <button id="led36" class="led-button" onclick="updateValue(36, this.id)">LED 36</button>
+        <button id="led37" class="led-button" onclick="updateValue(37, this.id)">LED 37</button>
+        <button id="led38" class="led-button" onclick="updateValue(38, this.id)">LED 38</button>
+        <button id="led39" class="led-button" onclick="updateValue(39, this.id)">LED 39</button>
+        <button id="led40" class="led-button" onclick="updateValue(40, this.id)">LED 40</button>
     </div>
     <p id="value"></p>
-    <script>
-        setInterval(checkLink, 150);
-        setInterval(displayValue, 150);
-    </script>
 </body>
 </html>
