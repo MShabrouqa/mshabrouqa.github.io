@@ -81,11 +81,30 @@ function displayValue() {
     xhttp.send();
 }
 
-function updateValue(value) {
-    var xhttp = new XMLHttpRequest();
-    // Use the token variable here
-    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value, true);
-    xhttp.send();
+function updateValue(value, buttonId) {
+    var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
+    hitWebsite(url, buttonId);
+}
+
+function hitWebsite(url, buttonId) {
+    var button = document.getElementById(buttonId);
+    button.innerText = "Loading...";
+    button.disabled = true;
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            button.innerText = "LED " + buttonId.slice(3); // Restore button text
+            button.disabled = false;
+            if (xhr.status === 200) {
+                console.log(xhr.responseText); // Response from the website
+            } else {
+                console.error("Error:", xhr.status);
+            }
+        }
+    };
+    xhr.send();
 }
 </script>
 </head>
@@ -93,29 +112,27 @@ function updateValue(value) {
     <h1>ESP Web Server</h1>
     <p id="result"></p>
     <div class="led-container">
-        <button id="led1" class="led-button" onclick="updateValue(1)">LED 1</button>
-        <button id="led2" class="led-button" onclick="updateValue(2)">LED 2</button>
-        <button id="led3" class="led-button" onclick="updateValue(3)">LED 3</button>
-        <button id="led4" class="led-button" onclick="updateValue(4)">LED 4</button>
-        <button id="led5" class="led-button" onclick="updateValue(5)">LED 5</button>
-        <button id="led6" class="led-button" onclick="updateValue(6)">LED 6</button>
-        <button id="led7" class="led-button" onclick="updateValue(7)">LED 7</button>
-        <button id="led8" class="led-button" onclick="updateValue(8)">LED 8</button>
-        <button id="led9" class="led-button" onclick="updateValue(9)">LED 9</button>
-        <button id="led10" class="led-button" onclick="updateValue(10)">LED 10</button>
-        <button id="led11" class="led-button" onclick="updateValue(11)">LED 11</button>
-        <button id="led12" class="led-button" onclick="updateValue(12)">LED 12</button>
-        <button id="led13" class="led-button" onclick="updateValue(13)">LED 13</button>
-        <button id="led14" class="led-button" onclick="updateValue(14)">LED 14</button>
-        <button id="led15" class="led-button" onclick="updateValue(15)">LED 15</button>
-        <button id="led16" class="led-button" onclick="updateValue(16)">LED 16</button>
+        <button id="led1" class="led-button" onclick="updateValue(1, this.id)">LED 1</button>
+        <button id="led2" class="led-button" onclick="updateValue(2, this.id)">LED 2</button>
+        <button id="led3" class="led-button" onclick="updateValue(3, this.id)">LED 3</button>
+        <button id="led4" class="led-button" onclick="updateValue(4, this.id)">LED 4</button>
+        <button id="led5" class="led-button" onclick="updateValue(5, this.id)">LED 5</button>
+        <button id="led6" class="led-button" onclick="updateValue(6, this.id)">LED 6</button>
+        <button id="led7" class="led-button" onclick="updateValue(7, this.id)">LED 7</button>
+        <button id="led8" class="led-button" onclick="updateValue(8, this.id)">LED 8</button>
+        <button id="led9" class="led-button" onclick="updateValue(9, this.id)">LED 9</button>
+        <button id="led10" class="led-button" onclick="updateValue(10, this.id)">LED 10</button>
+        <button id="led11" class="led-button" onclick="updateValue(11, this.id)">LED 11</button>
+        <button id="led12" class="led-button" onclick="updateValue(12, this.id)">LED 12</button>
+        <button id="led13" class="led-button" onclick="updateValue(13, this.id)">LED 13</button>
+        <button id="led14" class="led-button" onclick="updateValue(14, this.id)">LED 14</button>
+        <button id="led15" class="led-button" onclick="updateValue(15, this.id)">LED 15</button>
+        <button id="led16" class="led-button" onclick="updateValue(16, this.id)">LED 16</button>
     </div>
     <p id="value"></p>
     <script>
-        setInterval(checkLink, 200);
-    </script>
-    <script>
-        setInterval(displayValue, 200);
+        setInterval(checkLink, 150);
+        setInterval(displayValue, 150);
     </script>
 </body>
 </html>
