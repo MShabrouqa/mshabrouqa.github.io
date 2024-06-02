@@ -117,8 +117,13 @@ function checkArraySize() {
         if (this.readyState == 4 && this.status == 200) {
             var arraySize = parseInt(this.responseText);
             // Show buttons based on array size
-            if (arraySize >= 8) {
-                for (var i = 1; i <= 8; i++) {
+            if (arraySize >= 3) {
+                for (var i = 1; i <= 3; i++) {
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }
+            }
+           if (arraySize >= 8) {
+                for (var i = 4; i <= 8; i++) {
                     document.getElementById("led" + i).style.display = "inline-block";
                 }
             }
