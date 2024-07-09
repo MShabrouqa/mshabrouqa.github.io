@@ -32,10 +32,31 @@
     }
 </style>
 <script>
-// Define the token variable
-
 var server = "sgp1";
-var token = "N5Ra0zsS6__J5zkjuf0pljWaBH0ZGb10";
+var token = ""; // Initialize token variable
+
+// Function to set the token and remember it if checkbox is checked
+function setToken() {
+    token = document.getElementById("tokenInput").value;
+    console.log("Token updated to: " + token);
+    
+    // Check if the remember checkbox is checked
+    var rememberCheckbox = document.getElementById("rememberCheckbox");
+    if (rememberCheckbox.checked) {
+        // Save token to localStorage
+        localStorage.setItem("savedToken", token);
+    }
+}
+
+// Function to load saved token from localStorage if available
+function loadSavedToken() {
+    var savedToken = localStorage.getItem("savedToken");
+    if (savedToken) {
+        token = savedToken;
+        document.getElementById("tokenInput").value = token;
+        console.log("Loaded saved token: " + token);
+    }
+}
 
 function checkLink() {
     var xhttp = new XMLHttpRequest();
@@ -153,9 +174,13 @@ function checkArraySize() {
     xhttp.send();
 }
 
-setInterval(checkLink, 150);
-setInterval(displayValue, 150);
-setInterval(checkArraySize, 150);
+// Load saved token when the page loads
+window.onload = function() {
+    loadSavedToken();
+    setInterval(checkLink, 150);
+    setInterval(displayValue, 150);
+    setInterval(checkArraySize, 150);
+};
 </script>
 </head>
 <body>
@@ -213,5 +238,52 @@ setInterval(checkArraySize, 150);
         <button id="led40" class="led-button" onclick="updateValue(40, this.id)">LED 40</button>
     </div>
     <p id="value"></p>
+    
+    <!-- Input for dynamic token -->
+    <div>
+        <br><br>
+        <input type="text" id="tokenInput" placeholder="Enter Token">
+        <button onclick="setToken()">Set Token</button>
+        <br>
+        <label><input type="checkbox" id="rememberCheckbox"> Remember Token</label>
+    </div>
+
+    <script>
+        // Load saved token when the page loads
+        window.onload = function() {
+            loadSavedToken();
+            setInterval(checkLink, 150);
+            setInterval(displayValue, 150);
+            setInterval(checkArraySize, 150);
+        };
+
+        // Function to set the token and remember it if checkbox is checked
+        function setToken() {
+            token = document.getElementById("tokenInput").value;
+            console.log("Token updated to: " + token);
+            
+            // Check if the remember checkbox is checked
+            var rememberCheckbox = document.getElementById("rememberCheckbox");
+            if (rememberCheckbox.checked) {
+                // Save token to localStorage
+                localStorage.setItem("savedToken", token);
+            } else {
+                // Clear saved token if checkbox is unchecked
+                localStorage.removeItem("savedToken");
+            }
+        }
+
+        // Function to load saved token from localStorage if available
+        function loadSavedToken() {
+            var savedToken = localStorage.getItem("savedToken");
+            if (savedToken) {
+                token = savedToken;
+                document.getElementById("tokenInput").value = token;
+                console.log("Loaded saved token: " + token);
+                // Check the remember checkbox
+                document.getElementById("rememberCheckbox").checked = true;
+            }
+        }
+    </script>
 </body>
 </html>
