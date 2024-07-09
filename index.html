@@ -33,30 +33,7 @@
 </style>
 <script>
 var server = "sgp1";
-var token = ""; // Initialize token variable
-
-// Function to set the token and remember it if checkbox is checked
-function setToken() {
-    token = document.getElementById("tokenInput").value;
-    console.log("Token updated to: " + token);
-    
-    // Check if the remember checkbox is checked
-    var rememberCheckbox = document.getElementById("rememberCheckbox");
-    if (rememberCheckbox.checked) {
-        // Save token to localStorage
-        localStorage.setItem("savedToken", token);
-    }
-}
-
-// Function to load saved token from localStorage if available
-function loadSavedToken() {
-    var savedToken = localStorage.getItem("savedToken");
-    if (savedToken) {
-        token = savedToken;
-        document.getElementById("tokenInput").value = token;
-        console.log("Loaded saved token: " + token);
-    }
-}
+var token = localStorage.getItem("token") || ""; // Use stored token or default
 
 function checkLink() {
     var xhttp = new XMLHttpRequest();
@@ -174,18 +151,29 @@ function checkArraySize() {
     xhttp.send();
 }
 
-// Load saved token when the page loads
-window.onload = function() {
-    loadSavedToken();
-    setInterval(checkLink, 150);
-    setInterval(displayValue, 150);
-    setInterval(checkArraySize, 150);
-};
+function setToken() {
+    var newToken = prompt("Enter new token :", token);
+    if (newToken !== null && newToken.length <= 32) {
+        token = newToken;
+        localStorage.setItem("token", token); // Store token in localStorage
+        // Optionally, update existing API calls with the new token
+        checkLink();
+        displayValue();
+        checkArraySize();
+    } else {
+        alert("Token must be less than or equal to 32 characters.");
+    }
+}
+
+setInterval(checkLink, 150);
+setInterval(displayValue, 150);
+setInterval(checkArraySize, 150);
 </script>
 </head>
 <body>
     <h1>ESP Web Server</h1>
     <p id="result"></p>
+
     <div class="led-container">
         <!-- Buttons from 1 to 8 initially hidden -->
         <button id="led1" class="led-button" onclick="updateValue(1, this.id)">LED 1</button>
@@ -237,53 +225,11 @@ window.onload = function() {
         <button id="led39" class="led-button" onclick="updateValue(39, this.id)">LED 39</button>
         <button id="led40" class="led-button" onclick="updateValue(40, this.id)">LED 40</button>
     </div>
-    <p id="value"></p>
+    <br><br>
     
-    <!-- Input for dynamic token -->
-    <div>
-        <br><br>
-        <input type="text" id="tokenInput" placeholder="Enter Token" maxlength="32" >
         <button onclick="setToken()">Set Token</button>
-        <br>
-        <label><input type="checkbox" id="rememberCheckbox"> Remember Token</label>
-    </div>
-
-    <script>
-        // Load saved token when the page loads
-        window.onload = function() {
-            loadSavedToken();
-            setInterval(checkLink, 150);
-            setInterval(displayValue, 150);
-            setInterval(checkArraySize, 150);
-        };
-
-        // Function to set the token and remember it if checkbox is checked
-        function setToken() {
-            token = document.getElementById("tokenInput").value;
-            console.log("Token updated to: " + token);
-            
-            // Check if the remember checkbox is checked
-            var rememberCheckbox = document.getElementById("rememberCheckbox");
-            if (rememberCheckbox.checked) {
-                // Save token to localStorage
-                localStorage.setItem("savedToken", token);
-            } else {
-                // Clear saved token if checkbox is unchecked
-                localStorage.removeItem("savedToken");
-            }
-        }
-
-        // Function to load saved token from localStorage if available
-        function loadSavedToken() {
-            var savedToken = localStorage.getItem("savedToken");
-            if (savedToken) {
-                token = savedToken;
-                document.getElementById("tokenInput").value = token;
-                console.log("Loaded saved token: " + token);
-                // Check the remember checkbox
-                document.getElementById("rememberCheckbox").checked = true;
-            }
-        }
-    </script>
+        
+        
+    <p id="value"></p>
 </body>
 </html>
