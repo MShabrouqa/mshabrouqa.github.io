@@ -163,104 +163,7 @@ function setToken() {
     } 
 }
 
-function fetchDataAndExtractVariables() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var responseText = this.responseText;
-            // Example extraction logic, modify as per your data format
-            var startIndex = responseText.indexOf("Sw1=");
-            var Sw1 = responseText.substring(startIndex + 4, endIndex);
 
-            startIndex = responseText.indexOf("&Sw2=");
-            var Sw2 = responseText.substring(startIndex + 5, endIndex);
-
-            startIndex = responseText.indexOf("&Sw3=");
-            var Sw3 = responseText.substring(startIndex + 6, endIndex);
-
-            // Update the button text for LED 1 with Sw1 value
-            document.getElementById("led1").innerText = Sw1;
-            document.getElementById("led2").innerText = Sw2;
-            document.getElementById("led3").innerText = Sw3;
-
-            // Now you have Sw1, Sw2, and Sw3 variables populated with data
-            console.log("Sw1:", Sw1);
-            console.log("Sw2:", Sw2);
-            console.log("Sw3:", Sw3);
-        }
-    };
-    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
-    xhttp.send();
-}
-
-setInterval(checkLink, 150);
-setInterval(displayValue, 150);
-setInterval(checkArraySize, 150);
-</script>
-</head>
-<body>
-    <h1>ESP Web Server</h1>
-    <p id="result"></p>
-
-    <div class="led-container">
-        <!-- Buttons from 1 to 8 initially hidden -->
-        <button id="led1" class="led-button" onclick="updateValue(1, this.id)">Button 1</button>
-        <button id="led2" class="led-button" onclick="updateValue(2, this.id)">Button 2</button>
-        <button id="led3" class="led-button" onclick="updateValue(3, this.id)">Button 3</button>
-        <button id="led4" class="led-button" onclick="updateValue(4, this.id)">Button 4</button>
-        <button id="led5" class="led-button" onclick="updateValue(5, this.id)">Button 5</button>
-        <button id="led6" class="led-button" onclick="updateValue(6, this.id)">Button 6</button>
-        <button id="led7" class="led-button" onclick="updateValue(7, this.id)">Button 7</button>
-        <button id="led8" class="led-button" onclick="updateValue(8, this.id)">Button 8</button>
-        
-        <!-- Buttons from 9 to 16 initially hidden -->
-        <button id="led9" class="led-button" onclick="updateValue(9, this.id)">Button 9</button>
-        <button id="led10" class="led-button" onclick="updateValue(10, this.id)">Button 10</button>
-        <button id="led11" class="led-button" onclick="updateValue(11, this.id)">Button 11</button>
-        <button id="led12" class="led-button" onclick="updateValue(12, this.id)">Button 12</button>
-        <button id="led13" class="led-button" onclick="updateValue(13, this.id)">Button 13</button>
-        <button id="led14" class="led-button" onclick="updateValue(14, this.id)">Button 14</button>
-        <button id="led15" class="led-button" onclick="updateValue(15, this.id)">Button 15</button>
-        <button id="led16" class="led-button" onclick="updateValue(16, this.id)">Button 16</button>
-        
-        <!-- Buttons from 17 to 24 initially hidden -->
-        <button id="led17" class="led-button" onclick="updateValue(17, this.id)">Button 17</button>
-        <button id="led18" class="led-button" onclick="updateValue(18, this.id)">Button 18</button>
-        <button id="led19" class="led-button" onclick="updateValue(19, this.id)">Button 19</button>
-        <button id="led20" class="led-button" onclick="updateValue(20, this.id)">Button 20</button>
-        <button id="led21" class="led-button" onclick="updateValue(21, this.id)">Button 21</button>
-        <button id="led22" class="led-button" onclick="updateValue(22, this.id)">Button 22</button>
-        <button id="led23" class="led-button" onclick="updateValue(23, this.id)">Button 23</button>
-        <button id="led24" class="led-button" onclick="updateValue(24, this.id)">Button 24</button>
-        
-        <!-- Buttons from 25 to 32 initially hidden -->
-        <button id="led25" class="led-button" onclick="updateValue(25, this.id)">Button 25</button>
-        <button id="led26" class="led-button" onclick="updateValue(26, this.id)">Button 26</button>
-        <button id="led27" class="led-button" onclick="updateValue(27, this.id)">Button 27</button>
-        <button id="led28" class="led-button" onclick="updateValue(28, this.id)">Button 28</button>
-        <button id="led29" class="led-button" onclick="updateValue(29, this.id)">Button 29</button>
-        <button id="led30" class="led-button" onclick="updateValue(30, this.id)">Button 30</button>
-        <button id="led31" class="led-button" onclick="updateValue(31, this.id)">Button 31</button>
-        <button id="led32" class="led-button" onclick="updateValue(32, this.id)">Button 32</button>
-        
-        <!-- Buttons from 33 to 40 initially hidden -->
-        <button id="led33" class="led-button" onclick="updateValue(33, this.id)">Button 33</button>
-        <button id="led34" class="led-button" onclick="updateValue(34, this.id)">Button 34</button>
-        <button id="led35" class="led-button" onclick="updateValue(35, this.id)">Button 35</button>
-        <button id="led36" class="led-button" onclick="updateValue(36, this.id)">Button 36</button>
-        <button id="led37" class="led-button" onclick="updateValue(37, this.id)">Button 37</button>
-        <button id="led38" class="led-button" onclick="updateValue(38, this.id)">Button 38</button>
-        <button id="led39" class="led-button" onclick="updateValue(39, this.id)">Button 39</button>
-        <button id="led40" class="led-button" onclick="updateValue(40, this.id)">Button 40</button>
-    </div>
-    <br><br>
-    
-    <button onclick="setToken()">Set Token</button>
-    
-    <p id="value"></p>
-
-    <script>
-        // Function to fetch data from v4 endpoint and extract variables
         function fetchDataAndExtractVariables() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -503,6 +406,71 @@ setInterval(checkArraySize, 150);
         // Call the function at regular intervals
         setInterval(fetchDataAndExtractVariables, 150);
         setInterval(fetchDataAndExtractVariables2, 150);
-    </script>
+        setInterval(checkLink, 150);
+		setInterval(displayValue, 150);
+		setInterval(checkArraySize, 150);
+</script>
+</head>
+<body>
+    <h1>ESP Web Server</h1>
+    <p id="result"></p>
+
+    <div class="led-container">
+        <!-- Buttons from 1 to 8 initially hidden -->
+        <button id="led1" class="led-button" onclick="updateValue(1, this.id)">Button 1</button>
+        <button id="led2" class="led-button" onclick="updateValue(2, this.id)">Button 2</button>
+        <button id="led3" class="led-button" onclick="updateValue(3, this.id)">Button 3</button>
+        <button id="led4" class="led-button" onclick="updateValue(4, this.id)">Button 4</button>
+        <button id="led5" class="led-button" onclick="updateValue(5, this.id)">Button 5</button>
+        <button id="led6" class="led-button" onclick="updateValue(6, this.id)">Button 6</button>
+        <button id="led7" class="led-button" onclick="updateValue(7, this.id)">Button 7</button>
+        <button id="led8" class="led-button" onclick="updateValue(8, this.id)">Button 8</button>
+        
+        <!-- Buttons from 9 to 16 initially hidden -->
+        <button id="led9" class="led-button" onclick="updateValue(9, this.id)">Button 9</button>
+        <button id="led10" class="led-button" onclick="updateValue(10, this.id)">Button 10</button>
+        <button id="led11" class="led-button" onclick="updateValue(11, this.id)">Button 11</button>
+        <button id="led12" class="led-button" onclick="updateValue(12, this.id)">Button 12</button>
+        <button id="led13" class="led-button" onclick="updateValue(13, this.id)">Button 13</button>
+        <button id="led14" class="led-button" onclick="updateValue(14, this.id)">Button 14</button>
+        <button id="led15" class="led-button" onclick="updateValue(15, this.id)">Button 15</button>
+        <button id="led16" class="led-button" onclick="updateValue(16, this.id)">Button 16</button>
+        
+        <!-- Buttons from 17 to 24 initially hidden -->
+        <button id="led17" class="led-button" onclick="updateValue(17, this.id)">Button 17</button>
+        <button id="led18" class="led-button" onclick="updateValue(18, this.id)">Button 18</button>
+        <button id="led19" class="led-button" onclick="updateValue(19, this.id)">Button 19</button>
+        <button id="led20" class="led-button" onclick="updateValue(20, this.id)">Button 20</button>
+        <button id="led21" class="led-button" onclick="updateValue(21, this.id)">Button 21</button>
+        <button id="led22" class="led-button" onclick="updateValue(22, this.id)">Button 22</button>
+        <button id="led23" class="led-button" onclick="updateValue(23, this.id)">Button 23</button>
+        <button id="led24" class="led-button" onclick="updateValue(24, this.id)">Button 24</button>
+        
+        <!-- Buttons from 25 to 32 initially hidden -->
+        <button id="led25" class="led-button" onclick="updateValue(25, this.id)">Button 25</button>
+        <button id="led26" class="led-button" onclick="updateValue(26, this.id)">Button 26</button>
+        <button id="led27" class="led-button" onclick="updateValue(27, this.id)">Button 27</button>
+        <button id="led28" class="led-button" onclick="updateValue(28, this.id)">Button 28</button>
+        <button id="led29" class="led-button" onclick="updateValue(29, this.id)">Button 29</button>
+        <button id="led30" class="led-button" onclick="updateValue(30, this.id)">Button 30</button>
+        <button id="led31" class="led-button" onclick="updateValue(31, this.id)">Button 31</button>
+        <button id="led32" class="led-button" onclick="updateValue(32, this.id)">Button 32</button>
+        
+        <!-- Buttons from 33 to 40 initially hidden -->
+        <button id="led33" class="led-button" onclick="updateValue(33, this.id)">Button 33</button>
+        <button id="led34" class="led-button" onclick="updateValue(34, this.id)">Button 34</button>
+        <button id="led35" class="led-button" onclick="updateValue(35, this.id)">Button 35</button>
+        <button id="led36" class="led-button" onclick="updateValue(36, this.id)">Button 36</button>
+        <button id="led37" class="led-button" onclick="updateValue(37, this.id)">Button 37</button>
+        <button id="led38" class="led-button" onclick="updateValue(38, this.id)">Button 38</button>
+        <button id="led39" class="led-button" onclick="updateValue(39, this.id)">Button 39</button>
+        <button id="led40" class="led-button" onclick="updateValue(40, this.id)">Button 40</button>
+    </div>
+    <br><br>
+    
+    <button onclick="setToken()">Set Token</button>
+    
+    <p id="value"></p>
+
 </body>
 </html>
