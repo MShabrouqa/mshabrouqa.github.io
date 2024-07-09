@@ -305,99 +305,33 @@ setInterval(checkArraySize, 150);
                     
                     startIndex = responseText.indexOf("&Sw10=");
                     endIndex = responseText.indexOf("&Sw11=");
-                    var Sw10 = responseText.substring(startIndex + 5, endIndex);
+                    var Sw10 = responseText.substring(startIndex + 6, endIndex);
                     
                     startIndex = responseText.indexOf("&Sw11=");
                     endIndex = responseText.indexOf("&Sw12=");
-                    var Sw11 = responseText.substring(startIndex + 5, endIndex);
+                    var Sw11 = responseText.substring(startIndex + 6, endIndex);
                     
                     startIndex = responseText.indexOf("&Sw12=");
                     endIndex = responseText.indexOf("&Sw13=");
-                    var Sw12 = responseText.substring(startIndex + 5, endIndex);
+                    var Sw12 = responseText.substring(startIndex + 6, endIndex);
                     
                     startIndex = responseText.indexOf("&Sw13=");
                     endIndex = responseText.indexOf("&Sw14=");
-                    var Sw13 = responseText.substring(startIndex + 5, endIndex);
+                    var Sw13 = responseText.substring(startIndex + 6, endIndex);
                     
                     startIndex = responseText.indexOf("&Sw14=");
                     endIndex = responseText.indexOf("&Sw15=");
-                    var Sw14 = responseText.substring(startIndex + 5, endIndex);
+                    var Sw14 = responseText.substring(startIndex + 6, endIndex);
                     
                     startIndex = responseText.indexOf("&Sw15=");
                     endIndex = responseText.indexOf("&Sw16=");
-                    var Sw15 = responseText.substring(startIndex + 5, endIndex);
+                    var Sw15 = responseText.substring(startIndex + 6, endIndex);
                     
                     startIndex = responseText.indexOf("&Sw16=");
-                    endIndex = responseText.indexOf("&Sw17=");
-                    var Sw16 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw17=");
-                    endIndex = responseText.indexOf("&Sw18=");
-                    var Sw17 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw18=");
-                    endIndex = responseText.indexOf("&Sw19=");
-                    var Sw18 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw19=");
-                    endIndex = responseText.indexOf("&Sw20=");
-                    var Sw19 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw20=");
-                    endIndex = responseText.indexOf("&Sw21=");
-                    var Sw20 = responseText.substring(startIndex + 5, endIndex);
-
-                    startIndex = responseText.indexOf("&Sw21=");
-                    endIndex = responseText.indexOf("&Sw22=");
-                    var Sw21 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw22=");
-                    endIndex = responseText.indexOf("&Sw23=");
-                    var Sw22 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw23=");
-                    endIndex = responseText.indexOf("&Sw24=");
-                    var Sw23 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw24=");
-                    endIndex = responseText.indexOf("&Sw25=");
-                    var Sw24 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw25=");
-                    endIndex = responseText.indexOf("&Sw26=");
-                    var Sw25 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw26=");
-                    endIndex = responseText.indexOf("&Sw27=");
-                    var Sw26 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw27=");
-                    endIndex = responseText.indexOf("&Sw28=");
-                    var Sw27 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw28=");
-                    endIndex = responseText.indexOf("&Sw29=");
-                    var Sw28 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw29=");
-                    endIndex = responseText.indexOf("&Sw30=");
-                    var Sw29 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw30=");
-                    endIndex = responseText.indexOf("&Sw31=");
-                    var Sw30 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw31=");
-                    endIndex = responseText.indexOf("&Sw32=");
-                    var Sw31 = responseText.substring(startIndex + 5, endIndex);
-                    
-                    startIndex = responseText.indexOf("&Sw32=");
-                    endIndex = responseText.indexOf("&Sw33=");
-                    var Sw32 = responseText.substring(startIndex + 5, endIndex);
+                    var Sw16 = responseText.substring(startIndex + 6);
                     
                     
-
-                                        
+                    
                     // Update the button text for LED 1 with Sw1 value
                     document.getElementById("led1").innerText = Sw1;
                     document.getElementById("led2").innerText = Sw2;
@@ -415,22 +349,7 @@ setInterval(checkArraySize, 150);
                     document.getElementById("led14").innerText = Sw14;
                     document.getElementById("led15").innerText = Sw15;
                     document.getElementById("led16").innerText = Sw16;
-                    document.getElementById("led17").innerText = Sw17;
-                    document.getElementById("led18").innerText = Sw18;
-                    document.getElementById("led19").innerText = Sw19;
-                    document.getElementById("led20").innerText = Sw20;
-                    document.getElementById("led21").innerText = Sw21;
-                    document.getElementById("led22").innerText = Sw22;
-                    document.getElementById("led23").innerText = Sw23;
-                    document.getElementById("led24").innerText = Sw24;
-                    document.getElementById("led25").innerText = Sw25;
-                    document.getElementById("led26").innerText = Sw26;
-                    document.getElementById("led27").innerText = Sw27;
-                    document.getElementById("led28").innerText = Sw28;
-                    document.getElementById("led29").innerText = Sw29;
-                    document.getElementById("led30").innerText = Sw30;
-                    document.getElementById("led31").innerText = Sw31;
-                    document.getElementById("led32").innerText = Sw32;
+
                   
                     // Now you have Sw1, Sw2, and Sw3 variables populated with data
                     console.log("Sw1:", Sw1);
@@ -449,6 +368,110 @@ setInterval(checkArraySize, 150);
                     console.log("Sw14:", Sw14);
                     console.log("Sw15:", Sw15);
                     console.log("Sw16:", Sw16);
+
+                                    
+                }
+            };
+            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
+            xhttp.send();
+        }
+        
+        
+        function fetchDataAndExtractVariables2() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var responseText = this.responseText;
+                    // Example extraction logic, modify as per your data format
+                    
+                    startIndex = responseText.indexOf("Sw16=");
+                    endIndex = responseText.indexOf("&Sw17=");
+                    var Sw16 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw17=");
+                    endIndex = responseText.indexOf("&Sw18=");
+                    var Sw17 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw18=");
+                    endIndex = responseText.indexOf("&Sw19=");
+                    var Sw18 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw19=");
+                    endIndex = responseText.indexOf("&Sw20=");
+                    var Sw19 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw20=");
+                    endIndex = responseText.indexOf("&Sw21=");
+                    var Sw20 = responseText.substring(startIndex + 6, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw21=");
+                    endIndex = responseText.indexOf("&Sw22=");
+                    var Sw21 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw22=");
+                    endIndex = responseText.indexOf("&Sw23=");
+                    var Sw22 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw23=");
+                    endIndex = responseText.indexOf("&Sw24=");
+                    var Sw23 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw24=");
+                    endIndex = responseText.indexOf("&Sw25=");
+                    var Sw24 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw25=");
+                    endIndex = responseText.indexOf("&Sw26=");
+                    var Sw25 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw26=");
+                    endIndex = responseText.indexOf("&Sw27=");
+                    var Sw26 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw27=");
+                    endIndex = responseText.indexOf("&Sw28=");
+                    var Sw27 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw28=");
+                    endIndex = responseText.indexOf("&Sw29=");
+                    var Sw28 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw29=");
+                    endIndex = responseText.indexOf("&Sw30=");
+                    var Sw29 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw30=");
+                    endIndex = responseText.indexOf("&Sw31=");
+                    var Sw30 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw31=");
+                    endIndex = responseText.indexOf("&Sw32=");
+                    var Sw31 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw32=");
+                    var Sw32 = responseText.substring(startIndex + 6);
+                    
+                    
+                                        
+                    // Update the button text for LED 1 with Sw1 value
+                    document.getElementById("led17").innerText = Sw17;
+                    document.getElementById("led18").innerText = Sw18;
+                    document.getElementById("led19").innerText = Sw19;
+                    document.getElementById("led20").innerText = Sw20;
+                    document.getElementById("led21").innerText = Sw21;
+                    document.getElementById("led22").innerText = Sw22;
+                    document.getElementById("led23").innerText = Sw23;
+                    document.getElementById("led24").innerText = Sw24;
+                    document.getElementById("led25").innerText = Sw25;
+                    document.getElementById("led26").innerText = Sw26;
+                    document.getElementById("led27").innerText = Sw27;
+                    document.getElementById("led28").innerText = Sw28;
+                    document.getElementById("led29").innerText = Sw29;
+                    document.getElementById("led30").innerText = Sw30;
+                    document.getElementById("led31").innerText = Sw31;
+                    document.getElementById("led32").innerText = Sw32;
+                  
+                    // Now you have Sw1, Sw2, and Sw3 variables populated with data
                     console.log("Sw17:", Sw17);
                     console.log("Sw18:", Sw18);
                     console.log("Sw19:", Sw19);
@@ -468,12 +491,18 @@ setInterval(checkArraySize, 150);
                                     
                 }
             };
-            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
+            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
             xhttp.send();
-        }
+        }        
+        
+        
+        
+        
+        
 
         // Call the function at regular intervals
         setInterval(fetchDataAndExtractVariables, 150);
+        setInterval(fetchDataAndExtractVariables2, 150);
     </script>
 </body>
 </html>
