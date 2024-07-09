@@ -120,7 +120,7 @@ function checkArraySize() {
                     document.getElementById("led" + i).style.display = "inline-block";
                 }
             }
-           if (arraySize >= 8) {
+            if (arraySize >= 8) {
                 for (var i = 4; i <= 8; i++) {
                     document.getElementById("led" + i).style.display = "inline-block";
                 }
@@ -163,6 +163,36 @@ function setToken() {
     } 
 }
 
+function fetchDataAndExtractVariables() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var responseText = this.responseText;
+            // Example extraction logic, modify as per your data format
+            var startIndex = responseText.indexOf("Sw1=");
+            var Sw1 = responseText.substring(startIndex + 4, endIndex);
+
+            startIndex = responseText.indexOf("&Sw2=");
+            var Sw2 = responseText.substring(startIndex + 5, endIndex);
+
+            startIndex = responseText.indexOf("&Sw3=");
+            var Sw3 = responseText.substring(startIndex + 6, endIndex);
+
+            // Update the button text for LED 1 with Sw1 value
+            document.getElementById("led1").innerText = Sw1;
+            document.getElementById("led2").innerText = Sw2;
+            document.getElementById("led3").innerText = Sw3;
+
+            // Now you have Sw1, Sw2, and Sw3 variables populated with data
+            console.log("Sw1:", Sw1);
+            console.log("Sw2:", Sw2);
+            console.log("Sw3:", Sw3);
+        }
+    };
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
+    xhttp.send();
+}
+
 setInterval(checkLink, 150);
 setInterval(displayValue, 150);
 setInterval(checkArraySize, 150);
@@ -174,60 +204,276 @@ setInterval(checkArraySize, 150);
 
     <div class="led-container">
         <!-- Buttons from 1 to 8 initially hidden -->
-        <button id="led1" class="led-button" onclick="updateValue(1, this.id)">LED 1</button>
-        <button id="led2" class="led-button" onclick="updateValue(2, this.id)">LED 2</button>
-        <button id="led3" class="led-button" onclick="updateValue(3, this.id)">LED 3</button>
-        <button id="led4" class="led-button" onclick="updateValue(4, this.id)">LED 4</button>
-        <button id="led5" class="led-button" onclick="updateValue(5, this.id)">LED 5</button>
-        <button id="led6" class="led-button" onclick="updateValue(6, this.id)">LED 6</button>
-        <button id="led7" class="led-button" onclick="updateValue(7, this.id)">LED 7</button>
-        <button id="led8" class="led-button" onclick="updateValue(8, this.id)">LED 8</button>
+        <button id="led1" class="led-button" onclick="updateValue(1, this.id)">Button 1</button>
+        <button id="led2" class="led-button" onclick="updateValue(2, this.id)">Button 2</button>
+        <button id="led3" class="led-button" onclick="updateValue(3, this.id)">Button 3</button>
+        <button id="led4" class="led-button" onclick="updateValue(4, this.id)">Button 4</button>
+        <button id="led5" class="led-button" onclick="updateValue(5, this.id)">Button 5</button>
+        <button id="led6" class="led-button" onclick="updateValue(6, this.id)">Button 6</button>
+        <button id="led7" class="led-button" onclick="updateValue(7, this.id)">Button 7</button>
+        <button id="led8" class="led-button" onclick="updateValue(8, this.id)">Button 8</button>
         
         <!-- Buttons from 9 to 16 initially hidden -->
-        <button id="led9" class="led-button" onclick="updateValue(9, this.id)">LED 9</button>
-        <button id="led10" class="led-button" onclick="updateValue(10, this.id)">LED 10</button>
-        <button id="led11" class="led-button" onclick="updateValue(11, this.id)">LED 11</button>
-        <button id="led12" class="led-button" onclick="updateValue(12, this.id)">LED 12</button>
-        <button id="led13" class="led-button" onclick="updateValue(13, this.id)">LED 13</button>
-        <button id="led14" class="led-button" onclick="updateValue(14, this.id)">LED 14</button>
-        <button id="led15" class="led-button" onclick="updateValue(15, this.id)">LED 15</button>
-        <button id="led16" class="led-button" onclick="updateValue(16, this.id)">LED 16</button>
+        <button id="led9" class="led-button" onclick="updateValue(9, this.id)">Button 9</button>
+        <button id="led10" class="led-button" onclick="updateValue(10, this.id)">Button 10</button>
+        <button id="led11" class="led-button" onclick="updateValue(11, this.id)">Button 11</button>
+        <button id="led12" class="led-button" onclick="updateValue(12, this.id)">Button 12</button>
+        <button id="led13" class="led-button" onclick="updateValue(13, this.id)">Button 13</button>
+        <button id="led14" class="led-button" onclick="updateValue(14, this.id)">Button 14</button>
+        <button id="led15" class="led-button" onclick="updateValue(15, this.id)">Button 15</button>
+        <button id="led16" class="led-button" onclick="updateValue(16, this.id)">Button 16</button>
         
         <!-- Buttons from 17 to 24 initially hidden -->
-        <button id="led17" class="led-button" onclick="updateValue(17, this.id)">LED 17</button>
-        <button id="led18" class="led-button" onclick="updateValue(18, this.id)">LED 18</button>
-        <button id="led19" class="led-button" onclick="updateValue(19, this.id)">LED 19</button>
-        <button id="led20" class="led-button" onclick="updateValue(20, this.id)">LED 20</button>
-        <button id="led21" class="led-button" onclick="updateValue(21, this.id)">LED 21</button>
-        <button id="led22" class="led-button" onclick="updateValue(22, this.id)">LED 22</button>
-        <button id="led23" class="led-button" onclick="updateValue(23, this.id)">LED 23</button>
-        <button id="led24" class="led-button" onclick="updateValue(24, this.id)">LED 24</button>
+        <button id="led17" class="led-button" onclick="updateValue(17, this.id)">Button 17</button>
+        <button id="led18" class="led-button" onclick="updateValue(18, this.id)">Button 18</button>
+        <button id="led19" class="led-button" onclick="updateValue(19, this.id)">Button 19</button>
+        <button id="led20" class="led-button" onclick="updateValue(20, this.id)">Button 20</button>
+        <button id="led21" class="led-button" onclick="updateValue(21, this.id)">Button 21</button>
+        <button id="led22" class="led-button" onclick="updateValue(22, this.id)">Button 22</button>
+        <button id="led23" class="led-button" onclick="updateValue(23, this.id)">Button 23</button>
+        <button id="led24" class="led-button" onclick="updateValue(24, this.id)">Button 24</button>
         
         <!-- Buttons from 25 to 32 initially hidden -->
-        <button id="led25" class="led-button" onclick="updateValue(25, this.id)">LED 25</button>
-        <button id="led26" class="led-button" onclick="updateValue(26, this.id)">LED 26</button>
-        <button id="led27" class="led-button" onclick="updateValue(27, this.id)">LED 27</button>
-        <button id="led28" class="led-button" onclick="updateValue(28, this.id)">LED 28</button>
-        <button id="led29" class="led-button" onclick="updateValue(29, this.id)">LED 29</button>
-        <button id="led30" class="led-button" onclick="updateValue(30, this.id)">LED 30</button>
-        <button id="led31" class="led-button" onclick="updateValue(31, this.id)">LED 31</button>
-        <button id="led32" class="led-button" onclick="updateValue(32, this.id)">LED 32</button>
+        <button id="led25" class="led-button" onclick="updateValue(25, this.id)">Button 25</button>
+        <button id="led26" class="led-button" onclick="updateValue(26, this.id)">Button 26</button>
+        <button id="led27" class="led-button" onclick="updateValue(27, this.id)">Button 27</button>
+        <button id="led28" class="led-button" onclick="updateValue(28, this.id)">Button 28</button>
+        <button id="led29" class="led-button" onclick="updateValue(29, this.id)">Button 29</button>
+        <button id="led30" class="led-button" onclick="updateValue(30, this.id)">Button 30</button>
+        <button id="led31" class="led-button" onclick="updateValue(31, this.id)">Button 31</button>
+        <button id="led32" class="led-button" onclick="updateValue(32, this.id)">Button 32</button>
         
         <!-- Buttons from 33 to 40 initially hidden -->
-        <button id="led33" class="led-button" onclick="updateValue(33, this.id)">LED 33</button>
-        <button id="led34" class="led-button" onclick="updateValue(34, this.id)">LED 34</button>
-        <button id="led35" class="led-button" onclick="updateValue(35, this.id)">LED 35</button>
-        <button id="led36" class="led-button" onclick="updateValue(36, this.id)">LED 36</button>
-        <button id="led37" class="led-button" onclick="updateValue(37, this.id)">LED 37</button>
-        <button id="led38" class="led-button" onclick="updateValue(38, this.id)">LED 38</button>
-        <button id="led39" class="led-button" onclick="updateValue(39, this.id)">LED 39</button>
-        <button id="led40" class="led-button" onclick="updateValue(40, this.id)">LED 40</button>
+        <button id="led33" class="led-button" onclick="updateValue(33, this.id)">Button 33</button>
+        <button id="led34" class="led-button" onclick="updateValue(34, this.id)">Button 34</button>
+        <button id="led35" class="led-button" onclick="updateValue(35, this.id)">Button 35</button>
+        <button id="led36" class="led-button" onclick="updateValue(36, this.id)">Button 36</button>
+        <button id="led37" class="led-button" onclick="updateValue(37, this.id)">Button 37</button>
+        <button id="led38" class="led-button" onclick="updateValue(38, this.id)">Button 38</button>
+        <button id="led39" class="led-button" onclick="updateValue(39, this.id)">Button 39</button>
+        <button id="led40" class="led-button" onclick="updateValue(40, this.id)">Button 40</button>
     </div>
     <br><br>
     
-        <button onclick="setToken()">Set Token</button>
-        
-        
+    <button onclick="setToken()">Set Token</button>
+    
     <p id="value"></p>
+
+    <script>
+        // Function to fetch data from v4 endpoint and extract variables
+        function fetchDataAndExtractVariables() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var responseText = this.responseText;
+                    // Example extraction logic, modify as per your data format
+                    var startIndex = responseText.indexOf("Sw1=");
+                    var endIndex = responseText.indexOf("&Sw2=");
+                    var Sw1 = responseText.substring(startIndex + 4, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw2=");
+                    endIndex = responseText.indexOf("&Sw3=");
+                    var Sw2 = responseText.substring(startIndex + 5, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw3=");
+                    endIndex = responseText.indexOf("&Sw4=");
+                    var Sw3 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw4=");
+                    endIndex = responseText.indexOf("&Sw5=");
+                    var Sw4 = responseText.substring(startIndex + 5, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw5=");
+                    endIndex = responseText.indexOf("&Sw6=");
+                    var Sw5 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw6=");
+                    endIndex = responseText.indexOf("&Sw7=");
+                    var Sw6 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw7=");
+                    endIndex = responseText.indexOf("&Sw8=");
+                    var Sw7 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw8=");
+                    endIndex = responseText.indexOf("&Sw9=");
+                    var Sw8 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw9=");
+                    endIndex = responseText.indexOf("&Sw10=");
+                    var Sw9 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw10=");
+                    endIndex = responseText.indexOf("&Sw11=");
+                    var Sw10 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw11=");
+                    endIndex = responseText.indexOf("&Sw12=");
+                    var Sw11 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw12=");
+                    endIndex = responseText.indexOf("&Sw13=");
+                    var Sw12 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw13=");
+                    endIndex = responseText.indexOf("&Sw14=");
+                    var Sw13 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw14=");
+                    endIndex = responseText.indexOf("&Sw15=");
+                    var Sw14 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw15=");
+                    endIndex = responseText.indexOf("&Sw16=");
+                    var Sw15 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw16=");
+                    endIndex = responseText.indexOf("&Sw17=");
+                    var Sw16 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw17=");
+                    endIndex = responseText.indexOf("&Sw18=");
+                    var Sw17 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw18=");
+                    endIndex = responseText.indexOf("&Sw19=");
+                    var Sw18 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw19=");
+                    endIndex = responseText.indexOf("&Sw20=");
+                    var Sw19 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw20=");
+                    endIndex = responseText.indexOf("&Sw21=");
+                    var Sw20 = responseText.substring(startIndex + 5, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw21=");
+                    endIndex = responseText.indexOf("&Sw22=");
+                    var Sw21 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw22=");
+                    endIndex = responseText.indexOf("&Sw23=");
+                    var Sw22 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw23=");
+                    endIndex = responseText.indexOf("&Sw24=");
+                    var Sw23 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw24=");
+                    endIndex = responseText.indexOf("&Sw25=");
+                    var Sw24 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw25=");
+                    endIndex = responseText.indexOf("&Sw26=");
+                    var Sw25 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw26=");
+                    endIndex = responseText.indexOf("&Sw27=");
+                    var Sw26 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw27=");
+                    endIndex = responseText.indexOf("&Sw28=");
+                    var Sw27 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw28=");
+                    endIndex = responseText.indexOf("&Sw29=");
+                    var Sw28 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw29=");
+                    endIndex = responseText.indexOf("&Sw30=");
+                    var Sw29 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw30=");
+                    endIndex = responseText.indexOf("&Sw31=");
+                    var Sw30 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw31=");
+                    endIndex = responseText.indexOf("&Sw32=");
+                    var Sw31 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw32=");
+                    endIndex = responseText.indexOf("&Sw33=");
+                    var Sw32 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    
+
+                                        
+                    // Update the button text for LED 1 with Sw1 value
+                    document.getElementById("led1").innerText = Sw1;
+                    document.getElementById("led2").innerText = Sw2;
+                    document.getElementById("led3").innerText = Sw3;
+                    document.getElementById("led4").innerText = Sw4;
+                    document.getElementById("led5").innerText = Sw5;
+                    document.getElementById("led6").innerText = Sw6;
+                    document.getElementById("led7").innerText = Sw7;
+                    document.getElementById("led8").innerText = Sw8;
+                    document.getElementById("led9").innerText = Sw9;
+                    document.getElementById("led10").innerText = Sw10;
+                    document.getElementById("led11").innerText = Sw11;
+                    document.getElementById("led12").innerText = Sw12;
+                    document.getElementById("led13").innerText = Sw13;
+                    document.getElementById("led14").innerText = Sw14;
+                    document.getElementById("led15").innerText = Sw15;
+                    document.getElementById("led16").innerText = Sw16;
+                    document.getElementById("led17").innerText = Sw17;
+                    document.getElementById("led18").innerText = Sw18;
+                    document.getElementById("led19").innerText = Sw19;
+                    document.getElementById("led20").innerText = Sw20;
+                    document.getElementById("led21").innerText = Sw21;
+                    document.getElementById("led22").innerText = Sw22;
+                    document.getElementById("led23").innerText = Sw23;
+                    document.getElementById("led24").innerText = Sw24;
+                    document.getElementById("led25").innerText = Sw25;
+                    document.getElementById("led26").innerText = Sw26;
+                    document.getElementById("led27").innerText = Sw27;
+                    document.getElementById("led28").innerText = Sw28;
+                    document.getElementById("led29").innerText = Sw29;
+                    document.getElementById("led30").innerText = Sw30;
+                    document.getElementById("led31").innerText = Sw31;
+                    document.getElementById("led32").innerText = Sw32;
+                  
+                    // Now you have Sw1, Sw2, and Sw3 variables populated with data
+                    console.log("Sw1:", Sw1);
+                    console.log("Sw2:", Sw2);
+                    console.log("Sw3:", Sw3);
+                    console.log("Sw4:", Sw4);
+                    console.log("Sw5:", Sw5);
+                    console.log("Sw6:", Sw6);
+                    console.log("Sw7:", Sw7);
+                    console.log("Sw8:", Sw8);
+                    console.log("Sw9:", Sw9);
+                    console.log("Sw10:", Sw10);
+                    console.log("Sw11:", Sw11);
+                    console.log("Sw12:", Sw12);
+                    console.log("Sw13:", Sw13);
+                    console.log("Sw14:", Sw14);
+                    console.log("Sw15:", Sw15);
+                    console.log("Sw16:", Sw16);
+                    console.log("Sw17:", Sw17);
+                    console.log("Sw18:", Sw18);
+                    console.log("Sw19:", Sw19);
+                    console.log("Sw20:", Sw20);
+                    console.log("Sw21:", Sw21);
+                    console.log("Sw22:", Sw22);
+                    console.log("Sw23:", Sw23);
+                    console.log("Sw24:", Sw24);
+                    console.log("Sw25:", Sw25);
+                    console.log("Sw26:", Sw26);
+                    console.log("Sw27:", Sw27);
+                    console.log("Sw28:", Sw28);
+                    console.log("Sw29:", Sw29);
+                    console.log("Sw30:", Sw30);
+                    console.log("Sw31:", Sw31);
+                    console.log("Sw32:", Sw32);
+                                    
+                }
+            };
+            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
+            xhttp.send();
+        }
+
+        // Call the function at regular intervals
+        setInterval(fetchDataAndExtractVariables, 150);
+    </script>
 </body>
 </html>
