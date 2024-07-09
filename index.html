@@ -97,7 +97,6 @@ function hitWebsite(url, buttonId) {
     xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            button.innerText = "LED " + buttonId.slice(3); // Restore button text
             button.disabled = false;
             if (xhr.status === 200) {
                 console.log(xhr.responseText); // Response from the website
