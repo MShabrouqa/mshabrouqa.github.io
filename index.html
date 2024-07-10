@@ -67,13 +67,16 @@ function displayValue() {
                     var buttonId = "led" + (i + 1);
                     var button = document.getElementById(buttonId);
 
+    var lastGridStyle = localStorage.getItem('gridStyle');
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "grey";}  else  {
+
                     if (digit === "0") {
                         button.style.backgroundColor = "green";
                     } else if (digit === "1") {
                         button.style.backgroundColor = "red";
                     } else {
                         button.style.backgroundColor = "";
-                    }
+                    }}
                 }
             }
         }
@@ -398,6 +401,49 @@ function setToken() {
         }        
         
         
+        
+        
+        
+        document.addEventListener('DOMContentLoaded', function() {
+    var changeStyleButton = document.getElementById('changeStyleButton');
+    var ledContainer = document.querySelector('.led-container');
+    var isGridThreeColumns = true; // Initial state
+    
+    // Function to toggle grid style
+    function toggleGridStyle() {
+        if (isGridThreeColumns) {
+            ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+            isGridThreeColumns = false;
+        } else {
+            ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            isGridThreeColumns = true;
+        }
+        // Store the current state in localStorage
+        localStorage.setItem('gridStyle', isGridThreeColumns ? 'grid3' : 'grid1');
+    }
+    
+    // Check localStorage for last used grid style
+    var lastGridStyle = localStorage.getItem('gridStyle');
+    if (lastGridStyle === 'grid1') {
+        // Set initial state to single column grid
+        ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+        isGridThreeColumns = false;
+    } else {
+        // Default to 3-column grid (if not explicitly set or invalid)
+        ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        isGridThreeColumns = true;
+    }
+    
+    // Add event listener to the button
+    changeStyleButton.addEventListener('click', toggleGridStyle);
+});
+        
+        
+        
+        
+        
+        
+        
         // Call the function at regular intervals
         setInterval(fetchDataAndExtractVariables, 150);
         setInterval(fetchDataAndExtractVariables2, 150);
@@ -464,7 +510,8 @@ function setToken() {
     <br><br>
     
     <button onclick="setToken()">Set Token</button>
-    
+    <br>
+    <button id="changeStyleButton">Change Style</button>
     <p id="value"></p>
 
 </body>
