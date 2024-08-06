@@ -3,51 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Website</title>
-<!-- Bootstrap CSS -->
-<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
-<!-- Font Awesome CSS -->
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css'>
-
+<title>ESP Web Server</title>
 <style>
-    .center {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 60vh;
-        flex-direction: column; /* Make buttons appear vertically */
-        gap: 50px; /* Add some space between buttons */
+    body {
+        text-align: center;
     }
 
-    .btn-custom {
-        width: 200px; /* Fixed width for all buttons */
-        height: 75px; /* Fixed height for all buttons */
-        font-size: 20px; /* Font size */
+    .led-container {
+        max-width: auto; /* Set max-width to 400px */
+        margin: auto auto; /* Center the container */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Three columns */
+        gap: 25px;
+        justify-content: center;
+    }
+
+    .led-button {
+        color: white;
+        font-weight: bold;
+        padding: 17px;
+        box-sizing: border-box;
+        display: none; /* Initially hide all buttons */
+        max-width: auto; /* Set max-width to 400px */
+    }
+
+    #value {
+        display: none;
     }
 </style>
-</head>
-<body>
-
-<div class="center">
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=1', this)">1</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=2', this)">2</button>
-    <button type="button" class="btn btn-primary btn-custom" onclick="hitWebsite('https://sgp1.blynk.cloud/external/api/update?token=oFx_9fHxjhrxWbEpmAhzy3fTSquschga&v1=3', this)">3</button>
-</div>
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<!-- Bootstrap JS -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js'></script>
 <script>
-function hitWebsite(url, button) {
-    var $button = $(button);
-    $button.button('loading');
+var server = "sgp1";
+var token = localStorage.getItem("token") || ""; // Use stored token or default
 
+function checkLink() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                if (this.responseText === "true") {
+                    document.getElementById("result").innerText = "Device is connected.";
+                } else {
+                    document.getElementById("result").innerText = "Device is not connected.";
+                }
+            } else {
+                document.getElementById("result").innerText = "Error: Unable to connect to the device.";
+            }
+        }
+    };
+    // Use the token variable here
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
+    xhttp.send();
+}
+
+function displayValue() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText !== "0" && this.responseText !== "1") {
+                document.getElementById("value").innerText = "Value: " + this.responseText;
+
+                for (var i = 0; i < this.responseText.length; i++) {
+                    var digit = this.responseText.charAt(i);
+                    var buttonId = "led" + (i + 1);
+                    var button = document.getElementById(buttonId);
+
+    var lastGridStyle = localStorage.getItem('gridStyle');
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "grey";}  else  {
+
+                    if (digit === "0") {
+                        button.style.backgroundColor = "green";
+                    } else if (digit === "1") {
+                        button.style.backgroundColor = "red";
+                    } else {
+                        button.style.backgroundColor = "";
+                    }}
+                }
+            }
+        }
+    };
+    // Use the token variable here
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
+    xhttp.send();
+}
+
+function updateValue(value, buttonId) {
+    var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
+    hitWebsite(url, buttonId);
+}
+
+function hitWebsite(url, buttonId) {
+    var button = document.getElementById(buttonId);
+    button.innerText = "Loading...";
+    button.disabled = true;
+    
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            $button.button('reset');
+            button.disabled = false;
             if (xhr.status === 200) {
                 console.log(xhr.responseText); // Response from the website
             } else {
@@ -57,6 +110,409 @@ function hitWebsite(url, button) {
     };
     xhr.send();
 }
+
+function checkArraySize() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var arraySize = parseInt(this.responseText);
+            // Show buttons based on array size
+            if (arraySize >= 3) {
+                for (var i = 1; i <= 3; i++) { if( document.getElementById("led" + i).innerText !="" ){
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }}
+            }
+            if (arraySize >= 8) {
+                for (var i = 4; i <= 8; i++) { if( document.getElementById("led" + i).innerText !="" ){
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }}
+            }
+            if (arraySize >= 16) { 
+                for (var i = 9; i <= 16; i++) { if( document.getElementById("led" + i).innerText !="" ){
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }}
+            }
+            if (arraySize >= 24) {
+                for (var i = 17; i <= 24; i++) { if( document.getElementById("led" + i).innerText !="" ){
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }}
+            }
+            if (arraySize >= 32) {
+                for (var i = 25; i <= 32; i++) { if( document.getElementById("led" + i).innerText !="" ){
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }}
+            }
+            if (arraySize >= 40) {
+                for (var i = 33; i <= 40; i++) { if( document.getElementById("led" + i).innerText !="" ){
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }}
+            }
+        }
+    };
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
+    xhttp.send();
+}
+
+function setToken() {
+    var newToken = prompt("Enter new token :", token);
+    if (newToken !== null && newToken.length <= 32) {
+        token = newToken;
+        localStorage.setItem("token", token); // Store token in localStorage
+        // Optionally, update existing API calls with the new token
+        checkLink();
+        displayValue();
+        checkArraySize();
+    } 
+}
+
+
+        function fetchDataAndExtractVariables() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var responseText = this.responseText;
+                    // Example extraction logic, modify as per your data format
+                    var startIndex = responseText.indexOf("Sw1=");
+                    var endIndex = responseText.indexOf("&Sw2=");
+                    var Sw1 = responseText.substring(startIndex + 4, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw2=");
+                    endIndex = responseText.indexOf("&Sw3=");
+                    var Sw2 = responseText.substring(startIndex + 5, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw3=");
+                    endIndex = responseText.indexOf("&Sw4=");
+                    var Sw3 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw4=");
+                    endIndex = responseText.indexOf("&Sw5=");
+                    var Sw4 = responseText.substring(startIndex + 5, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw5=");
+                    endIndex = responseText.indexOf("&Sw6=");
+                    var Sw5 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw6=");
+                    endIndex = responseText.indexOf("&Sw7=");
+                    var Sw6 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw7=");
+                    endIndex = responseText.indexOf("&Sw8=");
+                    var Sw7 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw8=");
+                    endIndex = responseText.indexOf("&Sw9=");
+                    var Sw8 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw9=");
+                    endIndex = responseText.indexOf("&Sw10=");
+                    var Sw9 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw10=");
+                    endIndex = responseText.indexOf("&Sw11=");
+                    var Sw10 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw11=");
+                    endIndex = responseText.indexOf("&Sw12=");
+                    var Sw11 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw12=");
+                    endIndex = responseText.indexOf("&Sw13=");
+                    var Sw12 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw13=");
+                    endIndex = responseText.indexOf("&Sw14=");
+                    var Sw13 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw14=");
+                    endIndex = responseText.indexOf("&Sw15=");
+                    var Sw14 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw15=");
+                    endIndex = responseText.indexOf("&Sw16=");
+                    var Sw15 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw16=");
+                    var Sw16 = responseText.substring(startIndex + 6);
+                    
+                    
+                    
+                    // Update the button text for LED 1 with Sw1 value
+                    document.getElementById("led1").innerText = Sw1;
+                    document.getElementById("led2").innerText = Sw2;
+                    document.getElementById("led3").innerText = Sw3;
+                    document.getElementById("led4").innerText = Sw4;
+                    document.getElementById("led5").innerText = Sw5;
+                    document.getElementById("led6").innerText = Sw6;
+                    document.getElementById("led7").innerText = Sw7;
+                    document.getElementById("led8").innerText = Sw8;
+                    document.getElementById("led9").innerText = Sw9;
+                    document.getElementById("led10").innerText = Sw10;
+                    document.getElementById("led11").innerText = Sw11;
+                    document.getElementById("led12").innerText = Sw12;
+                    document.getElementById("led13").innerText = Sw13;
+                    document.getElementById("led14").innerText = Sw14;
+                    document.getElementById("led15").innerText = Sw15;
+                    document.getElementById("led16").innerText = Sw16;
+
+                  
+                    // Now you have Sw1, Sw2, and Sw3 variables populated with data
+                    console.log("Sw1:", Sw1);
+                    console.log("Sw2:", Sw2);
+                    console.log("Sw3:", Sw3);
+                    console.log("Sw4:", Sw4);
+                    console.log("Sw5:", Sw5);
+                    console.log("Sw6:", Sw6);
+                    console.log("Sw7:", Sw7);
+                    console.log("Sw8:", Sw8);
+                    console.log("Sw9:", Sw9);
+                    console.log("Sw10:", Sw10);
+                    console.log("Sw11:", Sw11);
+                    console.log("Sw12:", Sw12);
+                    console.log("Sw13:", Sw13);
+                    console.log("Sw14:", Sw14);
+                    console.log("Sw15:", Sw15);
+                    console.log("Sw16:", Sw16);
+
+                                    
+                }
+            };
+            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
+            xhttp.send();
+        }
+        
+        
+        function fetchDataAndExtractVariables2() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var responseText = this.responseText;
+                    // Example extraction logic, modify as per your data format
+                    
+                    startIndex = responseText.indexOf("Sw16=");
+                    endIndex = responseText.indexOf("&Sw17=");
+                    var Sw16 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw17=");
+                    endIndex = responseText.indexOf("&Sw18=");
+                    var Sw17 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw18=");
+                    endIndex = responseText.indexOf("&Sw19=");
+                    var Sw18 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw19=");
+                    endIndex = responseText.indexOf("&Sw20=");
+                    var Sw19 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw20=");
+                    endIndex = responseText.indexOf("&Sw21=");
+                    var Sw20 = responseText.substring(startIndex + 6, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw21=");
+                    endIndex = responseText.indexOf("&Sw22=");
+                    var Sw21 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw22=");
+                    endIndex = responseText.indexOf("&Sw23=");
+                    var Sw22 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw23=");
+                    endIndex = responseText.indexOf("&Sw24=");
+                    var Sw23 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw24=");
+                    endIndex = responseText.indexOf("&Sw25=");
+                    var Sw24 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw25=");
+                    endIndex = responseText.indexOf("&Sw26=");
+                    var Sw25 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw26=");
+                    endIndex = responseText.indexOf("&Sw27=");
+                    var Sw26 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw27=");
+                    endIndex = responseText.indexOf("&Sw28=");
+                    var Sw27 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw28=");
+                    endIndex = responseText.indexOf("&Sw29=");
+                    var Sw28 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw29=");
+                    endIndex = responseText.indexOf("&Sw30=");
+                    var Sw29 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw30=");
+                    endIndex = responseText.indexOf("&Sw31=");
+                    var Sw30 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw31=");
+                    endIndex = responseText.indexOf("&Sw32=");
+                    var Sw31 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw32=");
+                    var Sw32 = responseText.substring(startIndex + 6);
+                    
+                    
+                                        
+                    // Update the button text for LED 1 with Sw1 value
+                    document.getElementById("led17").innerText = Sw17;
+                    document.getElementById("led18").innerText = Sw18;
+                    document.getElementById("led19").innerText = Sw19;
+                    document.getElementById("led20").innerText = Sw20;
+                    document.getElementById("led21").innerText = Sw21;
+                    document.getElementById("led22").innerText = Sw22;
+                    document.getElementById("led23").innerText = Sw23;
+                    document.getElementById("led24").innerText = Sw24;
+                    document.getElementById("led25").innerText = Sw25;
+                    document.getElementById("led26").innerText = Sw26;
+                    document.getElementById("led27").innerText = Sw27;
+                    document.getElementById("led28").innerText = Sw28;
+                    document.getElementById("led29").innerText = Sw29;
+                    document.getElementById("led30").innerText = Sw30;
+                    document.getElementById("led31").innerText = Sw31;
+                    document.getElementById("led32").innerText = Sw32;
+                  
+                    // Now you have Sw1, Sw2, and Sw3 variables populated with data
+                    console.log("Sw17:", Sw17);
+                    console.log("Sw18:", Sw18);
+                    console.log("Sw19:", Sw19);
+                    console.log("Sw20:", Sw20);
+                    console.log("Sw21:", Sw21);
+                    console.log("Sw22:", Sw22);
+                    console.log("Sw23:", Sw23);
+                    console.log("Sw24:", Sw24);
+                    console.log("Sw25:", Sw25);
+                    console.log("Sw26:", Sw26);
+                    console.log("Sw27:", Sw27);
+                    console.log("Sw28:", Sw28);
+                    console.log("Sw29:", Sw29);
+                    console.log("Sw30:", Sw30);
+                    console.log("Sw31:", Sw31);
+                    console.log("Sw32:", Sw32);
+                                    
+                }
+            };
+            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
+            xhttp.send();
+        }        
+        
+        
+        
+        
+        
+        document.addEventListener('DOMContentLoaded', function() {
+    var changeStyleButton = document.getElementById('changeStyleButton');
+    var ledContainer = document.querySelector('.led-container');
+    var isGridThreeColumns = true; // Initial state
+    
+    // Function to toggle grid style
+    function toggleGridStyle() {
+        if (isGridThreeColumns) {
+            ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+            isGridThreeColumns = false;
+        } else {
+            ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            isGridThreeColumns = true;
+        }
+        // Store the current state in localStorage
+        localStorage.setItem('gridStyle', isGridThreeColumns ? 'grid3' : 'grid1');
+    }
+    
+    // Check localStorage for last used grid style
+    var lastGridStyle = localStorage.getItem('gridStyle');
+    if (lastGridStyle === 'grid1') {
+        // Set initial state to single column grid
+        ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+        isGridThreeColumns = false;
+    } else {
+        // Default to 3-column grid (if not explicitly set or invalid)
+        ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        isGridThreeColumns = true;
+    }
+    
+    // Add event listener to the button
+    changeStyleButton.addEventListener('click', toggleGridStyle);
+});
+        
+        
+        
+        
+        
+        
+        
+        // Call the function at regular intervals
+        setInterval(fetchDataAndExtractVariables, 1000);
+        setInterval(fetchDataAndExtractVariables2, 1000);
+        setInterval(checkLink, 1000);
+		setInterval(displayValue, 1000);
+		setInterval(checkArraySize, 1000);
 </script>
+</head>
+<body>
+    <h1>ESP Web Server</h1>
+    <p id="result"></p>
+
+    <div class="led-container">
+        <!-- Buttons from 1 to 8 initially hidden -->
+        <button id="led1" class="led-button" onclick="updateValue(1, this.id)">Button 1</button>
+        <button id="led2" class="led-button" onclick="updateValue(2, this.id)">Button 2</button>
+        <button id="led3" class="led-button" onclick="updateValue(3, this.id)">Button 3</button>
+        <button id="led4" class="led-button" onclick="updateValue(4, this.id)">Button 4</button>
+        <button id="led5" class="led-button" onclick="updateValue(5, this.id)">Button 5</button>
+        <button id="led6" class="led-button" onclick="updateValue(6, this.id)">Button 6</button>
+        <button id="led7" class="led-button" onclick="updateValue(7, this.id)">Button 7</button>
+        <button id="led8" class="led-button" onclick="updateValue(8, this.id)">Button 8</button>
+        
+        <!-- Buttons from 9 to 16 initially hidden -->
+        <button id="led9" class="led-button" onclick="updateValue(9, this.id)">Button 9</button>
+        <button id="led10" class="led-button" onclick="updateValue(10, this.id)">Button 10</button>
+        <button id="led11" class="led-button" onclick="updateValue(11, this.id)">Button 11</button>
+        <button id="led12" class="led-button" onclick="updateValue(12, this.id)">Button 12</button>
+        <button id="led13" class="led-button" onclick="updateValue(13, this.id)">Button 13</button>
+        <button id="led14" class="led-button" onclick="updateValue(14, this.id)">Button 14</button>
+        <button id="led15" class="led-button" onclick="updateValue(15, this.id)">Button 15</button>
+        <button id="led16" class="led-button" onclick="updateValue(16, this.id)">Button 16</button>
+        
+        <!-- Buttons from 17 to 24 initially hidden -->
+        <button id="led17" class="led-button" onclick="updateValue(17, this.id)">Button 17</button>
+        <button id="led18" class="led-button" onclick="updateValue(18, this.id)">Button 18</button>
+        <button id="led19" class="led-button" onclick="updateValue(19, this.id)">Button 19</button>
+        <button id="led20" class="led-button" onclick="updateValue(20, this.id)">Button 20</button>
+        <button id="led21" class="led-button" onclick="updateValue(21, this.id)">Button 21</button>
+        <button id="led22" class="led-button" onclick="updateValue(22, this.id)">Button 22</button>
+        <button id="led23" class="led-button" onclick="updateValue(23, this.id)">Button 23</button>
+        <button id="led24" class="led-button" onclick="updateValue(24, this.id)">Button 24</button>
+        
+        <!-- Buttons from 25 to 32 initially hidden -->
+        <button id="led25" class="led-button" onclick="updateValue(25, this.id)">Button 25</button>
+        <button id="led26" class="led-button" onclick="updateValue(26, this.id)">Button 26</button>
+        <button id="led27" class="led-button" onclick="updateValue(27, this.id)">Button 27</button>
+        <button id="led28" class="led-button" onclick="updateValue(28, this.id)">Button 28</button>
+        <button id="led29" class="led-button" onclick="updateValue(29, this.id)">Button 29</button>
+        <button id="led30" class="led-button" onclick="updateValue(30, this.id)">Button 30</button>
+        <button id="led31" class="led-button" onclick="updateValue(31, this.id)">Button 31</button>
+        <button id="led32" class="led-button" onclick="updateValue(32, this.id)">Button 32</button>
+        
+        <!-- Buttons from 33 to 40 initially hidden -->
+        <button id="led33" class="led-button" onclick="updateValue(33, this.id)">Button 33</button>
+        <button id="led34" class="led-button" onclick="updateValue(34, this.id)">Button 34</button>
+        <button id="led35" class="led-button" onclick="updateValue(35, this.id)">Button 35</button>
+        <button id="led36" class="led-button" onclick="updateValue(36, this.id)">Button 36</button>
+        <button id="led37" class="led-button" onclick="updateValue(37, this.id)">Button 37</button>
+        <button id="led38" class="led-button" onclick="updateValue(38, this.id)">Button 38</button>
+        <button id="led39" class="led-button" onclick="updateValue(39, this.id)">Button 39</button>
+        <button id="led40" class="led-button" onclick="updateValue(40, this.id)">Button 40</button>
+    </div>
+    <br><br><br><br>
+    
+    <button onclick="setToken()">Set Token</button>
+    <br><br>
+    <button id="changeStyleButton">Change Style</button>
+    <p id="value"></p>
+
 </body>
 </html>
