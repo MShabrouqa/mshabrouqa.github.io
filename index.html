@@ -82,7 +82,7 @@ function displayValue() {
         }
     };
     // Use the token variable here
-    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
     xhttp.send();
 }
 
@@ -149,7 +149,7 @@ function checkArraySize() {
             }
         }
     };
-    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
     xhttp.send();
 }
 
@@ -445,11 +445,11 @@ function setToken() {
         
         
         // Call the function at regular intervals
-        setInterval(fetchDataAndExtractVariables, 1000);
-        setInterval(fetchDataAndExtractVariables2, 1000);
-        setInterval(checkLink, 1000);
-		setInterval(displayValue, 1000);
-		setInterval(checkArraySize, 1000);
+        setInterval(fetchDataAndExtractVariables, 150);
+        setInterval(fetchDataAndExtractVariables2, 150);
+        setInterval(checkLink, 150);
+		setInterval(displayValue, 150);
+		setInterval(checkArraySize, 150);
 </script>
 </head>
 <body>
