@@ -117,36 +117,11 @@ function checkArraySize() {
         if (this.readyState == 4 && this.status == 200) {
             var arraySize = parseInt(this.responseText);
             // Show buttons based on array size
-            if (arraySize >= 3) {
-                for (var i = 1; i <= 3; i++) { if( document.getElementById("led" + i).innerText !="" ){
+            
+                for (var i = 1; i <= arraySize; i++) { if( document.getElementById("led" + i).innerText !="" ){
                     document.getElementById("led" + i).style.display = "inline-block";
                 }}
-            }
-            if (arraySize >= 8) {
-                for (var i = 4; i <= 8; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block";
-                }}
-            }
-            if (arraySize >= 16) { 
-                for (var i = 9; i <= 16; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block";
-                }}
-            }
-            if (arraySize >= 24) {
-                for (var i = 17; i <= 24; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block";
-                }}
-            }
-            if (arraySize >= 32) {
-                for (var i = 25; i <= 32; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block";
-                }}
-            }
-            if (arraySize >= 40) {
-                for (var i = 33; i <= 40; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block";
-                }}
-            }
+            
         }
     };
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
@@ -437,12 +412,6 @@ function setToken() {
     // Add event listener to the button
     changeStyleButton.addEventListener('click', toggleGridStyle);
 });
-        
-        
-        
-        
-        
-        
         
         // Call the function at regular intervals
         setInterval(fetchDataAndExtractVariables, 150);
