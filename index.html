@@ -101,12 +101,13 @@ function hitWebsite(url, buttonId) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             button.disabled = false;
-   	fetchDataAndExtractVariables();
-        fetchDataAndExtractVariables2();
-	displayValue();
+
         }
     };
     xhr.send();
+	   	fetchDataAndExtractVariables();
+        fetchDataAndExtractVariables2();
+	displayValue();
 }
 
 function checkArraySize() {
