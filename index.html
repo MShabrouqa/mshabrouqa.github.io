@@ -101,11 +101,6 @@ function hitWebsite(url, buttonId) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             button.disabled = false;
-            if (xhr.status === 200) {
-                console.log(xhr.responseText); // Response from the website
-            } else {
-                console.error("Error:", xhr.status);
-            }
         }
     };
     xhr.send();
@@ -229,27 +224,6 @@ function setToken() {
                     document.getElementById("led14").innerText = Sw14;
                     document.getElementById("led15").innerText = Sw15;
                     document.getElementById("led16").innerText = Sw16;
-
-                  
-                    // Now you have Sw1, Sw2, and Sw3 variables populated with data
-                    console.log("Sw1:", Sw1);
-                    console.log("Sw2:", Sw2);
-                    console.log("Sw3:", Sw3);
-                    console.log("Sw4:", Sw4);
-                    console.log("Sw5:", Sw5);
-                    console.log("Sw6:", Sw6);
-                    console.log("Sw7:", Sw7);
-                    console.log("Sw8:", Sw8);
-                    console.log("Sw9:", Sw9);
-                    console.log("Sw10:", Sw10);
-                    console.log("Sw11:", Sw11);
-                    console.log("Sw12:", Sw12);
-                    console.log("Sw13:", Sw13);
-                    console.log("Sw14:", Sw14);
-                    console.log("Sw15:", Sw15);
-                    console.log("Sw16:", Sw16);
-
-                                    
                 }
             };
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
@@ -350,25 +324,6 @@ function setToken() {
                     document.getElementById("led30").innerText = Sw30;
                     document.getElementById("led31").innerText = Sw31;
                     document.getElementById("led32").innerText = Sw32;
-                  
-                    // Now you have Sw1, Sw2, and Sw3 variables populated with data
-                    console.log("Sw17:", Sw17);
-                    console.log("Sw18:", Sw18);
-                    console.log("Sw19:", Sw19);
-                    console.log("Sw20:", Sw20);
-                    console.log("Sw21:", Sw21);
-                    console.log("Sw22:", Sw22);
-                    console.log("Sw23:", Sw23);
-                    console.log("Sw24:", Sw24);
-                    console.log("Sw25:", Sw25);
-                    console.log("Sw26:", Sw26);
-                    console.log("Sw27:", Sw27);
-                    console.log("Sw28:", Sw28);
-                    console.log("Sw29:", Sw29);
-                    console.log("Sw30:", Sw30);
-                    console.log("Sw31:", Sw31);
-                    console.log("Sw32:", Sw32);
-                                    
                 }
             };
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
