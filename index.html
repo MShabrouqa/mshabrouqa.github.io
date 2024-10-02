@@ -101,6 +101,9 @@ function hitWebsite(url, buttonId) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             button.disabled = false;
+	fetchDataAndExtractVariables();
+        fetchDataAndExtractVariables2();
+   
         }
     };
     xhr.send();
@@ -367,17 +370,14 @@ function setToken() {
     // Add event listener to the button
     changeStyleButton.addEventListener('click', toggleGridStyle);
 });
-        fetchDataAndExtractVariables();
+
+(function() {
+	fetchDataAndExtractVariables();
         fetchDataAndExtractVariables2();
-        checkLink();
-        displayValue();
-        checkArraySize();
-        // Call the function at regular intervals
-        setInterval(fetchDataAndExtractVariables, 100000);
-        setInterval(fetchDataAndExtractVariables2, 100000);
-        setInterval(checkLink, 100000);
-		setInterval(displayValue, 150);
-		setInterval(checkArraySize, 100000);
+     	checkLink();
+	displayValue();
+    	checkArraySize();
+})();
 </script>
 </head>
 <body>
