@@ -105,7 +105,9 @@ function hitWebsite(url, buttonId) {
         }
     };
     xhr.send();
-	   	fetchDataAndExtractVariables();
+	checkLink();
+        checkArraySize();
+	fetchDataAndExtractVariables();
         fetchDataAndExtractVariables2();
 	displayValue();
 }
