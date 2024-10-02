@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESP Web Server</title>
 <style>
-    body {
-        text-align: center;
-    }
+    body { text-align: center; }
 
     .led-container {
         max-width: auto; /* Set max-width to 400px */
@@ -34,7 +32,6 @@
 <script>
 var server = "sgp1";
 var token = localStorage.getItem("token") || ""; // Use stored token or default
-var arraySize = localStorage.getItem("arraySize") || "";
 
 function checkLink() {
     var xhttp = new XMLHttpRequest();
@@ -53,7 +50,8 @@ function checkLink() {
     };
     // Use the token variable here
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
-    xhttp.send();}
+    xhttp.send();
+}
 
 function displayValue() {
     var xhttp = new XMLHttpRequest();
@@ -61,6 +59,7 @@ function displayValue() {
         if (this.readyState == 4 && this.status == 200) {
             if (this.responseText !== "0" && this.responseText !== "1") {
                 document.getElementById("value").innerText = "Value: " + this.responseText;
+
                 for (var i = 0; i < this.responseText.length; i++) {
                     var digit = this.responseText.charAt(i);
                     var buttonId = "led" + (i + 1);
@@ -75,17 +74,20 @@ function displayValue() {
                         button.style.backgroundColor = "red";
                     } else {
                         button.style.backgroundColor = "";
-                    }}                }            }        }    };
+                    }}
+                }
+            }
+        }
+    };
+    // Use the token variable here
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
     xhttp.send();
-
-    }
-
+}
 
 function updateValue(value, buttonId) {
     var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
-    hitWebsite(url, buttonId);}
-
+    hitWebsite(url, buttonId);
+}
 
 function hitWebsite(url, buttonId) {
     var button = document.getElementById(buttonId);
@@ -96,39 +98,48 @@ function hitWebsite(url, buttonId) {
     xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            button.disabled = false;        }    };
+            button.disabled = false;
+
+        }
+    };
     xhr.send();
 	checkLink();
     checkArraySize();
 	fetchDataAndExtractVariables();
-    fetchDataAndExtractVariables2();    }
-
+    fetchDataAndExtractVariables2();
+    }
 
 function checkArraySize() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-        arraySize = parseInt(this.responseText);
-    if (arraySize == ""){localStorage.setItem("arraySize", arraySize);}
-    
+            var arraySize = parseInt(this.responseText);
+           
                 for (var i = 1; i <= arraySize; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block"; }}}};
+                    document.getElementById("led" + i).style.display = "inline-block";
+                }}
+            
+        }
+    };
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
-    xhttp.send();}
-
+    xhttp.send();
+}
 
 function setToken() {
     var newToken = prompt("Enter new token :", token);
     if (newToken !== null && newToken.length <= 32) {
         token = newToken;
         localStorage.setItem("token", token);
+        
         checkLink();
         displayValue();
         checkArraySize();
         fetchDataAndExtractVariables();
-        fetchDataAndExtractVariables2(); }}
+        fetchDataAndExtractVariables2();
+    } 
+}
 
-function fetchDataAndExtractVariables() {
+        function fetchDataAndExtractVariables() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -197,6 +208,9 @@ function fetchDataAndExtractVariables() {
                     startIndex = responseText.indexOf("&Sw16=");
                     var Sw16 = responseText.substring(startIndex + 6);
                     
+                    
+                    
+                    // Update the button text for LED 1 with Sw1 value
                     document.getElementById("led1").innerText = Sw1;
                     document.getElementById("led2").innerText = Sw2;
                     document.getElementById("led3").innerText = Sw3;
@@ -216,10 +230,11 @@ function fetchDataAndExtractVariables() {
                 }
             };
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
-            xhttp.send();}
+            xhttp.send();
+        }
         
         
-function fetchDataAndExtractVariables2() {
+        function fetchDataAndExtractVariables2() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -293,7 +308,9 @@ function fetchDataAndExtractVariables2() {
                     startIndex = responseText.indexOf("&Sw32=");
                     var Sw32 = responseText.substring(startIndex + 6);
                     
-
+                    
+                                        
+                    // Update the button text for LED 1 with Sw1 value
                     document.getElementById("led17").innerText = Sw17;
                     document.getElementById("led18").innerText = Sw18;
                     document.getElementById("led19").innerText = Sw19;
@@ -313,39 +330,52 @@ function fetchDataAndExtractVariables2() {
                 }
             };
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
-            xhttp.send();}        
+            xhttp.send();
+        }        
         
         
         document.addEventListener('DOMContentLoaded', function() {
     var changeStyleButton = document.getElementById('changeStyleButton');
     var ledContainer = document.querySelector('.led-container');
-    var isGridThreeColumns = true;
+    var isGridThreeColumns = true; // Initial state
     
-
-function toggleGridStyle() {
+    // Function to toggle grid style
+    function toggleGridStyle() {
         if (isGridThreeColumns) {
             ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
-            isGridThreeColumns = false; } 
-            else {
+            isGridThreeColumns = false;
+        } else {
             ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
-            isGridThreeColumns = true;  }
-        localStorage.setItem('gridStyle', isGridThreeColumns ? 'grid3' : 'grid1');    }
+            isGridThreeColumns = true;
+        }
+        // Store the current state in localStorage
+        localStorage.setItem('gridStyle', isGridThreeColumns ? 'grid3' : 'grid1');
+    }
     
+    // Check localStorage for last used grid style
     var lastGridStyle = localStorage.getItem('gridStyle');
     if (lastGridStyle === 'grid1') {
+        // Set initial state to single column grid
         ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
-        isGridThreeColumns = false;   } 
-        else {
+        isGridThreeColumns = false;
+    } else {
+        // Default to 3-column grid (if not explicitly set or invalid)
         ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
-        isGridThreeColumns = true;    }
-    changeStyleButton.addEventListener('click', toggleGridStyle);});
+        isGridThreeColumns = true;
+    }
+    
+    // Add event listener to the button
+    changeStyleButton.addEventListener('click', toggleGridStyle);
+    
+});
 
 (function() {
 	    fetchDataAndExtractVariables();
         fetchDataAndExtractVariables2();
      	checkLink();
 	    displayValue();
-    	checkArraySize();})();
+    	checkArraySize();
+})();
 
 setInterval(checkLink, 10000);
 setInterval(displayValue, 150);
