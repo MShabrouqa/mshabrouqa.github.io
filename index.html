@@ -71,7 +71,6 @@ function updateValue(value, buttonId) {
 function hitWebsite(url, buttonId) {
     var button = document.getElementById(buttonId);
     button.innerText = "Loading...";
-    button.style.backgroundColor = "grey";
     button.disabled = true;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
