@@ -6,24 +6,27 @@
 <title>ESP Web Server</title>
 <style>
     body { text-align: center; }
+
     .led-container {
-        max-width: auto;
-        margin: auto auto;
+        max-width: auto; /* Set max-width to 400px */
+        margin: auto auto; /* Center the container */
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* Three columns */
         gap: 25px;
-        justify-content: center; }
+        justify-content: center;
+    }
+
     .led-button {
         color: white;
         font-weight: bold;
         padding: 17px;
         box-sizing: border-box;
-        display: none; 
-        max-width: auto; }
+        display: none; /* Initially hide all buttons */
+        max-width: auto; /* Set max-width to 400px */
+    }
+
     #value { display: none; }
 </style>
-
-
 <script>
 var server = "sgp1";
 var token = localStorage.getItem("token") || ""; 
@@ -36,8 +39,35 @@ function checkLink() {
                 if (this.responseText === "true") {
                     document.getElementById("result").innerText = "Device is connected."; } 
                 else { document.getElementById("result").innerText = "Device is not connected."; }} 
-            else { document.getElementById("result").innerText = "Please set token"; }}}; 
+            else { document.getElementById("result").innerText = "Please set token"; }}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
+    xhttp.send();}
+
+
+function hitWebsite(value,buttonId,) {
+    var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
+    var button = document.getElementById(buttonId);
+    button.innerText = "Loading...";
+    button.disabled = true;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+        button.disabled = false;}};
+    xhr.send();
+ 	checkLink();
+    checkArraySize();
+	fetchDataAndExtractVariables();
+    fetchDataAndExtractVariables2();  }
+
+function checkArraySize() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var arraySize = parseInt(this.responseText);
+            localStorage.setItem('arraySize', arraySize); // Save arraySize
+            showButtons(arraySize);        }    };
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
     xhttp.send();}
 
 function displayValue() {
@@ -61,33 +91,14 @@ function displayValue() {
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
     xhttp.send();}
 
-function updateValue(value, buttonId) {
-    var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
-    hitWebsite(url, buttonId);}
+function showButtons(arraySize) {
+    for (var i = 1; i <= arraySize; i++) {
+        document.getElementById("led" + i).style.display = "inline-block";    }}
 
-function hitWebsite(url, buttonId) {
-    var button = document.getElementById(buttonId);
-    button.innerText = "Loading...";
-    button.disabled = true;
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            button.disabled = false;}}; 
-    xhr.send();
-	checkLink();
-    checkArraySize();
-	fetchDataAndExtractVariables();  }
+document.addEventListener('DOMContentLoaded', function() {
+    var savedArraySize = localStorage.getItem('arraySize');
+    if (savedArraySize) { showButtons(parseInt(savedArraySize));}});
 
-function checkArraySize() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var arraySize = parseInt(this.responseText);
-                for (var i = 1; i <= arraySize; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block";}}}}; 
-    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
-    xhttp.send();}
 
 function setToken() {
     var newToken = prompt("Enter new token :", token);
@@ -97,7 +108,8 @@ function setToken() {
         checkLink();
         displayValue();
         checkArraySize();
-        fetchDataAndExtractVariables();    }}
+        fetchDataAndExtractVariables();
+        fetchDataAndExtractVariables2();    }}
 
 function fetchDataAndExtractVariables() {
             var xhttp = new XMLHttpRequest();
@@ -117,21 +129,177 @@ function fetchDataAndExtractVariables() {
                     endIndex = responseText.indexOf("&Sw4=");
                     var Sw3 = responseText.substring(startIndex + 5, endIndex);
                     
+                    startIndex = responseText.indexOf("&Sw4=");
+                    endIndex = responseText.indexOf("&Sw5=");
+                    var Sw4 = responseText.substring(startIndex + 5, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw5=");
+                    endIndex = responseText.indexOf("&Sw6=");
+                    var Sw5 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw6=");
+                    endIndex = responseText.indexOf("&Sw7=");
+                    var Sw6 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw7=");
+                    endIndex = responseText.indexOf("&Sw8=");
+                    var Sw7 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw8=");
+                    endIndex = responseText.indexOf("&Sw9=");
+                    var Sw8 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw9=");
+                    endIndex = responseText.indexOf("&Sw10=");
+                    var Sw9 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw10=");
+                    endIndex = responseText.indexOf("&Sw11=");
+                    var Sw10 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw11=");
+                    endIndex = responseText.indexOf("&Sw12=");
+                    var Sw11 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw12=");
+                    endIndex = responseText.indexOf("&Sw13=");
+                    var Sw12 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw13=");
+                    endIndex = responseText.indexOf("&Sw14=");
+                    var Sw13 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw14=");
+                    endIndex = responseText.indexOf("&Sw15=");
+                    var Sw14 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw15=");
+                    endIndex = responseText.indexOf("&Sw16=");
+                    var Sw15 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw16=");
+                    var Sw16 = responseText.substring(startIndex + 6);
+                    
                     document.getElementById("led1").innerText = Sw1;
                     document.getElementById("led2").innerText = Sw2;
                     document.getElementById("led3").innerText = Sw3;
-
-                }}; 
+                    document.getElementById("led4").innerText = Sw4;
+                    document.getElementById("led5").innerText = Sw5;
+                    document.getElementById("led6").innerText = Sw6;
+                    document.getElementById("led7").innerText = Sw7;
+                    document.getElementById("led8").innerText = Sw8;
+                    document.getElementById("led9").innerText = Sw9;
+                    document.getElementById("led10").innerText = Sw10;
+                    document.getElementById("led11").innerText = Sw11;
+                    document.getElementById("led12").innerText = Sw12;
+                    document.getElementById("led13").innerText = Sw13;
+                    document.getElementById("led14").innerText = Sw14;
+                    document.getElementById("led15").innerText = Sw15;
+                    document.getElementById("led16").innerText = Sw16;
+                }};
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
             xhttp.send();        }
         
         
+function fetchDataAndExtractVariables2() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var responseText = this.responseText;
+                    
+                    startIndex = responseText.indexOf("Sw16=");
+                    endIndex = responseText.indexOf("&Sw17=");
+                    var Sw16 = responseText.substring(startIndex + 5, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw17=");
+                    endIndex = responseText.indexOf("&Sw18=");
+                    var Sw17 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw18=");
+                    endIndex = responseText.indexOf("&Sw19=");
+                    var Sw18 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw19=");
+                    endIndex = responseText.indexOf("&Sw20=");
+                    var Sw19 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw20=");
+                    endIndex = responseText.indexOf("&Sw21=");
+                    var Sw20 = responseText.substring(startIndex + 6, endIndex);
+
+                    startIndex = responseText.indexOf("&Sw21=");
+                    endIndex = responseText.indexOf("&Sw22=");
+                    var Sw21 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw22=");
+                    endIndex = responseText.indexOf("&Sw23=");
+                    var Sw22 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw23=");
+                    endIndex = responseText.indexOf("&Sw24=");
+                    var Sw23 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw24=");
+                    endIndex = responseText.indexOf("&Sw25=");
+                    var Sw24 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw25=");
+                    endIndex = responseText.indexOf("&Sw26=");
+                    var Sw25 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw26=");
+                    endIndex = responseText.indexOf("&Sw27=");
+                    var Sw26 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw27=");
+                    endIndex = responseText.indexOf("&Sw28=");
+                    var Sw27 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw28=");
+                    endIndex = responseText.indexOf("&Sw29=");
+                    var Sw28 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw29=");
+                    endIndex = responseText.indexOf("&Sw30=");
+                    var Sw29 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw30=");
+                    endIndex = responseText.indexOf("&Sw31=");
+                    var Sw30 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw31=");
+                    endIndex = responseText.indexOf("&Sw32=");
+                    var Sw31 = responseText.substring(startIndex + 6, endIndex);
+                    
+                    startIndex = responseText.indexOf("&Sw32=");
+                    var Sw32 = responseText.substring(startIndex + 6);
+                    
+                    document.getElementById("led17").innerText = Sw17;
+                    document.getElementById("led18").innerText = Sw18;
+                    document.getElementById("led19").innerText = Sw19;
+                    document.getElementById("led20").innerText = Sw20;
+                    document.getElementById("led21").innerText = Sw21;
+                    document.getElementById("led22").innerText = Sw22;
+                    document.getElementById("led23").innerText = Sw23;
+                    document.getElementById("led24").innerText = Sw24;
+                    document.getElementById("led25").innerText = Sw25;
+                    document.getElementById("led26").innerText = Sw26;
+                    document.getElementById("led27").innerText = Sw27;
+                    document.getElementById("led28").innerText = Sw28;
+                    document.getElementById("led29").innerText = Sw29;
+                    document.getElementById("led30").innerText = Sw30;
+                    document.getElementById("led31").innerText = Sw31;
+                    document.getElementById("led32").innerText = Sw32;
+                }};
+            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
+            xhttp.send(); }        
+        
         document.addEventListener('DOMContentLoaded', function() {
     var changeStyleButton = document.getElementById('changeStyleButton');
     var ledContainer = document.querySelector('.led-container');
-    var isGridThreeColumns = true; 
+    var isGridThreeColumns = true; // Initial state
     
-    
+
 function toggleGridStyle() {
         if (isGridThreeColumns) {
             ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
@@ -149,20 +317,19 @@ function toggleGridStyle() {
         isGridThreeColumns = true;    }
         changeStyleButton.addEventListener('click', toggleGridStyle);
     });
-    
 
 (function() {
      	checkLink();
 	    fetchDataAndExtractVariables();
+        fetchDataAndExtractVariables2();
 	    displayValue();
     	checkArraySize();
 })();
 
-setInterval(checkLink, 30000);
+setInterval(checkLink, 10000);
 setInterval(displayValue, 150);
+
 </script>
-
-
 </head>
 <body>
     <h1>ESP Web Server</h1>
@@ -170,9 +337,45 @@ setInterval(displayValue, 150);
 
     <div class="led-container">
         <!-- Buttons from 1 to 8 initially hidden -->
-        <button id="led1" class="led-button" onclick="updateValue(1, this.id)">Button 1</button>
-        <button id="led2" class="led-button" onclick="updateValue(2, this.id)">Button 2</button>
-        <button id="led3" class="led-button" onclick="updateValue(3, this.id)">Button 3</button>
+        <button id="led1" class="led-button" onclick="hitWebsite(1, this.id)">Button 1</button>
+        <button id="led2" class="led-button" onclick="hitWebsite(2, this.id)">Button 2</button>
+        <button id="led3" class="led-button" onclick="hitWebsite(3, this.id)">Button 3</button>
+        <button id="led4" class="led-button" onclick="hitWebsite(4, this.id)">Button 4</button>
+        <button id="led5" class="led-button" onclick="hitWebsite(5, this.id)">Button 5</button>
+        <button id="led6" class="led-button" onclick="hitWebsite(6, this.id)">Button 6</button>
+        <button id="led7" class="led-button" onclick="hitWebsite(7, this.id)">Button 7</button>
+        <button id="led8" class="led-button" onclick="hitWebsite(8, this.id)">Button 8</button>
+        
+        <!-- Buttons from 9 to 16 initially hidden -->
+        <button id="led9" class="led-button" onclick="hitWebsite(9, this.id)">Button 9</button>
+        <button id="led10" class="led-button" onclick="hitWebsite(10, this.id)">Button 10</button>
+        <button id="led11" class="led-button" onclick="hitWebsite(11, this.id)">Button 11</button>
+        <button id="led12" class="led-button" onclick="hitWebsite(12, this.id)">Button 12</button>
+        <button id="led13" class="led-button" onclick="hitWebsite(13, this.id)">Button 13</button>
+        <button id="led14" class="led-button" onclick="hitWebsite(14, this.id)">Button 14</button>
+        <button id="led15" class="led-button" onclick="hitWebsite(15, this.id)">Button 15</button>
+        <button id="led16" class="led-button" onclick="hitWebsite(16, this.id)">Button 16</button>
+        
+        <!-- Buttons from 17 to 24 initially hidden -->
+        <button id="led17" class="led-button" onclick="hitWebsite(17, this.id)">Button 17</button>
+        <button id="led18" class="led-button" onclick="hitWebsite(18, this.id)">Button 18</button>
+        <button id="led19" class="led-button" onclick="hitWebsite(19, this.id)">Button 19</button>
+        <button id="led20" class="led-button" onclick="hitWebsite(20, this.id)">Button 20</button>
+        <button id="led21" class="led-button" onclick="hitWebsite(21, this.id)">Button 21</button>
+        <button id="led22" class="led-button" onclick="hitWebsite(22, this.id)">Button 22</button>
+        <button id="led23" class="led-button" onclick="hitWebsite(23, this.id)">Button 23</button>
+        <button id="led24" class="led-button" onclick="hitWebsite(24, this.id)">Button 24</button>
+        
+        <!-- Buttons from 25 to 32 initially hidden -->
+        <button id="led25" class="led-button" onclick="hitWebsite(25, this.id)">Button 25</button>
+        <button id="led26" class="led-button" onclick="hitWebsite(26, this.id)">Button 26</button>
+        <button id="led27" class="led-button" onclick="hitWebsite(27, this.id)">Button 27</button>
+        <button id="led28" class="led-button" onclick="hitWebsite(28, this.id)">Button 28</button>
+        <button id="led29" class="led-button" onclick="hitWebsite(29, this.id)">Button 29</button>
+        <button id="led30" class="led-button" onclick="hitWebsite(30, this.id)">Button 30</button>
+        <button id="led31" class="led-button" onclick="hitWebsite(31, this.id)">Button 31</button>
+        <button id="led32" class="led-button" onclick="hitWebsite(32, this.id)">Button 32</button>
+        
 
     </div>
     <br><br><br><br>
