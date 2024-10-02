@@ -25,13 +25,11 @@
         max-width: auto; /* Set max-width to 400px */
     }
 
-    #value {
-        display: none;
-    }
+    #value { display: none; }
 </style>
 <script>
 var server = "sgp1";
-var token = localStorage.getItem("token") || ""; // Use stored token or default
+var token = localStorage.getItem("token") || ""; 
 
 function checkLink() {
     var xhttp = new XMLHttpRequest();
@@ -39,19 +37,11 @@ function checkLink() {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 if (this.responseText === "true") {
-                    document.getElementById("result").innerText = "Device is connected.";
-                } else {
-                    document.getElementById("result").innerText = "Device is not connected.";
-                }
-            } else {
-                document.getElementById("result").innerText = "Please set token";
-            }
-        }
-    };
-    // Use the token variable here
+                    document.getElementById("result").innerText = "Device is connected."; } 
+                else { document.getElementById("result").innerText = "Device is not connected."; }} 
+            else { document.getElementById("result").innerText = "Please set token"; }}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
-    xhttp.send();
-}
+    xhttp.send();}
 
 function displayValue() {
     var xhttp = new XMLHttpRequest();
@@ -59,35 +49,24 @@ function displayValue() {
         if (this.readyState == 4 && this.status == 200) {
             if (this.responseText !== "0" && this.responseText !== "1") {
                 document.getElementById("value").innerText = "Value: " + this.responseText;
-
                 for (var i = 0; i < this.responseText.length; i++) {
                     var digit = this.responseText.charAt(i);
                     var buttonId = "led" + (i + 1);
                     var button = document.getElementById(buttonId);
-
     var lastGridStyle = localStorage.getItem('gridStyle');
-    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "grey";}  else  {
-
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "grey";}  
+                    else  {
                     if (digit === "0") {
-                        button.style.backgroundColor = "green";
-                    } else if (digit === "1") {
-                        button.style.backgroundColor = "red";
-                    } else {
-                        button.style.backgroundColor = "";
-                    }}
-                }
-            }
-        }
-    };
-    // Use the token variable here
+                        button.style.backgroundColor = "green";} 
+                        else if (digit === "1") {
+                        button.style.backgroundColor = "red";  } 
+                        else {button.style.backgroundColor = ""; }}}}}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
-    xhttp.send();
-}
+    xhttp.send();}
 
 function updateValue(value, buttonId) {
     var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
-    hitWebsite(url, buttonId);
-}
+    hitWebsite(url, buttonId);}
 
 function hitWebsite(url, buttonId) {
     var button = document.getElementById(buttonId);
@@ -98,53 +77,40 @@ function hitWebsite(url, buttonId) {
     xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-            button.disabled = false;
-
-        }
-    };
+            button.disabled = false;}};
     xhr.send();
 	checkLink();
     checkArraySize();
 	fetchDataAndExtractVariables();
-    fetchDataAndExtractVariables2();
-    }
+    fetchDataAndExtractVariables2();  }
 
 function checkArraySize() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var arraySize = parseInt(this.responseText);
-           
                 for (var i = 1; i <= arraySize; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block";
-                }}
-            
-        }
-    };
+                    document.getElementById("led" + i).style.display = "inline-block";}}}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
-    xhttp.send();
-}
+    xhttp.send();}
 
 function setToken() {
     var newToken = prompt("Enter new token :", token);
     if (newToken !== null && newToken.length <= 32) {
         token = newToken;
         localStorage.setItem("token", token);
-        
         checkLink();
         displayValue();
         checkArraySize();
         fetchDataAndExtractVariables();
-        fetchDataAndExtractVariables2();
-    } 
-}
+        fetchDataAndExtractVariables2();    }}
 
-        function fetchDataAndExtractVariables() {
+function fetchDataAndExtractVariables() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var responseText = this.responseText;
-                    // Example extraction logic, modify as per your data format
+
                     var startIndex = responseText.indexOf("Sw1=");
                     var endIndex = responseText.indexOf("&Sw2=");
                     var Sw1 = responseText.substring(startIndex + 4, endIndex);
@@ -208,9 +174,7 @@ function setToken() {
                     startIndex = responseText.indexOf("&Sw16=");
                     var Sw16 = responseText.substring(startIndex + 6);
                     
-                    
-                    
-                    // Update the button text for LED 1 with Sw1 value
+
                     document.getElementById("led1").innerText = Sw1;
                     document.getElementById("led2").innerText = Sw2;
                     document.getElementById("led3").innerText = Sw3;
@@ -227,19 +191,16 @@ function setToken() {
                     document.getElementById("led14").innerText = Sw14;
                     document.getElementById("led15").innerText = Sw15;
                     document.getElementById("led16").innerText = Sw16;
-                }
-            };
+                }};
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
-            xhttp.send();
-        }
+            xhttp.send();        }
         
         
-        function fetchDataAndExtractVariables2() {
+function fetchDataAndExtractVariables2() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var responseText = this.responseText;
-                    // Example extraction logic, modify as per your data format
                     
                     startIndex = responseText.indexOf("Sw16=");
                     endIndex = responseText.indexOf("&Sw17=");
@@ -308,9 +269,6 @@ function setToken() {
                     startIndex = responseText.indexOf("&Sw32=");
                     var Sw32 = responseText.substring(startIndex + 6);
                     
-                    
-                                        
-                    // Update the button text for LED 1 with Sw1 value
                     document.getElementById("led17").innerText = Sw17;
                     document.getElementById("led18").innerText = Sw18;
                     document.getElementById("led19").innerText = Sw19;
@@ -327,57 +285,43 @@ function setToken() {
                     document.getElementById("led30").innerText = Sw30;
                     document.getElementById("led31").innerText = Sw31;
                     document.getElementById("led32").innerText = Sw32;
-                }
-            };
+                }};
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
-            xhttp.send();
-        }        
-        
+            xhttp.send(); }        
         
         document.addEventListener('DOMContentLoaded', function() {
     var changeStyleButton = document.getElementById('changeStyleButton');
     var ledContainer = document.querySelector('.led-container');
     var isGridThreeColumns = true; // Initial state
     
-    // Function to toggle grid style
-    function toggleGridStyle() {
+
+function toggleGridStyle() {
         if (isGridThreeColumns) {
             ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
-            isGridThreeColumns = false;
-        } else {
+            isGridThreeColumns = false;  } 
+        else {
             ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
-            isGridThreeColumns = true;
-        }
-        // Store the current state in localStorage
-        localStorage.setItem('gridStyle', isGridThreeColumns ? 'grid3' : 'grid1');
-    }
-    
-    // Check localStorage for last used grid style
+            isGridThreeColumns = true;    }
+        localStorage.setItem('gridStyle', isGridThreeColumns ? 'grid3' : 'grid1');    }
     var lastGridStyle = localStorage.getItem('gridStyle');
     if (lastGridStyle === 'grid1') {
-        // Set initial state to single column grid
         ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
-        isGridThreeColumns = false;
-    } else {
-        // Default to 3-column grid (if not explicitly set or invalid)
+        isGridThreeColumns = false;    } 
+        else {
         ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
-        isGridThreeColumns = true;
-    }
-    
-    // Add event listener to the button
-    changeStyleButton.addEventListener('click', toggleGridStyle);
-    
-});
+        isGridThreeColumns = true;    }
+        changeStyleButton.addEventListener('click', toggleGridStyle);
+    });
 
 (function() {
+     	checkLink();
 	    fetchDataAndExtractVariables();
         fetchDataAndExtractVariables2();
-     	checkLink();
 	    displayValue();
     	checkArraySize();
 })();
 
-setInterval(checkLink, 10000);
+setInterval(checkLink, 30000);
 setInterval(displayValue, 150);
 
 </script>
