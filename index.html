@@ -89,10 +89,28 @@ function checkArraySize() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var arraySize = parseInt(this.responseText);
-                for (var i = 1; i <= arraySize; i++) { if( document.getElementById("led" + i).innerText !="" ){
-                    document.getElementById("led" + i).style.display = "inline-block";}}}};
+            localStorage.setItem('arraySize', arraySize); // Save arraySize
+            showButtons(arraySize); // Call function to show buttons
+        }
+    };
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
-    xhttp.send();}
+    xhttp.send();
+}
+
+function showButtons(arraySize) {
+    for (var i = 1; i <= arraySize; i++) {
+        document.getElementById("led" + i).style.display = "inline-block";
+    }
+}
+
+// On page load, check for saved arraySize
+document.addEventListener('DOMContentLoaded', function() {
+    var savedArraySize = localStorage.getItem('arraySize');
+    if (savedArraySize) {
+        showButtons(parseInt(savedArraySize)); // Show saved buttons
+    }
+});
+
 
 function setToken() {
     var newToken = prompt("Enter new token :", token);
@@ -321,7 +339,7 @@ function toggleGridStyle() {
     	checkArraySize();
 })();
 
-setInterval(checkLink, 30000);
+setInterval(checkLink, 10000);
 setInterval(displayValue, 150);
 
 </script>
