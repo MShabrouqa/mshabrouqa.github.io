@@ -59,6 +59,7 @@ function hitWebsite(value,buttonId,) {
  button.style.backgroundColor = "green";}
          else if (button.style.backgroundColor === "green"){
  button.style.backgroundColor = "red";}
+ displayValue;
                 
         }};
     xhr.send();
@@ -333,9 +334,6 @@ function toggleGridStyle() {
 	    displayValue();
     	checkArraySize();
 })();
-
-setInterval(checkLink, 10000);
-setInterval(displayValue, 10000);
 
 </script>
 </head>
