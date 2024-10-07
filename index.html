@@ -44,7 +44,7 @@ function checkLink() {
     xhttp.send();}
 
 
-function hitWebsite(value,buttonId,) {
+function hitWebsite(value,buttonId) {
     var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
     var button = document.getElementById(buttonId);
     button.innerText = "Loading...";
@@ -55,12 +55,14 @@ function hitWebsite(value,buttonId,) {
         if (xhr.readyState === 4) {
         button.disabled = false;
         
+            var lastGridStyle = localStorage.getItem('gridStyle');
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "grey";}
+        else {
+        
         if (button.style.backgroundColor === "red"){
  button.style.backgroundColor = "green";}
          else if (button.style.backgroundColor === "green"){
- button.style.backgroundColor = "red";}
- 
-
+ button.style.backgroundColor = "red";}}
                 
         }};
     xhr.send();
@@ -68,17 +70,6 @@ function hitWebsite(value,buttonId,) {
     checkArraySize();
 	fetchDataAndExtractVariables();
     fetchDataAndExtractVariables2();  }
-
-function checkArraySize() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var arraySize = parseInt(this.responseText);
-            localStorage.setItem('arraySize', arraySize); // Save arraySize
-            showButtons(arraySize);        }    };
-    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
-    xhttp.send();}
-
 
 function displayValue() {
     var xhttp = new XMLHttpRequest();
@@ -97,8 +88,19 @@ function displayValue() {
                         button.style.backgroundColor = "green";} 
                         else if (digit === "1") {
                         button.style.backgroundColor = "red";  } 
-                        else {button.style.backgroundColor = ""; }}}}}};
+                        else {button.style.backgroundColor = "grey"; }}}}}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
+    xhttp.send();}
+
+
+function checkArraySize() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var arraySize = parseInt(this.responseText);
+            localStorage.setItem('arraySize', arraySize); // Save arraySize
+            showButtons(arraySize);        }    };
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
     xhttp.send();}
 
 function showButtons(arraySize) {
