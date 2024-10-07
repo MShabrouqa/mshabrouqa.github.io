@@ -9,7 +9,6 @@
 
     .led-container {
         max-width: auto; /* Set max-width to 400px */
-        margin: auto auto; /* Center the container */
         display: grid;
         grid-template-columns: repeat(3, 1fr); /* Three columns */
         gap: 25px;
@@ -83,6 +82,8 @@ function displayValue() {
                     var button = document.getElementById(buttonId);
     var lastGridStyle = localStorage.getItem('gridStyle');
     if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";
+    
+    button.style.width = "250px";
     button.style.padding= "30px";
     }  
                     else  { button.style.padding= "17px";
@@ -325,8 +326,11 @@ function toggleGridStyle() {
     var lastGridStyle = localStorage.getItem('gridStyle');
     if (lastGridStyle === 'grid1') {
         ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+        
+        ledContainer.style.display= "inline-grid";
         ledContainer.style.gap= "35px";
         isGridThreeColumns = false;    } 
+        
         else {
         ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
         isGridThreeColumns = true;    }
