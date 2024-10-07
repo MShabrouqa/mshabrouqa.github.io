@@ -56,7 +56,7 @@ function hitWebsite(value,buttonId) {
         button.disabled = false;
         
             var lastGridStyle = localStorage.getItem('gridStyle');
-    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "grey";}
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";}
         else {
         
         if (button.style.backgroundColor === "red"){
@@ -82,7 +82,7 @@ function displayValue() {
                     var buttonId = "led" + (i + 1);
                     var button = document.getElementById(buttonId);
     var lastGridStyle = localStorage.getItem('gridStyle');
-    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "grey";
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";
     button.style.padding= "30px";
     }  
                     else  { button.style.padding= "17px";
@@ -90,7 +90,7 @@ function displayValue() {
                         button.style.backgroundColor = "green";} 
                         else if (digit === "1") {
                         button.style.backgroundColor = "red";  } 
-                        else {button.style.backgroundColor = "grey"; }}}}}};
+                        else {button.style.backgroundColor = "RoyalBlue"; }}}}}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
     xhttp.send();}
 
@@ -325,6 +325,7 @@ function toggleGridStyle() {
     var lastGridStyle = localStorage.getItem('gridStyle');
     if (lastGridStyle === 'grid1') {
         ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+        ledContainer.style.gap= "35px";
         isGridThreeColumns = false;    } 
         else {
         ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
