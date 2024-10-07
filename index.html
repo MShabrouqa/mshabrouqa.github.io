@@ -53,7 +53,14 @@ function hitWebsite(value,buttonId,) {
     xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
-        button.disabled = false;}};
+        button.disabled = false;
+        
+        if (button.style.backgroundColor === "red"){
+ button.style.backgroundColor = "green";}
+         else if (button.style.backgroundColor === "green"){
+ button.style.backgroundColor = "red";}
+                
+        }};
     xhr.send();
  	checkLink();
     checkArraySize();
@@ -69,6 +76,7 @@ function checkArraySize() {
             showButtons(arraySize);        }    };
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
     xhttp.send();}
+
 
 function displayValue() {
     var xhttp = new XMLHttpRequest();
@@ -327,7 +335,7 @@ function toggleGridStyle() {
 })();
 
 setInterval(checkLink, 10000);
-setInterval(displayValue, 150);
+setInterval(displayValue, 10000);
 
 </script>
 </head>
