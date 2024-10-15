@@ -54,6 +54,8 @@ function hitWebsite(value,buttonId) {
         if (xhr.readyState === 4) {
         button.disabled = false;
         
+        refresh(value);
+               
             var lastGridStyle = localStorage.getItem('gridStyle');
     if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";}
         else {
@@ -94,6 +96,40 @@ function displayValue() {
                         else {button.style.backgroundColor = "RoyalBlue"; }}}}}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
     xhttp.send();}
+    
+    
+    
+    
+    
+    function refresh(x) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.responseText !== "0" && this.responseText !== "1") {
+                document.getElementById("value").innerText = "Value: " + this.responseText;
+                for (var i = 0; i < this.responseText.length; i++) {
+                if (x != i+1){
+                    var digit = this.responseText.charAt(i);
+                    var buttonId = "led" + (i + 1);
+                    var button = document.getElementById(buttonId);
+    var lastGridStyle = localStorage.getItem('gridStyle');
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";
+    
+    button.style.width = "250px";
+    button.style.padding= "30px";
+    }  
+                    else  { button.style.padding= "17px";
+                    if (digit === "0") {
+                        button.style.backgroundColor = "green";} 
+                        else if (digit === "1") {
+                        button.style.backgroundColor = "red";  } 
+                        else {button.style.backgroundColor = "RoyalBlue"; }}}}}}};
+    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
+    xhttp.send();}
+    
+    
+    
+    
 
 
 function checkArraySize() {
@@ -109,7 +145,6 @@ function checkArraySize() {
 function showButtons(arraySize) {
     for (var i = 1; i <= arraySize; i++) {
         document.getElementById("led" + i).style.display = "inline-block";    }}
-
 document.addEventListener('DOMContentLoaded', function() {
     var savedArraySize = localStorage.getItem('arraySize');
     if (savedArraySize) { showButtons(parseInt(savedArraySize));}});
