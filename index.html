@@ -26,6 +26,7 @@
 
     #value { display: none; }
 </style>
+
 <script>
 var server = "sgp1";
 var token = localStorage.getItem("token") || ""; 
@@ -41,19 +42,18 @@ function checkLink() {
             else { document.getElementById("result").innerText = "Please set token"; }}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
     xhttp.send();}
+</script>
 
-
+<script>
 function hitWebsite(value,buttonId) {
     var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
     var lastGridStyle = localStorage.getItem('gridStyle');
     var button = document.getElementById(buttonId);
     button.innerText = "Loading...";
-    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "MidnightBlue";}
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "DarkBlue";}
    else {
            if (button.style.backgroundColor === "red"){ button.style.backgroundColor = "darkred";}
-         else if (button.style.backgroundColor === "green"){ button.style.backgroundColor = "darkgreen";}
-   }
-
+         else if (button.style.backgroundColor === "green"){ button.style.backgroundColor = "darkgreen";}   }
     button.disabled = true;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
@@ -62,17 +62,17 @@ function hitWebsite(value,buttonId) {
         button.disabled = false;
     if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";}
         else {
-        
         if (button.style.backgroundColor === "darkred"){ button.style.backgroundColor = "green";}
          else if (button.style.backgroundColor === "darkgreen"){ button.style.backgroundColor = "red";}}
-                
         }};
     xhr.send();
  	checkLink();
     checkArraySize();
 	fetchDataAndExtractVariables();
     fetchDataAndExtractVariables2();  }
+</script>
 
+<script>
 function displayValue() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -85,10 +85,9 @@ function displayValue() {
                     var button = document.getElementById(buttonId);
     var lastGridStyle = localStorage.getItem('gridStyle');
     if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";
-    
     button.style.width = "250px";
-    button.style.padding= "30px";
-    }  
+    button.style.fontSize = "19px";
+    button.style.padding= "22px";    }  
                     else  { button.style.padding= "17px";
                     if (digit === "0") {
                         button.style.backgroundColor = "green";} 
@@ -97,10 +96,9 @@ function displayValue() {
                         else {button.style.backgroundColor = "RoyalBlue"; }}}}}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
     xhttp.send();}
-    
-    
-       
-    
+</script>
+
+<script>
    function checkArraySize() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -110,15 +108,18 @@ function displayValue() {
             showButtons(arraySize);        }    };
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
     xhttp.send();}
+</script>
 
+<script>
 function showButtons(arraySize) {
     for (var i = 1; i <= arraySize; i++) {
         document.getElementById("led" + i).style.display = "inline-block";    }}
 document.addEventListener('DOMContentLoaded', function() {
     var savedArraySize = localStorage.getItem('arraySize');
     if (savedArraySize) { showButtons(parseInt(savedArraySize));}});
+</script>
 
-
+<script>
 function setToken() {
     var newToken = prompt("Enter new token :", token);
     if (newToken !== null && newToken.length <= 32) {
@@ -129,7 +130,9 @@ function setToken() {
         checkArraySize();
         fetchDataAndExtractVariables();
         fetchDataAndExtractVariables2();    }}
+</script>
 
+<script>
 function fetchDataAndExtractVariables() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -218,8 +221,9 @@ function fetchDataAndExtractVariables() {
                 }};
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
             xhttp.send();        }
-        
-        
+</script>
+
+<script>
 function fetchDataAndExtractVariables2() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
@@ -312,12 +316,13 @@ function fetchDataAndExtractVariables2() {
                 }};
             xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
             xhttp.send(); }        
-        
+</script>
+
+<script>
         document.addEventListener('DOMContentLoaded', function() {
     var changeStyleButton = document.getElementById('changeStyleButton');
     var ledContainer = document.querySelector('.led-container');
     var isGridThreeColumns = true; // Initial state
-    
 
 function toggleGridStyle() {
         if (isGridThreeColumns) {
