@@ -74,7 +74,7 @@ function displayValue() {
     				button.style.backgroundColor = "RoyalBlue";
     				button.style.width = "250px";
     				button.style.fontSize = "19px";
-    				button.style.padding= "27px";
+    				button.style.padding= "30px";
                     ledContainer.style.display= "inline-grid";}  
              else  { 
                     button.style.padding= "17px"; 
@@ -108,7 +108,10 @@ function showButtons(arraySize) {
     var lastGridStyle = localStorage.getItem('gridStyle');
     for (var i = 1; i <= arraySize; i++) {
         document.getElementById("led" + i).style.display = "inline-block";    
-         if (lastGridStyle === 'grid1') {document.getElementById("led" + i).style.backgroundColor = "RoyalBlue";}
+         if (lastGridStyle === 'grid1') {document.getElementById("led" + i).style.backgroundColor = "RoyalBlue";
+         document.getElementById("led" + i).style.fontSize = "19px";
+         document.getElementById("led" + i).style.width = "250px";
+         document.getElementById("led" + i).style.padding = "30px";}
         }}
 </script>
 
