@@ -73,12 +73,14 @@ function displayValue() {
     				button.style.width = "250px";
     				button.style.fontSize = "19px";
     				button.style.padding= "30px";
-                    ledContainer.style.display= "inline-grid";}  
+                    ledContainer.style.gap= "35px";
+                    ledContainer.style.display= "inline-grid";}
              else  { 
                     button.style.padding= "17px"; 
                     button.style.fontSize = ""; 
                     button.style.width = ""; 
                     button.style.padding= "";
+                    ledContainer.style.gap= "";
                     ledContainer.style.display= "grid";
                     if (digit === "0") {button.style.backgroundColor = "green";} 
                         else if (digit === "1") {button.style.backgroundColor = "red";  } 
@@ -106,10 +108,12 @@ function showButtons(arraySize) {
     var lastGridStyle = localStorage.getItem('gridStyle');
     for (var i = 1; i <= arraySize; i++) {
         document.getElementById("led" + i).style.display = "inline-block";    
-         if (lastGridStyle === 'grid1') {document.getElementById("led" + i).style.backgroundColor = "RoyalBlue";
+         if (lastGridStyle === 'grid1') {
+         document.getElementById("led" + i).style.backgroundColor = "RoyalBlue";
          document.getElementById("led" + i).style.fontSize = "19px";
          document.getElementById("led" + i).style.width = "250px";
-         document.getElementById("led" + i).style.padding = "30px";}}
+         document.getElementById("led" + i).style.padding = "30px";
+         }}
          for (var y = arraySize+1; y <= 32; y++) {document.getElementById("led" + y).style.display = "none";}
         }
 </script>
@@ -363,7 +367,8 @@ function toggleGridStyle() {
     if (lastGridStyle === 'grid1') {
         ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
         ledContainer.style.display= "inline-grid";
-               
+        ledContainer.style.gap= "35px";
+        
         isGridThreeColumns = false;    }
         else {
         ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
