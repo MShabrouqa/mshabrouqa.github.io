@@ -7,7 +7,7 @@
 <style>
     body { text-align: center; }
     .led-container { max-width: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; justify-content: center; }
-    .led-button { color: white; font-weight: bold; padding: 17px; box-sizing: border-box; display: none; max-width: auto; background-color: green; }
+    .led-button { color: white; font-weight: bold; padding: 17px; box-sizing: border-box; display: none; max-width: auto; background-color: green; border-radius: 0px;}
     #value { display: none; }
 </style>
 
@@ -74,6 +74,7 @@ function displayValue() {
     				button.style.fontSize = "19px";
     				button.style.padding= "30px";
                     ledContainer.style.gap= "35px";
+                    button.style.borderRadius = "10px";
                     ledContainer.style.display= "inline-grid";}
              else  { 
                     button.style.padding= "17px"; 
@@ -81,6 +82,7 @@ function displayValue() {
                     button.style.width = ""; 
                     button.style.padding= "";
                     ledContainer.style.gap= "";
+                    button.style.borderRadius = "";
                     ledContainer.style.display= "grid";
                     if (digit === "0") {button.style.backgroundColor = "green";} 
                         else if (digit === "1") {button.style.backgroundColor = "red";  } 
@@ -113,11 +115,11 @@ function showButtons(arraySize) {
          document.getElementById("led" + i).style.fontSize = "19px";
          document.getElementById("led" + i).style.width = "250px";
          document.getElementById("led" + i).style.padding = "30px";
+         document.getElementById("led" + i).style.borderRadius = "10px";
          }}
          for (var y = arraySize+1; y <= 32; y++) {document.getElementById("led" + y).style.display = "none";}
         }
 </script>
-
 
 <script>
 function setToken() {
@@ -243,7 +245,7 @@ function NameSwitch1(value){
                     document.getElementById("led14").innerText = Sw14;
                     document.getElementById("led15").innerText = Sw15;
                     document.getElementById("led16").innerText = Sw16;
-}
+                    }
 </script>
 
 <script>
@@ -376,8 +378,7 @@ function toggleGridStyle() {
         
         changeStyleButton.addEventListener('click', toggleGridStyle);
         changeStyleButton.addEventListener('click', displayValue);
-    });
-
+        });
 </script>
 
 <script>
@@ -394,7 +395,7 @@ function toggleGridStyle() {
 <body>
     <h1>ESP Web Server</h1>
     <p id="result">Connecting...</p>
-
+    
     <div class="led-container">
         <!-- Buttons from 1 to 8 initially hidden -->
         <button id="led1" class="led-button" onclick="hitWebsite(1, this.id)">Button 1</button>
@@ -436,7 +437,6 @@ function toggleGridStyle() {
         <button id="led31" class="led-button" onclick="hitWebsite(31, this.id)">Button 31</button>
         <button id="led32" class="led-button" onclick="hitWebsite(32, this.id)">Button 32</button>
         
-
     </div>
     <br><br><br><br>
     
