@@ -29,7 +29,7 @@
 
 <script>
 var server = "sgp1";
-var token = localStorage.getItem("token") || ""; 
+var token = localStorage.getItem("token") || "";
 
 function checkLink() {
     var xhttp = new XMLHttpRequest();
@@ -68,8 +68,8 @@ function hitWebsite(value,buttonId) {
     xhr.send();
  	checkLink();
     checkArraySize();
-	fetchDataAndExtractVariables();
-    fetchDataAndExtractVariables2();  }
+        SitSwitch1();
+        SitSwitch2();  }
 </script>
 
 <script>
@@ -114,10 +114,8 @@ function displayValue() {
 function showButtons(arraySize) {
     for (var i = 1; i <= arraySize; i++) {
         document.getElementById("led" + i).style.display = "inline-block";    }}
-document.addEventListener('DOMContentLoaded', function() {
-    var savedArraySize = localStorage.getItem('arraySize');
-    if (savedArraySize) { showButtons(parseInt(savedArraySize));}});
 </script>
+
 
 <script>
 function setToken() {
@@ -128,17 +126,40 @@ function setToken() {
         checkLink();
         displayValue();
         checkArraySize();
-        fetchDataAndExtractVariables();
-        fetchDataAndExtractVariables2();    }}
+        SitSwitch1();
+        SitSwitch2();    }}
 </script>
 
 <script>
-function fetchDataAndExtractVariables() {
+function SitSwitch1() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     var responseText = this.responseText;
+                    localStorage.setItem("Switch1", responseText);
+                    NameSwitch1(responseText);
+                }};
+            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
+            xhttp.send();        }
+</script>
 
+<script>
+function SitSwitch2() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var responseText = this.responseText;
+                    localStorage.setItem("Switch2", responseText);
+                    NameSwitch2(responseText);
+                    }};
+            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
+            xhttp.send(); }        
+</script>
+
+<script>
+function NameSwitch1(value){
+                    var responseText=value;
+                    
                     var startIndex = responseText.indexOf("Sw1=");
                     var endIndex = responseText.indexOf("&Sw2=");
                     var Sw1 = responseText.substring(startIndex + 4, endIndex);
@@ -218,18 +239,13 @@ function fetchDataAndExtractVariables() {
                     document.getElementById("led14").innerText = Sw14;
                     document.getElementById("led15").innerText = Sw15;
                     document.getElementById("led16").innerText = Sw16;
-                }};
-            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v4", true);
-            xhttp.send();        }
+}
 </script>
 
 <script>
-function fetchDataAndExtractVariables2() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    var responseText = this.responseText;
-                    
+function NameSwitch2(value){
+                    var responseText=value;
+					
                     startIndex = responseText.indexOf("Sw16=");
                     endIndex = responseText.indexOf("&Sw17=");
                     var Sw16 = responseText.substring(startIndex + 5, endIndex);
@@ -313,18 +329,31 @@ function fetchDataAndExtractVariables2() {
                     document.getElementById("led30").innerText = Sw30;
                     document.getElementById("led31").innerText = Sw31;
                     document.getElementById("led32").innerText = Sw32;
-                }};
-            xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v5", true);
-            xhttp.send(); }        
+                    }        
 </script>
 
+
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        
     var changeStyleButton = document.getElementById('changeStyleButton');
     var ledContainer = document.querySelector('.led-container');
-    var isGridThreeColumns = true; // Initial state
+    var isGridThreeColumns = true;
+    
+    var savedArraySize = localStorage.getItem('arraySize');
+    if (savedArraySize) { showButtons(parseInt(savedArraySize));}
+    
+    var saveSwitch1 = localStorage.getItem('Switch1');
+    if (saveSwitch1 != "") { NameSwitch1(saveSwitch1);}
+    
+    var saveSwitch2 = localStorage.getItem('Switch2');
+    if (saveSwitch2 != "") { NameSwitch2(saveSwitch2);}
+    
+    
+    
 
 function toggleGridStyle() {
+
         if (isGridThreeColumns) {
             ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
             isGridThreeColumns = false;  } 
@@ -335,26 +364,31 @@ function toggleGridStyle() {
     var lastGridStyle = localStorage.getItem('gridStyle');
     if (lastGridStyle === 'grid1') {
         ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
-        
         ledContainer.style.display= "inline-grid";
-        ledContainer.style.gap= "35px";
-        isGridThreeColumns = false;    } 
+  
+        ledContainer.style.width = "250px";
+        ledContainer.style.fontSize = "19px";
+        ledContainer.style.padding= "30px";
         
+        isGridThreeColumns = false;    } 
         else {
         ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
         isGridThreeColumns = true;    }
         changeStyleButton.addEventListener('click', toggleGridStyle);
     });
 
+</script>
+
+<script>
 (function() {
      	checkLink();
-	    fetchDataAndExtractVariables();
-        fetchDataAndExtractVariables2();
+	    SitSwitch1();
+        SitSwitch2();
 	    displayValue();
     	checkArraySize();
 })();
-
 </script>
+
 </head>
 <body>
     <h1>ESP Web Server</h1>
