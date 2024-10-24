@@ -18,10 +18,8 @@ var token = localStorage.getItem("token") || "";
 function checkLink() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
-        if (this.readyState == 4) {
-            if (this.status == 200) {
-                if (this.responseText === "true") {
-                    document.getElementById("result").innerText = "Device is connected."; } 
+        if (this.readyState == 4){  if (this.status == 200){
+                if (this.responseText === "true"){document.getElementById("result").innerText = "Device is connected."; } 
                 else { document.getElementById("result").innerText = "Device is not connected."; }} 
             else { document.getElementById("result").innerText = "Please set token"; }}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/isHardwareConnected?token=" + token, true);
@@ -387,7 +385,7 @@ function toggleGridStyle() {
 </head>
 <body>
     <h1>ESP Web Server</h1>
-    <p id="result"></p>
+    <p id="result">Connecting...</p>
 
     <div class="led-container">
         <!-- Buttons from 1 to 8 initially hidden -->
