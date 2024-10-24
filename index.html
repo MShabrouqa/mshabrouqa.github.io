@@ -83,12 +83,21 @@ function displayValue() {
                     var digit = this.responseText.charAt(i);
                     var buttonId = "led" + (i + 1);
                     var button = document.getElementById(buttonId);
-    var lastGridStyle = localStorage.getItem('gridStyle');
-    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";
-    button.style.width = "250px";
-    button.style.fontSize = "19px";
-    button.style.padding= "30px";    }  
-                    else  { button.style.padding= "17px";
+    				var lastGridStyle = localStorage.getItem('gridStyle');
+                    var ledContainer = document.querySelector('.led-container');
+    				
+   			 if (lastGridStyle === 'grid1') {
+    				button.style.backgroundColor = "RoyalBlue";
+    				button.style.width = "250px";
+    				button.style.fontSize = "19px";
+    				button.style.padding= "30px";
+                    ledContainer.style.display= "inline-grid";}  
+             else  { 
+                    button.style.padding= "17px"; 
+                    button.style.fontSize = ""; 
+                    button.style.width = ""; 
+                    button.style.padding= "";
+                    ledContainer.style.display= "grid";
                     if (digit === "0") {button.style.backgroundColor = "green";} 
                         else if (digit === "1") {button.style.backgroundColor = "red";  } 
                         else {button.style.backgroundColor = "RoyalBlue"; }}}}}};
@@ -368,13 +377,14 @@ function toggleGridStyle() {
   
         ledContainer.style.width = "250px";
         ledContainer.style.fontSize = "19px";
-        ledContainer.style.padding= "30px";
-        
-        isGridThreeColumns = false;    } 
+               
+        isGridThreeColumns = false;    }
         else {
         ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
         isGridThreeColumns = true;    }
+        
         changeStyleButton.addEventListener('click', toggleGridStyle);
+        changeStyleButton.addEventListener('click', displayValue);
     });
 
 </script>
