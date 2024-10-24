@@ -74,7 +74,7 @@ function displayValue() {
     				button.style.backgroundColor = "RoyalBlue";
     				button.style.width = "250px";
     				button.style.fontSize = "19px";
-    				button.style.padding= "30px";
+    				button.style.padding= "22px";
                     ledContainer.style.display= "inline-grid";}  
              else  { 
                     button.style.padding= "17px"; 
@@ -344,9 +344,7 @@ function NameSwitch2(value){
     
     var saveSwitch2 = localStorage.getItem('Switch2');
     if (saveSwitch2 != "") { NameSwitch2(saveSwitch2);}
-    
-    
-    
+
 
 function toggleGridStyle() {
 
@@ -361,9 +359,6 @@ function toggleGridStyle() {
     if (lastGridStyle === 'grid1') {
         ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
         ledContainer.style.display= "inline-grid";
-  
-        ledContainer.style.width = "250px";
-        ledContainer.style.fontSize = "19px";
                
         isGridThreeColumns = false;    }
         else {
