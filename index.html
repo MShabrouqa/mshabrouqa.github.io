@@ -87,13 +87,13 @@ function displayValue() {
     if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";
     button.style.width = "250px";
     button.style.fontSize = "19px";
-    button.style.padding= "25px";    }  
+    button.style.padding= "30px";    }  
                     else  { button.style.padding= "17px";
-                    if (digit === "0") {
-                        button.style.backgroundColor = "green";} 
-                        else if (digit === "1") {
-                        button.style.backgroundColor = "red";  } 
+                    if (digit === "0") {button.style.backgroundColor = "green";} 
+                        else if (digit === "1") {button.style.backgroundColor = "red";  } 
                         else {button.style.backgroundColor = "RoyalBlue"; }}}}}};
+                        
+                        
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
     xhttp.send();}
 </script>
