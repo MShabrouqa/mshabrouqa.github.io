@@ -6,24 +6,8 @@
 <title>ESP Web Server</title>
 <style>
     body { text-align: center; }
-
-    .led-container {
-        max-width: auto; /* Set max-width to 400px */
-        display: grid;
-        grid-template-columns: repeat(3, 1fr); /* Three columns */
-        gap: 25px;
-        justify-content: center;
-    }
-
-    .led-button {
-        color: white;
-        font-weight: bold;
-        padding: 17px;
-        box-sizing: border-box;
-        display: none; /* Initially hide all buttons */
-        max-width: auto; /* Set max-width to 400px */
-    }
-
+    .led-container { max-width: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; justify-content: center; }
+    .led-button { color: white; font-weight: bold; padding: 17px; box-sizing: border-box; display: none; max-width: auto; }
     #value { display: none; }
 </style>
 
@@ -53,7 +37,7 @@ function hitWebsite(value,buttonId) {
     if (lastGridStyle === 'grid1') {button.style.backgroundColor = "DarkBlue";}
    else {
            if (button.style.backgroundColor === "red"){ button.style.backgroundColor = "darkred";}
-         else if (button.style.backgroundColor === "green"){ button.style.backgroundColor = "darkgreen";}   }
+           else if (button.style.backgroundColor === "green"){ button.style.backgroundColor = "darkgreen";}   }
     button.disabled = true;
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
@@ -62,12 +46,12 @@ function hitWebsite(value,buttonId) {
         button.disabled = false;
     if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";}
         else {
-        if (button.style.backgroundColor === "darkred"){ button.style.backgroundColor = "green";}
+         if (button.style.backgroundColor === "darkred"){ button.style.backgroundColor = "green";}
          else if (button.style.backgroundColor === "darkgreen"){ button.style.backgroundColor = "red";}}
         }};
     xhr.send();
- 	checkLink();
-    checkArraySize();
+ 	    checkLink();
+        checkArraySize();
         SitSwitch1();
         SitSwitch2();  }
 </script>
@@ -113,16 +97,19 @@ function displayValue() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var arraySize = parseInt(this.responseText);
-            localStorage.setItem('arraySize', arraySize); // Save arraySize
-            showButtons(arraySize);        }    };
+            localStorage.setItem('arraySize', arraySize);
+            showButtons(arraySize);}};
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v2", true);
     xhttp.send();}
 </script>
 
 <script>
 function showButtons(arraySize) {
+    var lastGridStyle = localStorage.getItem('gridStyle');
     for (var i = 1; i <= arraySize; i++) {
-        document.getElementById("led" + i).style.display = "inline-block";    }}
+        document.getElementById("led" + i).style.display = "inline-block";    
+         if (lastGridStyle === 'grid1') {document.getElementById("led" + i).style.backgroundColor = "RoyalBlue";}
+        }}
 </script>
 
 
@@ -130,8 +117,8 @@ function showButtons(arraySize) {
 function setToken() {
     var newToken = prompt("Enter new token :", token);
     if (newToken !== null && newToken.length <= 32) {
-        token = newToken;
-        localStorage.setItem("token", token);
+    token = newToken;
+    localStorage.setItem("token", token);
         checkLink();
         displayValue();
         checkArraySize();
