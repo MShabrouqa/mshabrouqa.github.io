@@ -109,8 +109,9 @@ function showButtons(arraySize) {
          if (lastGridStyle === 'grid1') {document.getElementById("led" + i).style.backgroundColor = "RoyalBlue";
          document.getElementById("led" + i).style.fontSize = "19px";
          document.getElementById("led" + i).style.width = "250px";
-         document.getElementById("led" + i).style.padding = "30px";}
-        }}
+         document.getElementById("led" + i).style.padding = "30px";}}
+         for (var y = arraySize+1; y <= 32; y++) {document.getElementById("led" + y).style.display = "none";}
+        }
 </script>
 
 
@@ -120,11 +121,13 @@ function setToken() {
     if (newToken !== null && newToken.length <= 32) {
     token = newToken;
     localStorage.setItem("token", token);
+    localStorage.setItem('arraySize', 0);}
+        showButtons(0);
         checkLink();
         displayValue();
         checkArraySize();
         SitSwitch1();
-        SitSwitch2();    }}
+        SitSwitch2();    }
 </script>
 
 <script>
