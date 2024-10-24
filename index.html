@@ -42,7 +42,7 @@ function hitWebsite(value,buttonId) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
         button.disabled = false;
-    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "RoyalBlue";}
+    if (lastGridStyle === 'grid1') {button.style.backgroundColor = "SteelBlue";}
         else {
          if (button.style.backgroundColor === "darkred"){ button.style.backgroundColor = "green";}
          else if (button.style.backgroundColor === "darkgreen"){ button.style.backgroundColor = "red";}}
@@ -69,7 +69,7 @@ function displayValue() {
                     var ledContainer = document.querySelector('.led-container');
     				
    			 if (lastGridStyle === 'grid1') {
-    				button.style.backgroundColor = "RoyalBlue";
+    				button.style.backgroundColor = "SteelBlue";
     				button.style.width = "225px";
     				button.style.fontSize = "19px";
     				button.style.padding= "30px";
@@ -86,7 +86,7 @@ function displayValue() {
                     ledContainer.style.display= "grid";
                     if (digit === "0") {button.style.backgroundColor = "green";} 
                         else if (digit === "1") {button.style.backgroundColor = "red";  } 
-                        else {button.style.backgroundColor = "RoyalBlue"; }}}}}};
+                        else {button.style.backgroundColor = "SteelBlue"; }}}}}};
                         
                         
     xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
@@ -111,7 +111,7 @@ function showButtons(arraySize) {
     for (var i = 1; i <= arraySize; i++) {
         document.getElementById("led" + i).style.display = "inline-block";    
          if (lastGridStyle === 'grid1') {
-         document.getElementById("led" + i).style.backgroundColor = "RoyalBlue";
+         document.getElementById("led" + i).style.backgroundColor = "SteelBlue";
          document.getElementById("led" + i).style.fontSize = "19px";
          document.getElementById("led" + i).style.width = "225px";
          document.getElementById("led" + i).style.padding = "30px";
