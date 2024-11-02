@@ -4,12 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESP Web Server</title>
-<style>
-    body { text-align: center; }
-    .led-container { max-width: 300px; display: grid; margin: auto; grid-template-columns: repeat(3, 1fr); gap: 25px; justify-content: center; }
-    .led-button { color: white; font-weight: bold; padding: 17px; box-sizing: border-box; display: none; max-width: auto; background-color: green; border-radius: 0px;}
-    #value { display: none; }.
-</style>
+    <style>
+        body { text-align: center; }
+
+        .led-container {  height:150px; text-align:center;  display: grid;
+        grid-template-columns: repeat(3, 1fr); gap: 25px; justify-content: center; }
+        .led-button { color: white; font-weight: bold; white-space: normal; font-size: 17px;
+        word-wrap: break-word; display: inline-block; }
+        .green { background-color: green; }
+        .red { background-color: red; }
+       #value { display: none; }
+
+       .clickable-text { cursor: pointer; color: blue; text-decoration: underline; margin:0px auto; }
+
+    </style>
 
 <script>
 var server = "sgp1";
