@@ -20,9 +20,14 @@
         // Get the token from the URL
         const token = getTokenFromURL();
 
-        // Display the token in the page if it exists
+        // If a token exists, display it, then redirect to the main website
         if (token) {
             document.getElementById("tokenDisplay").textContent = `Token: ${token}`;
+            
+            // Redirect to the main website after a small delay (optional)
+            setTimeout(() => {
+                window.location.href = "https://www.mshabrouqa.github.io"; // Redirect to the main website
+            }, 2000); // Redirect after 2 seconds (you can adjust this)
         } else {
             document.getElementById("tokenDisplay").textContent = 'No token found in the URL.';
         }
