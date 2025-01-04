@@ -22,7 +22,7 @@
 
     // If the 'lastGridStyle' exists in the URL, store it in localStorage
     if (gridStyle) {
-      localStorage.setItem('gridStyle', gridStyle);
+      localStorage.setItem('gridStyle', isGridThreeColumns ? 'grid3' : 'grid1');    
       console.log('Last grid style set in localStorage:', gridStyle);
     } else {
       console.log('No lastGridStyle found in URL.');
