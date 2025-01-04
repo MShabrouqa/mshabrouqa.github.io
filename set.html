@@ -2,14 +2,17 @@
 <html lang="en">
 
 <script>
-    // Function to retrieve the 'token' from the URL query parameters
-    function getTokenFromUrl() {
+    // Function to retrieve a specific parameter from the URL query string
+    function getParamFromUrl(param) {
       const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('token');
+      return urlParams.get(param);
     }
 
-    // Check if there's a 'token' in the URL and set it in localStorage
-    const token = getTokenFromUrl();
+    // Retrieve the 'token' and 'lastGridStyle' parameters from the URL
+    const token = getParamFromUrl('token');
+    const lastGridStyle = getParamFromUrl('lastGridStyle');
+
+    // If the 'token' exists in the URL, store it in localStorage
     if (token) {
       localStorage.setItem('token', token);
       console.log('Token set in localStorage:', token);
@@ -17,8 +20,16 @@
       console.log('No token found in URL.');
     }
 
+    // If the 'lastGridStyle' exists in the URL, store it in localStorage
+    if (lastGridStyle) {
+      localStorage.setItem('lastGridStyle', lastGridStyle);
+      console.log('Last grid style set in localStorage:', lastGridStyle);
+    } else {
+      console.log('No lastGridStyle found in URL.');
+    }
+
     // Redirect to another page immediately
     window.location.href = "https://mshabrouqa.github.io";
-  </script>
+</script>
 
 </html>
