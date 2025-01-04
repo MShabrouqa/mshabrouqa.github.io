@@ -13,21 +13,12 @@
     h1 {
       color: #4CAF50;
     }
-    .token-display {
-      margin-top: 20px;
-      font-size: 18px;
-      padding: 10px;
-      background-color: #f4f4f4;
-      border: 1px solid #ddd;
-    }
   </style>
 </head>
 <body>
   <h1>Welcome to Token Setter Page</h1>
   
   <p>If a token is passed in the URL, it will be stored in localStorage.</p>
-
-  <div class="token-display" id="tokenDisplay"></div>
 
   <script>
     // Function to retrieve the 'token' from the URL query parameters
@@ -41,12 +32,12 @@
     if (token) {
       localStorage.setItem('token', token);
       console.log('Token set in localStorage:', token);
-      document.getElementById('tokenDisplay').innerText = `Token saved: ${token}`;
-      window.location.href = "https://mshabrouqa.github.io";
     } else {
-      document.getElementById('tokenDisplay').innerText = 'No token found in URL.';
       console.log('No token found in URL.');
     }
+
+    // Redirect to another page immediately
+    window.location.href = "https://mshabrouqa.github.io";
   </script>
 </body>
 </html>
