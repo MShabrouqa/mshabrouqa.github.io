@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Set Token from URL</title>
+  <title>Set Token and Redirect</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -25,7 +25,7 @@
 <body>
   <h1>Welcome to Token Setter Page</h1>
   
-  <p>If a token is passed in the URL, it will be stored in localStorage.</p>
+  <p>If a token is passed in the URL, it will be stored in localStorage and you will be redirected.</p>
 
   <div class="token-display" id="tokenDisplay"></div>
 
@@ -42,6 +42,11 @@
       localStorage.setItem('token', token);
       console.log('Token set in localStorage:', token);
       document.getElementById('tokenDisplay').innerText = `Token saved: ${token}`;
+
+      // Redirect to the main page after setting the token
+      setTimeout(() => {
+        window.location.href = "https://mshabrouqa.github.io";
+      }, 2000);  // Redirect after 2 seconds
     } else {
       document.getElementById('tokenDisplay').innerText = 'No token found in URL.';
       console.log('No token found in URL.');
