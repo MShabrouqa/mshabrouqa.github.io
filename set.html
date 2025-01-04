@@ -22,6 +22,8 @@
 
     // If a gridStyle (or style) is found, set it in localStorage
     if (gridStyle) {
+        if (gridStyle==1){gridStyle=grid1;}
+        if (gridStyle==3){gridStyle=grid3;}
       localStorage.setItem('gridStyle', gridStyle);
       console.log('Grid style set in localStorage:', gridStyle);
     } else {
