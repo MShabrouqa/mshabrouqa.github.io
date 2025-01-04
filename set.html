@@ -10,7 +10,7 @@
 
     // Retrieve the 'token' and 'lastGridStyle' parameters from the URL
     const token = getParamFromUrl('token');
-    const lastGridStyle = getParamFromUrl('lastGridStyle');
+    const lastGridStyle = getParamFromUrl('gridStyle');
 
     // If the 'token' exists in the URL, store it in localStorage
     if (token) {
@@ -22,8 +22,8 @@
 
     // If the 'lastGridStyle' exists in the URL, store it in localStorage
     if (lastGridStyle) {
-      localStorage.setItem('lastGridStyle', lastGridStyle);
-      console.log('Last grid style set in localStorage:', lastGridStyle);
+      localStorage.setItem('gridStyle', gridStyle);
+      console.log('Last grid style set in localStorage:', gridStyle);
     } else {
       console.log('No lastGridStyle found in URL.');
     }
