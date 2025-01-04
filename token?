@@ -1,0 +1,16 @@
+<script>
+  // Function to retrieve the 'token' from the URL query parameters
+  function getTokenFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('token');
+  }
+
+  // Check if there's a 'token' in the URL and set it in localStorage
+  const token = getTokenFromUrl();
+  if (token) {
+    localStorage.setItem('token', token);
+    console.log('Token set in localStorage:', token);
+  } else {
+    console.log('No token found in URL.');
+  }
+</script>
