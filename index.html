@@ -4,6 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ESP Web Server</title>
+
+
+<style>
+#snackbar-container {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 20px;
+  padding: 16px;
+  font-size: 17px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+</style>
+
+
 <style>
     body { text-align: center; }
     .led-container { max-width: auto; display: grid; margin: auto; grid-template-columns: repeat(3, 1fr); gap: 25px; justify-content: center; }
@@ -42,6 +95,7 @@ function hitWebsite(value,buttonId) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
         button.disabled = false;
+        popup();
     if (lastGridStyle === 'grid1') {button.style.backgroundColor = "SteelBlue";}
         else {
          if (button.style.backgroundColor === "darkred"){ button.style.backgroundColor = "green";}
@@ -341,6 +395,31 @@ function NameSwitch2(value){
 
 
 <script>
+function popup() {
+  // Create a new snackbar element
+  var snackbar = document.createElement("div");
+  snackbar.className = "snackbar";
+  snackbar.innerText = "Command Sent Successfully";
+
+  // Append the snackbar to the container
+  var container = document.getElementById("snackbar-container");
+  container.appendChild(snackbar);
+
+  // Show the snackbar with animation
+  setTimeout(function() {
+    snackbar.className = "snackbar show";
+  }, 10); // Slight delay to trigger the animation
+  
+  // Hide the snackbar after 3 seconds
+  setTimeout(function() {
+    snackbar.className = "snackbar";
+    container.removeChild(snackbar);
+  }, 3500); // 3500ms to match the fade-out timing
+}
+</script>
+
+
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         
     var changeStyleButton = document.getElementById('changeStyleButton');
@@ -440,6 +519,8 @@ function toggleGridStyle() {
         
     </div>
     <br><br><br><br>
+    
+    <div id="snackbar-container"></div>
     
     <button onclick="setToken()">Set Token</button>
     <br><br>
