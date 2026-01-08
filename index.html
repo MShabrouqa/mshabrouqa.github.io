@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESP Web Server</title>
+<title id="page-title">Obnet Web Server</title>
 
 
 <style>
@@ -41,12 +41,15 @@
 </style>
 
 
-<style>
-    body { text-align: center; }
-    .led-container { max-width: auto; display: grid; margin: auto; grid-template-columns: repeat(3, 1fr); gap: 25px; justify-content: center; }
-    .led-button { color: white; font-weight: bold; white-space: normal; font-size: 17px; word-wrap:anywhere; padding: 17px; box-sizing: border-box; display: none; max-width: auto; background-color: green; border-radius: 0px;}
-    #value { display: none; }.
-</style>
+    <style>
+        body {            text-align: center;            font-family: Arial, sans-serif;            margin-top: 50px;            background: linear-gradient( to left,#1c2833,#34495e,#1c2833, #1c2833,#34495e,#1c2833);         color: white;        }
+        .led-container {            max-width: 800px;            margin: auto;            display: grid;            grid-template-columns: repeat(3, 1fr);            gap: 25px;            justify-content: center;        }
+        .led-button {            color: white;            font-weight: bold;            padding: 17px;            box-sizing: border-box;            display: inline-block;           white-space: normal;            border: 2px solid gray;            border-radius: 8px;            font-size: 18px;            cursor: pointer;            transition: background-color 0.3s ease;        }
+        .green {            background-color: green;        }
+        .red {            background-color: red;        }
+        #value {            display: none;        }
+        .clickable-text {            cursor: pointer;            color: blue;            text-decoration: underline;            margin: 20px auto;        }
+    </style>
 
 
 
@@ -62,19 +65,16 @@ function popup() {
   container.appendChild(snackbar);
 
   // Show the snackbar with animation
-  setTimeout(function() {
-    snackbar.className = "snackbar show";
-  }, 10); // Slight delay to trigger the animation
+  setTimeout(function() {    snackbar.className = "snackbar show";  }, 10); 
+  // Slight delay to trigger the animation
   
   // Hide the snackbar after 3 seconds
   setTimeout(function() {
     snackbar.className = "snackbar";
-    container.removeChild(snackbar);
-  }, 1500); // 3500ms to match the fade-out timing
+    container.removeChild(snackbar);  }, 1500); 
+    // 3500ms to match the fade-out timing
 }
 </script>
-
-
 
 <script>
 var server = "sgp1";
@@ -93,6 +93,13 @@ function checkLink() {
 
 <script>
 function hitWebsite(value,buttonId) {
+    var Pass = localStorage.getItem('Pass');
+    if (Pass !== LogPass && LogPass !== "" ) {
+        Pass = prompt("Enter Authorization Password :", "", Pass);
+        localStorage.setItem("Pass", Pass);
+        }
+
+    if (Pass === LogPass || LogPass === "" ) {
     var url = "https://"+server+".blynk.cloud/external/api/update?token=" + token + "&v1=" + value;
     var lastGridStyle = localStorage.getItem('gridStyle');
     var button = document.getElementById(buttonId);
@@ -117,46 +124,66 @@ function hitWebsite(value,buttonId) {
  	    checkLink();
         checkArraySize();
         SitSwitch1();
-        SitSwitch2();  }
+        SitSwitch2();
+        buttonIDvalue = buttonID;
+        }
+
+        }
+        
 </script>
 
+
 <script>
-function displayValue() {
+
+function displayValue(buttonID) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             if (this.responseText !== "0" && this.responseText !== "1") {
                 document.getElementById("value").innerText = "Value: " + this.responseText;
                 for (var i = 0; i < this.responseText.length; i++) {
+
+                    if ((i + 1) === buttonID) continue;  // Skip this button
+
                     var digit = this.responseText.charAt(i);
                     var buttonId = "led" + (i + 1);
                     var button = document.getElementById(buttonId);
-    				var lastGridStyle = localStorage.getItem('gridStyle');
+                    var lastGridStyle = localStorage.getItem('gridStyle');
                     var ledContainer = document.querySelector('.led-container');
-    				
-   			 if (lastGridStyle === 'grid1') {
-    				button.style.backgroundColor = "SteelBlue";
-    				button.style.width = "225px";
-    				button.style.fontSize = "19px";
-    				button.style.padding= "30px";
-                    ledContainer.style.gap= "35px";
-                    button.style.borderRadius = "5px";
-                    ledContainer.style.display= "inline-grid";}
-             else  { 
-                    button.style.padding= "17px"; 
-                    button.style.fontSize = ""; 
-                    button.style.width = ""; 
-                    button.style.padding= "";
-                    ledContainer.style.gap= "";
-                    button.style.borderRadius = "";
-                    ledContainer.style.display= "grid";
-                    if (digit === "0") {button.style.backgroundColor = "green";} 
-                        else if (digit === "1") {button.style.backgroundColor = "red";  } 
-                        else {button.style.backgroundColor = "SteelBlue"; }}}}}};
-                        
-                        
-    xhttp.open("GET", "https://"+server+".blynk.cloud/external/api/get?token=" + token + "&v3", true);
-    xhttp.send();}
+
+                    if (lastGridStyle === 'grid1') {
+                        ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+                        button.style.backgroundColor = "SteelBlue";
+                        button.style.width = "225px";
+                        button.style.fontSize = "19px";
+                        button.style.padding = "30px";
+                        ledContainer.style.gap = "35px";
+                        button.style.borderRadius = "5px";
+                        ledContainer.style.display = "inline-grid";
+                    } else {
+                        button.style.padding = "17px";
+                        button.style.fontSize = "";
+                        button.style.width = "";
+                        ledContainer.style.gap = "";
+                        button.style.borderRadius = "";
+                        ledContainer.style.display = "grid";
+
+                        if (digit === "0" || digit === "X") {
+                            button.style.backgroundColor = "green";
+                        } else if (digit === "1") {
+                            button.style.backgroundColor = "red";
+                        } else {
+                            button.style.backgroundColor = "SteelBlue";
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    xhttp.open("GET", "https://" + server + ".blynk.cloud/external/api/get?token=" + token + "&v3", true);
+    xhttp.send();
+}
 </script>
 
 <script>
@@ -173,9 +200,18 @@ function displayValue() {
 
 <script>
 function showButtons(arraySize) {
+    var Pass = localStorage.getItem('Pass');
+    if (Pass !== LogPass && LogPass !== "" ) {
+        Pass = prompt("Enter Authorization Password :", "", Pass);
+        localStorage.setItem("Pass", Pass);
+        }
+
+    if (Pass === LogPass || LogPass === "" ) {
     var lastGridStyle = localStorage.getItem('gridStyle');
     for (var i = 1; i <= arraySize; i++) {
-        document.getElementById("led" + i).style.display = "inline-block";    
+        if (document.getElementById("led" + i).innerText =="")
+           { document.getElementById("led" + i).style.display = "none";;  }
+        else { document.getElementById("led" + i).style.display = "inline-block";  }    
          if (lastGridStyle === 'grid1') {
          document.getElementById("led" + i).style.backgroundColor = "SteelBlue";
          document.getElementById("led" + i).style.fontSize = "19px";
@@ -184,7 +220,7 @@ function showButtons(arraySize) {
          document.getElementById("led" + i).style.borderRadius = "5px";
          }}
          for (var y = arraySize+1; y <= 32; y++) {document.getElementById("led" + y).style.display = "none";}
-        }
+        }}
 </script>
 
 
@@ -232,11 +268,22 @@ function SitSwitch2() {
 <script>
 function NameSwitch1(value){
                     var responseText=value;
-                    
-                    var startIndex = responseText.indexOf("Sw1=");
-                    var endIndex = responseText.indexOf("&Sw2=");
-                    var Sw1 = responseText.substring(startIndex + 4, endIndex);
 
+                    var startIndex = responseText.indexOf("PN=");
+                    var endIndex = responseText.indexOf("&FW=");
+                    var PN = responseText.substring(startIndex + 3, endIndex);
+
+	            startIndex = responseText.indexOf("&FW=");
+                    endIndex = responseText.indexOf("Sw1=");
+                    var FW = responseText.substring(startIndex + 4, endIndex);
+
+	              if (PN === "Sw") {    PN = "";  }
+	              if (FW === "Sw1") {    FW = "";  }
+	
+                    startIndex = responseText.indexOf("Sw1=");
+                    endIndex = responseText.indexOf("&Sw2=");
+                    var Sw1 = responseText.substring(startIndex + 4, endIndex);
+	
                     startIndex = responseText.indexOf("&Sw2=");
                     endIndex = responseText.indexOf("&Sw3=");
                     var Sw2 = responseText.substring(startIndex + 5, endIndex);
@@ -294,8 +341,18 @@ function NameSwitch1(value){
                     var Sw15 = responseText.substring(startIndex + 6, endIndex);
                     
                     startIndex = responseText.indexOf("&Sw16=");
-                    var Sw16 = responseText.substring(startIndex + 6);
+	            endIndex = responseText.indexOf("&Title=");
+                    var Sw16 = responseText.substring(startIndex + 6, endIndex);
+
+	            startIndex = responseText.indexOf("&Title=");
+                    var Title = responseText.substring(startIndex + 7);
+                  
+                    document.getElementById("pagetitle").innerText = Title;
+                    document.getElementById("page-title").innerText = Title;
                     
+	            document.getElementById("PN").innerText = PN;
+	            document.getElementById("FW").innerText = FW;
+	
                     document.getElementById("led1").innerText = Sw1;
                     document.getElementById("led2").innerText = Sw2;
                     document.getElementById("led3").innerText = Sw3;
@@ -316,6 +373,7 @@ function NameSwitch1(value){
 </script>
 
 <script>
+var LogPass = "";
 function NameSwitch2(value){
                     var responseText=value;
 					
@@ -384,8 +442,12 @@ function NameSwitch2(value){
                     var Sw31 = responseText.substring(startIndex + 6, endIndex);
                     
                     startIndex = responseText.indexOf("&Sw32=");
-                    var Sw32 = responseText.substring(startIndex + 6);
+	            endIndex = responseText.indexOf("&LogPass=");
+                    var Sw32 = responseText.substring(startIndex + 6, endIndex);
                     
+                    startIndex = responseText.indexOf("&LogPass=");
+                    LogPass = responseText.substring(startIndex + 9);
+
                     document.getElementById("led17").innerText = Sw17;
                     document.getElementById("led18").innerText = Sw18;
                     document.getElementById("led19").innerText = Sw19;
@@ -425,7 +487,9 @@ function NameSwitch2(value){
 function toggleGridStyle() {
 
         if (isGridThreeColumns) {
-            ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+        ledContainer.style.gridTemplateColumns = 'repeat(1, 1fr)';
+        ledContainer.style.display= "inline-grid";
+        ledContainer.style.gap= "35px";
             isGridThreeColumns = false;  } 
         else {
             ledContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
@@ -459,49 +523,49 @@ function toggleGridStyle() {
 
 </head>
 <body>
-    <h1>ESP Web Server</h1>
+    <h1 id="pagetitle">Obnet Web Server</h1>
     <p id="result">Connecting...</p>
     
     <div class="led-container">
         <!-- Buttons from 1 to 8 initially hidden -->
-        <button id="led1" class="led-button" onclick="hitWebsite(1, this.id)">Button 1</button>
-        <button id="led2" class="led-button" onclick="hitWebsite(2, this.id)">Button 2</button>
-        <button id="led3" class="led-button" onclick="hitWebsite(3, this.id)">Button 3</button>
-        <button id="led4" class="led-button" onclick="hitWebsite(4, this.id)">Button 4</button>
-        <button id="led5" class="led-button" onclick="hitWebsite(5, this.id)">Button 5</button>
-        <button id="led6" class="led-button" onclick="hitWebsite(6, this.id)">Button 6</button>
-        <button id="led7" class="led-button" onclick="hitWebsite(7, this.id)">Button 7</button>
-        <button id="led8" class="led-button" onclick="hitWebsite(8, this.id)">Button 8</button>
+        <button id="led1" class="led-button" onclick="hitWebsite(1, this.id)" style="display: none;">Button 1</button>
+        <button id="led2" class="led-button" onclick="hitWebsite(2, this.id)" style="display: none;">Button 2</button>
+        <button id="led3" class="led-button" onclick="hitWebsite(3, this.id)" style="display: none;">Button 3</button>
+        <button id="led4" class="led-button" onclick="hitWebsite(4, this.id)" style="display: none;">Button 4</button>
+        <button id="led5" class="led-button" onclick="hitWebsite(5, this.id)" style="display: none;">Button 5</button>
+        <button id="led6" class="led-button" onclick="hitWebsite(6, this.id)" style="display: none;">Button 6</button>
+        <button id="led7" class="led-button" onclick="hitWebsite(7, this.id)" style="display: none;">Button 7</button>
+        <button id="led8" class="led-button" onclick="hitWebsite(8, this.id)" style="display: none;">Button 8</button>
         
         <!-- Buttons from 9 to 16 initially hidden -->
-        <button id="led9" class="led-button" onclick="hitWebsite(9, this.id)">Button 9</button>
-        <button id="led10" class="led-button" onclick="hitWebsite(10, this.id)">Button 10</button>
-        <button id="led11" class="led-button" onclick="hitWebsite(11, this.id)">Button 11</button>
-        <button id="led12" class="led-button" onclick="hitWebsite(12, this.id)">Button 12</button>
-        <button id="led13" class="led-button" onclick="hitWebsite(13, this.id)">Button 13</button>
-        <button id="led14" class="led-button" onclick="hitWebsite(14, this.id)">Button 14</button>
-        <button id="led15" class="led-button" onclick="hitWebsite(15, this.id)">Button 15</button>
-        <button id="led16" class="led-button" onclick="hitWebsite(16, this.id)">Button 16</button>
+        <button id="led9" class="led-button" onclick="hitWebsite(9, this.id)" style="display: none;">Button 9</button>
+        <button id="led10" class="led-button" onclick="hitWebsite(10, this.id)" style="display: none;">Button 10</button>
+        <button id="led11" class="led-button" onclick="hitWebsite(11, this.id)" style="display: none;">Button 11</button>
+        <button id="led12" class="led-button" onclick="hitWebsite(12, this.id)" style="display: none;">Button 12</button>
+        <button id="led13" class="led-button" onclick="hitWebsite(13, this.id)" style="display: none;">Button 13</button>
+        <button id="led14" class="led-button" onclick="hitWebsite(14, this.id)" style="display: none;">Button 14</button>
+        <button id="led15" class="led-button" onclick="hitWebsite(15, this.id)" style="display: none;">Button 15</button>
+        <button id="led16" class="led-button" onclick="hitWebsite(16, this.id)" style="display: none;">Button 16</button>
         
         <!-- Buttons from 17 to 24 initially hidden -->
-        <button id="led17" class="led-button" onclick="hitWebsite(17, this.id)">Button 17</button>
-        <button id="led18" class="led-button" onclick="hitWebsite(18, this.id)">Button 18</button>
-        <button id="led19" class="led-button" onclick="hitWebsite(19, this.id)">Button 19</button>
-        <button id="led20" class="led-button" onclick="hitWebsite(20, this.id)">Button 20</button>
-        <button id="led21" class="led-button" onclick="hitWebsite(21, this.id)">Button 21</button>
-        <button id="led22" class="led-button" onclick="hitWebsite(22, this.id)">Button 22</button>
-        <button id="led23" class="led-button" onclick="hitWebsite(23, this.id)">Button 23</button>
-        <button id="led24" class="led-button" onclick="hitWebsite(24, this.id)">Button 24</button>
+        <button id="led17" class="led-button" onclick="hitWebsite(17, this.id)" style="display: none;">Button 17</button>
+        <button id="led18" class="led-button" onclick="hitWebsite(18, this.id)" style="display: none;">Button 18</button>
+        <button id="led19" class="led-button" onclick="hitWebsite(19, this.id)" style="display: none;">Button 19</button>
+        <button id="led20" class="led-button" onclick="hitWebsite(20, this.id)" style="display: none;">Button 20</button>
+        <button id="led21" class="led-button" onclick="hitWebsite(21, this.id)" style="display: none;">Button 21</button>
+        <button id="led22" class="led-button" onclick="hitWebsite(22, this.id)" style="display: none;">Button 22</button>
+        <button id="led23" class="led-button" onclick="hitWebsite(23, this.id)" style="display: none;">Button 23</button>
+        <button id="led24" class="led-button" onclick="hitWebsite(24, this.id)" style="display: none;">Button 24</button>
         
         <!-- Buttons from 25 to 32 initially hidden -->
-        <button id="led25" class="led-button" onclick="hitWebsite(25, this.id)">Button 25</button>
-        <button id="led26" class="led-button" onclick="hitWebsite(26, this.id)">Button 26</button>
-        <button id="led27" class="led-button" onclick="hitWebsite(27, this.id)">Button 27</button>
-        <button id="led28" class="led-button" onclick="hitWebsite(28, this.id)">Button 28</button>
-        <button id="led29" class="led-button" onclick="hitWebsite(29, this.id)">Button 29</button>
-        <button id="led30" class="led-button" onclick="hitWebsite(30, this.id)">Button 30</button>
-        <button id="led31" class="led-button" onclick="hitWebsite(31, this.id)">Button 31</button>
-        <button id="led32" class="led-button" onclick="hitWebsite(32, this.id)">Button 32</button>
+        <button id="led25" class="led-button" onclick="hitWebsite(25, this.id)" style="display: none;">Button 25</button>
+        <button id="led26" class="led-button" onclick="hitWebsite(26, this.id)" style="display: none;">Button 26</button>
+        <button id="led27" class="led-button" onclick="hitWebsite(27, this.id)" style="display: none;">Button 27</button>
+        <button id="led28" class="led-button" onclick="hitWebsite(28, this.id)" style="display: none;">Button 28</button>
+        <button id="led29" class="led-button" onclick="hitWebsite(29, this.id)" style="display: none;">Button 29</button>
+        <button id="led30" class="led-button" onclick="hitWebsite(30, this.id)" style="display: none;">Button 30</button>
+        <button id="led31" class="led-button" onclick="hitWebsite(31, this.id)" style="display: none;">Button 31</button>
+        <button id="led32" class="led-button" onclick="hitWebsite(32, this.id)" style="display: none;">Button 32</button>
         
     </div>
     <br><br><br><br>
@@ -511,7 +575,10 @@ function toggleGridStyle() {
     <button onclick="setToken()">Set Token</button>
     <br><br>
     <button id="changeStyleButton">Change Style</button>
-    <p id="value"></p>
-
+    <p id="value"></p><br><br>
+	<h7> 
+    <div id="PN"></div>
+    <div id="FW"></div>
+	</h7>
 </body>
 </html>
