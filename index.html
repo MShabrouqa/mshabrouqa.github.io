@@ -126,6 +126,7 @@ function hitWebsite(value,buttonId) {
         SitSwitch1();
         SitSwitch2();
         buttonIDvalue = buttonID;
+
         }
 
         }
@@ -141,6 +142,7 @@ function displayValue(buttonID) {
         if (this.readyState == 4 && this.status == 200) {
             if (this.responseText !== "0" && this.responseText !== "1") {
                 document.getElementById("value").innerText = "Value: " + this.responseText;
+                displayValue();
                 for (var i = 0; i < this.responseText.length; i++) {
 
                     if ((i + 1) === buttonID) continue;  // Skip this button
