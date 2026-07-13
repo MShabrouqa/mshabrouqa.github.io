@@ -18,13 +18,12 @@ body{
     background:#eee;
     padding:20px;
     border-radius:10px;
-    text-align:left;
-    max-width:500px;
+    max-width:600px;
     margin:auto;
 }
 
 p{
-    font-size:16px;
+    text-align:left;
 }
 
 </style>
@@ -40,27 +39,27 @@ p{
 <h2>Device Information</h2>
 
 
-<p>Status:
-<span id="status">Loading...</span>
-</p>
-
-
 <p>IP Address:
 <span id="ip">-</span>
 </p>
 
 
-<p>Country:
-<span id="country">-</span>
+<p>Location:
+<span id="location">-</span>
 </p>
 
 
-<p>City:
-<span id="city">-</span>
+<p>Latitude:
+<span id="lat">-</span>
 </p>
 
 
-<p>Operating System:
+<p>Longitude:
+<span id="lon">-</span>
+</p>
+
+
+<p>OS:
 <span id="os">-</span>
 </p>
 
@@ -90,18 +89,13 @@ p{
 </p>
 
 
-<p>Language:
-<span id="lang">-</span>
-</p>
-
-
-<p>Time Zone:
-<span id="timezone">-</span>
-</p>
-
-
 <p>Battery:
 <span id="battery">-</span>
+</p>
+
+
+<p>Device Model:
+<span id="model">Not available</span>
 </p>
 
 
@@ -112,7 +106,8 @@ p{
 <script>
 
 
-// Get IP information
+// ================= IP + Location =================
+
 
 fetch("https://ipapi.co/json/")
 
@@ -121,95 +116,99 @@ fetch("https://ipapi.co/json/")
 .then(data=>{
 
 
-document.getElementById("ip").innerHTML=data.ip;
-
-document.getElementById("country").innerHTML=data.country_name;
-
-document.getElementById("city").innerHTML=data.city;
+document.getElementById("ip").innerHTML =
+data.ip;
 
 
-})
+document.getElementById("location").innerHTML =
+data.city+", "+data.country_name;
 
-.catch(()=>{
 
-document.getElementById("ip").innerHTML="Unavailable";
+document.getElementById("lat").innerHTML =
+data.latitude;
+
+
+document.getElementById("lon").innerHTML =
+data.longitude;
+
 
 });
 
 
 
 
-// Operating System
-
-function getOS(){
-
-let ua=navigator.userAgent;
+// ================= OS Detection =================
 
 
-if(ua.includes("Windows"))
-return "Windows";
+let ua = navigator.userAgent;
 
 
-if(ua.includes("Android"))
-return "Android";
+let os="Unknown";
 
 
-if(ua.includes("iPhone"))
-return "iOS";
+if(/Windows/i.test(ua))
+    os="Windows";
+
+else if(/Android/i.test(ua))
+    os="Android";
+
+else if(/iPhone|iPad/i.test(ua))
+    os="iOS";
+
+else if(/Mac/i.test(ua))
+    os="MacOS";
+
+else if(/Linux/i.test(ua))
+    os="Linux";
 
 
-if(ua.includes("Mac"))
-return "MacOS";
-
-
-if(ua.includes("Linux"))
-return "Linux";
-
-
-return "Unknown";
-
-}
-
-
-document.getElementById("os").innerHTML=getOS();
+document.getElementById("os").innerHTML=os;
 
 
 
 
-// Device type
+// ================= Device Type =================
 
-function getDevice(){
 
-let ua=navigator.userAgent;
+let device="PC";
 
 
 if(/Mobi|Android/i.test(ua))
-return "Mobile";
+    device="Mobile";
+
+else if(/Tablet/i.test(ua))
+    device="Tablet";
 
 
-if(/Tablet/i.test(ua))
-return "Tablet";
-
-
-return "PC";
-
-}
-
-
-document.getElementById("device").innerHTML=getDevice();
+document.getElementById("device").innerHTML=device;
 
 
 
 
-// Browser
+// ================= Browser =================
+
+
+let browser="Unknown";
+
+
+if(ua.includes("Chrome"))
+    browser="Chrome";
+
+else if(ua.includes("Firefox"))
+    browser="Firefox";
+
+else if(ua.includes("Safari"))
+    browser="Safari";
+
 
 document.getElementById("browser").innerHTML =
-navigator.userAgent;
+browser;
 
 
 
 
-// Screen
+// ================= Screen =================
+
 
 document.getElementById("screen").innerHTML =
 screen.width+" x "+screen.height;
@@ -217,41 +216,34 @@ screen.width+" x "+screen.height;
 
 
 
-// CPU
+// ================= CPU =================
+
 
 document.getElementById("cpu").innerHTML =
-navigator.hardwareConcurrency || "Not available";
+navigator.hardwareConcurrency || "Unknown";
 
 
 
 
-// RAM
+// ================= RAM =================
+
+
+if(navigator.deviceMemory)
 
 document.getElementById("ram").innerHTML =
-navigator.deviceMemory ?
-navigator.deviceMemory+" GB":
-"Not available";
+navigator.deviceMemory+" GB (estimated)";
+
+else
+
+document.getElementById("ram").innerHTML =
+"Unavailable";
 
 
 
 
-// Language
 
-document.getElementById("lang").innerHTML =
-navigator.language;
+// ================= Battery =================
 
-
-
-
-// Timezone
-
-document.getElementById("timezone").innerHTML =
-Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-
-
-
-// Battery
 
 if(navigator.getBattery){
 
@@ -284,18 +276,53 @@ updateBattery
 
 
 }
-else{
 
+else{
 
 document.getElementById("battery").innerHTML =
 "Not supported";
-
 
 }
 
 
 
-document.getElementById("status").innerHTML="Ready";
+
+
+// ================= Device Model =================
+
+
+// Modern browsers hide this information
+
+if(navigator.userAgentData){
+
+
+navigator.userAgentData.getHighEntropyValues(
+[
+"model",
+"platform",
+"architecture"
+]
+
+)
+
+.then(data=>{
+
+
+if(data.model)
+
+document.getElementById("model").innerHTML =
+data.model;
+
+else
+
+document.getElementById("model").innerHTML =
+"Hidden by browser";
+
+
+});
+
+
+}
 
 
 </script>
