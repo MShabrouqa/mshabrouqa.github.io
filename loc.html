@@ -1,165 +1,355 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Smart Location</title>
+<title>Device Information & Location</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
 body{
     font-family:Arial;
     text-align:center;
-    margin:40px;
+    margin:30px;
 }
 
 .box{
-    background:#eee;
+    background:#f2f2f2;
     padding:20px;
     border-radius:10px;
+    max-width:600px;
+    margin:auto;
+}
+
+table{
+    width:100%;
+    text-align:left;
+}
+
+td{
+    padding:8px;
 }
 
 a{
-    font-size:18px;
     color:blue;
 }
+
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="box">
 
-<h2>Device Location</h2>
+<h2>Device Information</h2>
 
-<p>Status: <span id="status">Checking...</span></p>
+<table>
 
-<p>Latitude: <span id="lat">-</span></p>
-<p>Longitude: <span id="lon">-</span></p>
-<p>Accuracy: <span id="accuracy">-</span></p>
+<tr><td>Status</td><td id="status">Checking...</td></tr>
+
+<tr><td>IP Address</td><td id="ip">-</td></tr>
+
+<tr><td>Location Source</td><td id="source">-</td></tr>
+
+<tr><td>Latitude</td><td id="lat">-</td></tr>
+
+<tr><td>Longitude</td><td id="lon">-</td></tr>
+
+<tr><td>Accuracy</td><td id="accuracy">-</td></tr>
+
+<tr><td>Operating System</td><td id="os">-</td></tr>
+
+<tr><td>Device Type</td><td id="device">-</td></tr>
+
+<tr><td>Browser</td><td id="browser">-</td></tr>
+
+<tr><td>Screen Size</td><td id="screen">-</td></tr>
+
+<tr><td>Language</td><td id="language">-</td></tr>
+
+<tr><td>Time Zone</td><td id="timezone">-</td></tr>
+
+<tr><td>CPU Cores</td><td id="cpu">-</td></tr>
+
+<tr><td>RAM</td><td id="ram">-</td></tr>
+
+<tr><td>Online</td><td id="online">-</td></tr>
+
+
+</table>
+
 
 <br>
 
 <a id="mapLink" target="_blank">
-Open in Google Maps
+Google Maps Location
 </a>
 
+
 </div>
+
 
 
 <script>
 
 
-async function getLocation(){
+// -------------------------
+// Device information
+// -------------------------
 
-    if(navigator.permissions){
-
-        try{
-
-            let permission = await navigator.permissions.query({
-                name:"geolocation"
-            });
+function getDeviceInfo(){
 
 
-            if(permission.state === "granted"){
+let ua = navigator.userAgent;
 
-                getGPS();
 
-            }
-            else{
+// OS
 
-                // Do not request GPS permission
-                getIPLocation();
+let os="Unknown";
 
-            }
 
-        }
-        catch(e){
+if(/Android/i.test(ua))
+    os="Android";
 
-            getIPLocation();
+else if(/iPhone|iPad/i.test(ua))
+    os="iOS";
 
-        }
+else if(/Windows/i.test(ua))
+    os="Windows";
 
-    }
-    else{
+else if(/Mac/i.test(ua))
+    os="MacOS";
 
-        getIPLocation();
+else if(/Linux/i.test(ua))
+    os="Linux";
 
-    }
+
+
+document.getElementById("os").innerHTML=os;
+
+
+
+// Device Type
+
+let device="PC";
+
+
+if(/Mobile/i.test(ua))
+    device="Mobile";
+
+else if(/Tablet|iPad/i.test(ua))
+    device="Tablet";
+
+
+document.getElementById("device").innerHTML=device;
+
+
+
+// Browser
+
+document.getElementById("browser").innerHTML =
+ua;
+
+
+
+// Screen
+
+document.getElementById("screen").innerHTML =
+screen.width+" x "+screen.height;
+
+
+
+// Language
+
+document.getElementById("language").innerHTML =
+navigator.language;
+
+
+
+// Time zone
+
+document.getElementById("timezone").innerHTML =
+Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+
+// CPU
+
+document.getElementById("cpu").innerHTML =
+navigator.hardwareConcurrency || "Unknown";
+
+
+
+// RAM
+
+document.getElementById("ram").innerHTML =
+(navigator.deviceMemory || "Unknown")+" GB";
+
+
+
+// Online
+
+document.getElementById("online").innerHTML =
+navigator.onLine ? "Yes":"No";
+
 
 }
 
 
 
-// GPS Location
+// -------------------------
+// IP Information
+// -------------------------
+
+function getIPInfo(){
+
+
+fetch("https://ipapi.co/json/")
+
+
+.then(response=>response.json())
+
+
+.then(data=>{
+
+
+document.getElementById("ip").innerHTML =
+data.ip;
+
+
+if(!gpsAvailable){
+
+displayLocation(
+
+data.latitude,
+data.longitude,
+"Approximate",
+"IP Location"
+
+);
+
+}
+
+
+})
+
+
+.catch(()=>{
+
+document.getElementById("ip").innerHTML =
+"Unavailable";
+
+});
+
+
+}
+
+
+
+// -------------------------
+// GPS without asking
+// -------------------------
+
+let gpsAvailable=false;
+
+
+
+async function checkGPS(){
+
+
+if(navigator.permissions){
+
+
+try{
+
+
+let permission =
+await navigator.permissions.query(
+{name:"geolocation"}
+);
+
+
+
+if(permission.state==="granted"){
+
+
+gpsAvailable=true;
+
+getGPS();
+
+
+}
+
+else{
+
+
+getIPInfo();
+
+
+}
+
+
+}
+
+catch(e){
+
+getIPInfo();
+
+}
+
+
+}
+
+else{
+
+getIPInfo();
+
+}
+
+
+}
+
+
+
 
 function getGPS(){
 
-    navigator.geolocation.getCurrentPosition(
 
-        function(position){
+navigator.geolocation.getCurrentPosition(
 
-            let lat = position.coords.latitude;
-            let lon = position.coords.longitude;
-            let acc = position.coords.accuracy;
+function(pos){
 
 
-            displayLocation(
-                lat,
-                lon,
-                acc,
-                "GPS Location"
-            );
+displayLocation(
 
-        },
+pos.coords.latitude,
+pos.coords.longitude,
+pos.coords.accuracy+" meters",
+"GPS"
 
-
-        function(){
-
-            getIPLocation();
-
-        },
+);
 
 
-        {
-            enableHighAccuracy:true,
-            timeout:5000,
-            maximumAge:0
-        }
+},
 
-    );
 
+function(){
+
+getIPInfo();
+
+},
+
+
+{
+enableHighAccuracy:true,
+timeout:5000
 }
 
 
-
-
-// IP Location fallback
-
-function getIPLocation(){
-
-    fetch("https://ipapi.co/json/")
-
-    .then(response=>response.json())
-
-    .then(data=>{
-
-
-        displayLocation(
-            data.latitude,
-            data.longitude,
-            "Approximate",
-            "IP Based Location"
-        );
-
-
-    })
-
-    .catch(()=>{
-
-        document.getElementById("status").innerHTML =
-        "Location unavailable";
-
-    });
+);
 
 
 }
@@ -167,50 +357,53 @@ function getIPLocation(){
 
 
 
+// -------------------------
+// Display Location
+// -------------------------
 
-// Display data + Google Map
-
-function displayLocation(lat,lon,accuracy,status){
-
-
-    document.getElementById("status").innerHTML =
-    status;
+function displayLocation(lat,lon,acc,source){
 
 
-    document.getElementById("lat").innerHTML =
-    lat;
+document.getElementById("source").innerHTML=
+source;
 
 
-    document.getElementById("lon").innerHTML =
-    lon;
+document.getElementById("lat").innerHTML=
+lat;
 
 
-    document.getElementById("accuracy").innerHTML =
-    accuracy;
+document.getElementById("lon").innerHTML=
+lon;
 
 
-
-    let mapURL =
-    "https://www.google.com/maps?q="
-    +lat+","+lon;
+document.getElementById("accuracy").innerHTML=
+acc;
 
 
 
-    let link =
-    document.getElementById("mapLink");
+document.getElementById("status").innerHTML=
+"Complete";
 
 
-    link.href = mapURL;
 
-    link.innerHTML =
-    "Open Location in Google Maps";
+document.getElementById("mapLink").href =
+"https://www.google.com/maps?q="+lat+","+lon;
+
+
+
+document.getElementById("mapLink").innerHTML =
+"Open in Google Maps";
 
 
 }
 
 
 
-getLocation();
+// Start
+
+getDeviceInfo();
+
+checkGPS();
 
 
 </script>
