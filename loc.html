@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<title>Device Information & Location</title>
+<title>Device Information</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,23 +9,23 @@
 
 body{
     font-family:Arial;
-    margin:20px;
-    background:#f2f2f2;
+    margin:30px;
+    text-align:center;
 }
 
 .box{
-    background:white;
+    background:#eeeeee;
     padding:20px;
     border-radius:10px;
-    box-shadow:0 0 10px #aaa;
 }
 
-h2{
-    color:#333;
+table{
+    width:100%;
 }
 
-p{
-    font-size:16px;
+td{
+    padding:8px;
+    text-align:left;
 }
 
 </style>
@@ -40,123 +38,78 @@ p{
 
 <div class="box">
 
-
 <h2>Device Information</h2>
 
 
-<p>Status:
-<span id="status">Loading...</span>
-</p>
+<table>
+
+<tr>
+<td>Device Name:</td>
+<td id="deviceName">-</td>
+</tr>
 
 
-<hr>
+<tr>
+<td>Device Type:</td>
+<td id="deviceType">-</td>
+</tr>
 
 
-<h3>Location</h3>
-
-<p>Latitude:
-<span id="lat">-</span>
-</p>
-
-<p>Longitude:
-<span id="lon">-</span>
-</p>
-
-<p>Accuracy:
-<span id="accuracy">-</span>
-</p>
+<tr>
+<td>Operating System:</td>
+<td id="os">-</td>
+</tr>
 
 
-<a id="mapLink" target="_blank">
-Open Google Maps
-</a>
+<tr>
+<td>Browser:</td>
+<td id="browser">-</td>
+</tr>
 
 
-<hr>
+<tr>
+<td>Battery:</td>
+<td id="battery">-</td>
+</tr>
 
 
-<h3>Network</h3>
-
-<p>IP Address:
-<span id="ip">-</span>
-</p>
-
-
-<p>Country:
-<span id="country">-</span>
-</p>
+<tr>
+<td>IP Address:</td>
+<td id="ip">-</td>
+</tr>
 
 
-<p>City:
-<span id="city">-</span>
-</p>
+<tr>
+<td>Screen:</td>
+<td id="screen">-</td>
+</tr>
 
 
-<hr>
+<tr>
+<td>CPU Cores:</td>
+<td id="cpu">-</td>
+</tr>
 
 
-<h3>Device</h3>
+<tr>
+<td>RAM:</td>
+<td id="ram">-</td>
+</tr>
 
 
-<p>Device Type:
-<span id="deviceType">-</span>
-</p>
+<tr>
+<td>Language:</td>
+<td id="lang">-</td>
+</tr>
 
 
-<p>Device Model:
-<span id="deviceModel">-</span>
-</p>
+<tr>
+<td>Time Zone:</td>
+<td id="timezone">-</td>
+</tr>
 
 
-<p>Operating System:
-<span id="os">-</span>
-</p>
-
-
-<p>Browser:
-<span id="browser">-</span>
-</p>
-
-
-<p>Screen:
-<span id="screen">-</span>
-</p>
-
-
-<p>CPU Cores:
-<span id="cpu">-</span>
-</p>
-
-
-<p>RAM:
-<span id="ram">-</span>
-</p>
-
-
-<p>Language:
-<span id="lang">-</span>
-</p>
-
-
-<p>Time Zone:
-<span id="timezone">-</span>
-</p>
-
-
-<hr>
-
-
-<h3>Battery</h3>
-
-
-<p>Battery:
-<span id="battery">Not Available</span>
-</p>
-
-
-<p>Charging:
-<span id="charging">-</span>
-</p>
+</table>
 
 
 </div>
@@ -166,290 +119,166 @@ Open Google Maps
 <script>
 
 
-// ==========================
-// Device information
-// ==========================
-
-
-function getDeviceInfo(){
-
+// Browser + OS
 
 let ua = navigator.userAgent;
 
 
-let os="Unknown";
+document.getElementById("browser").innerHTML =
+getBrowser();
 
 
-if(/Android/i.test(ua))
-    os="Android";
-
-else if(/iPhone|iPad/i.test(ua))
-    os="iOS";
-
-else if(/Windows/i.test(ua))
-    os="Windows";
-
-else if(/Mac/i.test(ua))
-    os="MacOS";
-
-else if(/Linux/i.test(ua))
-    os="Linux";
+document.getElementById("os").innerHTML =
+getOS();
 
 
 
-document.getElementById("os").innerHTML=os;
-
-
-
-let browser="Unknown";
-
+function getBrowser(){
 
 if(ua.includes("Chrome"))
-    browser="Chrome";
+return "Chrome";
 
-else if(ua.includes("Firefox"))
-    browser="Firefox";
+if(ua.includes("Firefox"))
+return "Firefox";
 
-else if(ua.includes("Safari"))
-    browser="Safari";
+if(ua.includes("Safari"))
+return "Safari";
 
+return "Unknown";
 
-document.getElementById("browser").innerHTML=browser;
-
-
-
-let type="Desktop";
-
-
-if(/Mobi/i.test(ua))
-    type="Mobile";
-
-
-document.getElementById("deviceType").innerHTML=type;
+}
 
 
 
-document.getElementById("deviceModel").innerHTML=
-navigator.userAgent;
+function getOS(){
+
+if(ua.includes("Android"))
+return "Android";
+
+if(ua.includes("iPhone"))
+return "iOS";
+
+if(ua.includes("Windows"))
+return "Windows";
+
+if(ua.includes("Mac"))
+return "MacOS";
+
+return "Unknown";
+
+}
 
 
 
-document.getElementById("screen").innerHTML=
+// Device type
+
+function deviceType(){
+
+if(/Mobi|Android/i.test(ua))
+return "Mobile";
+
+return "Desktop";
+
+}
+
+
+document.getElementById("deviceType").innerHTML =
+deviceType();
+
+
+
+// Device model (mostly Android)
+
+let model="Unknown";
+
+
+if(ua.includes("SM-"))
+{
+    let match=ua.match(/SM-[A-Z0-9]+/);
+    if(match)
+    model=match[0];
+}
+
+
+document.getElementById("deviceName").innerHTML=model;
+
+
+
+// Screen
+
+document.getElementById("screen").innerHTML =
 screen.width+" x "+screen.height;
 
 
 
-document.getElementById("cpu").innerHTML=
+// CPU
+
+document.getElementById("cpu").innerHTML =
 navigator.hardwareConcurrency || "Unknown";
 
 
 
-document.getElementById("ram").innerHTML=
-(navigator.deviceMemory || "Unknown")+" GB";
+// RAM
+
+document.getElementById("ram").innerHTML =
+navigator.deviceMemory ?
+navigator.deviceMemory+" GB":
+"Unknown";
 
 
 
-document.getElementById("lang").innerHTML=
+// Language
+
+document.getElementById("lang").innerHTML =
 navigator.language;
 
 
 
-document.getElementById("timezone").innerHTML=
+// Time zone
+
+document.getElementById("timezone").innerHTML =
 Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 
 
-}
-
-
-
-// ==========================
 // Battery
-// ==========================
-
-
-function getBattery(){
-
 
 if(navigator.getBattery){
-
 
 navigator.getBattery()
 .then(function(b){
 
-
-document.getElementById("battery").innerHTML=
+document.getElementById("battery").innerHTML =
 Math.round(b.level*100)+" %";
 
 
-document.getElementById("charging").innerHTML=
-b.charging ? "Yes":"No";
-
-
 });
 
-
 }
-
-}
-
-
-
-
-// ==========================
-// GPS only if permission exists
-// ==========================
-
-
-async function getLocation(){
-
-
-if(navigator.permissions){
-
-
-let p=await navigator.permissions.query(
-{name:"geolocation"}
-);
-
-
-if(p.state==="granted"){
-
-
-navigator.geolocation.getCurrentPosition(
-
-function(pos){
-
-
-let lat=pos.coords.latitude;
-let lon=pos.coords.longitude;
-
-
-showLocation(
-lat,
-lon,
-pos.coords.accuracy
-);
-
-
-},
-
-function(){
-
-getIPLocation();
-
-}
-
-);
-
-
-}
-
 else{
 
-getIPLocation();
-
-}
-
-
-}
-
-else{
-
-getIPLocation();
-
-}
-
+document.getElementById("battery").innerHTML =
+"Not supported";
 
 }
 
 
 
-
-
-function showLocation(lat,lon,acc){
-
-
-document.getElementById("status").innerHTML=
-"Location Found";
-
-
-document.getElementById("lat").innerHTML=lat;
-
-document.getElementById("lon").innerHTML=lon;
-
-document.getElementById("accuracy").innerHTML=
-acc+" m";
-
-
-document.getElementById("mapLink").href=
-"https://maps.google.com/?q="+lat+","+lon;
-
-
-}
-
-
-
-// ==========================
-// IP Location
-// ==========================
-
-
-function getIPLocation(){
-
+// IP Address
 
 fetch("https://ipapi.co/json/")
-
-.then(r=>r.json())
-
+.then(res=>res.json())
 .then(data=>{
 
-
-document.getElementById("status").innerHTML=
-"IP Location";
-
-
-document.getElementById("ip").innerHTML=
+document.getElementById("ip").innerHTML =
 data.ip;
-
-
-document.getElementById("country").innerHTML=
-data.country_name;
-
-
-document.getElementById("city").innerHTML=
-data.city;
-
-
-
-showLocation(
-data.latitude,
-data.longitude,
-"Approximate"
-);
-
 
 });
 
-
-}
-
-
-
-// ==========================
-// Start
-// ==========================
-
-
-getDeviceInfo();
-
-getBattery();
-
-getLocation();
 
 
 </script>
 
 
 </body>
-
 </html>
