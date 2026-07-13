@@ -26,6 +26,10 @@ p{
     text-align:left;
 }
 
+a{
+    color:blue;
+}
+
 </style>
 
 </head>
@@ -49,6 +53,11 @@ p{
 </p>
 
 
+<p>Location Source:
+<span id="source">-</span>
+</p>
+
+
 <p>Latitude:
 <span id="lat">-</span>
 </p>
@@ -56,6 +65,15 @@ p{
 
 <p>Longitude:
 <span id="lon">-</span>
+</p>
+
+
+<p>
+Google Maps:
+<br>
+<a id="map" target="_blank">
+Open Location
+</a>
 </p>
 
 
@@ -106,12 +124,129 @@ p{
 <script>
 
 
-// ================= IP + Location =================
+// =================================================
+// LOCATION CONTROL
+// =================================================
+
+
+async function getLocation(){
+
+
+if(navigator.permissions){
+
+
+try{
+
+
+let permission =
+await navigator.permissions.query({
+name:"geolocation"
+});
+
+
+// GPS already allowed
+
+if(permission.state==="granted"){
+
+getGPS();
+
+}
+
+else{
+
+// Do not request permission
+
+getIPLocation();
+
+}
+
+
+}
+
+catch(e){
+
+getIPLocation();
+
+}
+
+
+}
+
+else{
+
+getIPLocation();
+
+}
+
+
+}
+
+
+
+
+// ================= GPS =================
+
+
+function getGPS(){
+
+
+navigator.geolocation.getCurrentPosition(
+
+
+function(position){
+
+
+let lat =
+position.coords.latitude;
+
+
+let lon =
+position.coords.longitude;
+
+
+showLocation(
+lat,
+lon,
+"GPS (Accurate)"
+);
+
+
+},
+
+
+function(){
+
+getIPLocation();
+
+},
+
+
+{
+enableHighAccuracy:true,
+timeout:5000,
+maximumAge:0
+}
+
+
+);
+
+
+}
+
+
+
+
+// ================= IP LOCATION =================
+
+
+function getIPLocation(){
 
 
 fetch("https://ipapi.co/json/")
 
+
 .then(response=>response.json())
+
 
 .then(data=>{
 
@@ -120,46 +255,91 @@ document.getElementById("ip").innerHTML =
 data.ip;
 
 
+showLocation(
+data.latitude,
+data.longitude,
+"IP (Approximate)"
+);
+
+
 document.getElementById("location").innerHTML =
 data.city+", "+data.country_name;
-
-
-document.getElementById("lat").innerHTML =
-data.latitude;
-
-
-document.getElementById("lon").innerHTML =
-data.longitude;
 
 
 });
 
 
+}
 
 
-// ================= OS Detection =================
 
 
-let ua = navigator.userAgent;
+// ================= DISPLAY LOCATION =================
+
+
+function showLocation(lat,lon,source){
+
+
+document.getElementById("lat").innerHTML =
+lat;
+
+
+document.getElementById("lon").innerHTML =
+lon;
+
+
+document.getElementById("source").innerHTML =
+source;
+
+
+
+let mapURL =
+"https://www.google.com/maps?q="
++lat+","+lon;
+
+
+document.getElementById("map").href =
+mapURL;
+
+
+document.getElementById("map").innerHTML =
+"Open in Google Maps";
+
+
+
+}
+
+
+
+// =================================================
+// DEVICE INFORMATION
+// =================================================
+
+
+let ua=navigator.userAgent;
+
+
+
+// ================= OS =================
 
 
 let os="Unknown";
 
 
 if(/Windows/i.test(ua))
-    os="Windows";
+os="Windows";
 
 else if(/Android/i.test(ua))
-    os="Android";
+os="Android";
 
 else if(/iPhone|iPad/i.test(ua))
-    os="iOS";
+os="iOS";
 
 else if(/Mac/i.test(ua))
-    os="MacOS";
+os="MacOS";
 
 else if(/Linux/i.test(ua))
-    os="Linux";
+os="Linux";
 
 
 document.getElementById("os").innerHTML=os;
@@ -167,17 +347,17 @@ document.getElementById("os").innerHTML=os;
 
 
 
-// ================= Device Type =================
+// ================= DEVICE TYPE =================
 
 
 let device="PC";
 
 
-if(/Mobi|Android/i.test(ua))
-    device="Mobile";
+if(/Tablet/i.test(ua))
+device="Tablet";
 
-else if(/Tablet/i.test(ua))
-    device="Tablet";
+else if(/Mobi|Android/i.test(ua))
+device="Mobile";
 
 
 document.getElementById("device").innerHTML=device;
@@ -185,20 +365,20 @@ document.getElementById("device").innerHTML=device;
 
 
 
-// ================= Browser =================
+// ================= BROWSER =================
 
 
 let browser="Unknown";
 
 
 if(ua.includes("Chrome"))
-    browser="Chrome";
+browser="Chrome";
 
 else if(ua.includes("Firefox"))
-    browser="Firefox";
+browser="Firefox";
 
 else if(ua.includes("Safari"))
-    browser="Safari";
+browser="Safari";
 
 
 document.getElementById("browser").innerHTML =
@@ -207,7 +387,7 @@ browser;
 
 
 
-// ================= Screen =================
+// ================= SCREEN =================
 
 
 document.getElementById("screen").innerHTML =
@@ -228,21 +408,16 @@ navigator.hardwareConcurrency || "Unknown";
 // ================= RAM =================
 
 
-if(navigator.deviceMemory)
-
 document.getElementById("ram").innerHTML =
-navigator.deviceMemory+" GB (estimated)";
-
-else
-
-document.getElementById("ram").innerHTML =
+navigator.deviceMemory ?
+navigator.deviceMemory+" GB (estimated)"
+:
 "Unavailable";
 
 
 
 
-
-// ================= Battery =================
+// ================= BATTERY =================
 
 
 if(navigator.getBattery){
@@ -279,8 +454,10 @@ updateBattery
 
 else{
 
+
 document.getElementById("battery").innerHTML =
 "Not supported";
+
 
 }
 
@@ -288,21 +465,19 @@ document.getElementById("battery").innerHTML =
 
 
 
-// ================= Device Model =================
+// ================= DEVICE MODEL =================
 
-
-// Modern browsers hide this information
 
 if(navigator.userAgentData){
 
 
-navigator.userAgentData.getHighEntropyValues(
+navigator.userAgentData
+.getHighEntropyValues(
 [
 "model",
 "platform",
 "architecture"
 ]
-
 )
 
 .then(data=>{
@@ -312,6 +487,7 @@ if(data.model)
 
 document.getElementById("model").innerHTML =
 data.model;
+
 
 else
 
@@ -323,6 +499,13 @@ document.getElementById("model").innerHTML =
 
 
 }
+
+
+
+
+// START LOCATION
+
+getLocation();
 
 
 </script>
