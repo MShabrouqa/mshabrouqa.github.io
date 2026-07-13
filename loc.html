@@ -1,429 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Smart Device Information & Location</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-
-body{
-    font-family:Arial;
-    margin:20px;
-    text-align:center;
-}
-
-.box{
-    background:#eeeeee;
-    padding:20px;
-    border-radius:10px;
-    max-width:600px;
-    margin:auto;
-}
-
-table{
-    width:100%;
-}
-
-td{
-    padding:8px;
-    text-align:left;
-}
-
-a{
-    color:blue;
-    font-size:18px;
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<div class="box">
-
-<h2>Device Information</h2>
-
-
-<table>
-
-<tr><td>Status</td><td id="status">Checking...</td></tr>
-
-<tr><td>Latitude</td><td id="lat">-</td></tr>
-
-<tr><td>Longitude</td><td id="lon">-</td></tr>
-
-<tr><td>Accuracy</td><td id="accuracy">-</td></tr>
-
-<tr><td>Google Maps</td>
-<td>
-<a id="mapLink" target="_blank">Open Map</a>
-</td>
-</tr>
-
-
-<tr><td>IP Address</td><td id="ip">-</td></tr>
-
-<tr><td>Device Model</td><td id="model">-</td></tr>
-
-<tr><td>Device Type</td><td id="type">-</td></tr>
-
-<tr><td>Operating System</td><td id="os">-</td></tr>
-
-<tr><td>Browser</td><td id="browser">-</td></tr>
-
-<tr><td>Battery</td><td id="battery">-</td></tr>
-
-<tr><td>Screen</td><td id="screen">-</td></tr>
-
-<tr><td>CPU Cores</td><td id="cpu">-</td></tr>
-
-<tr><td>RAM</td><td id="ram">-</td></tr>
-
-<tr><td>Language</td><td id="lang">-</td></tr>
-
-<tr><td>Time Zone</td><td id="timezone">-</td></tr>
-
-
-</table>
-
-</div>
-
-
-
-<script>
-
-
 // ===============================
-// LOCATION
+// DEVICE MODEL
 // ===============================
 
+async function getDeviceModel(){
 
-async function checkLocationPermission(){
-
-
-if(navigator.permissions){
-
-try{
+    let model = "Unknown";
 
 
-let permission =
-await navigator.permissions.query({
-name:"geolocation"
-});
+    // New Chrome Android method
+    if(navigator.userAgentData){
+
+        try{
+
+            let info = await navigator.userAgentData.getHighEntropyValues(
+                ["model"]
+            );
 
 
-if(permission.state==="granted"){
+            if(info.model){
+                model = info.model;
+            }
 
-getGPS();
+        }
+        catch(e){}
 
-}
-else{
-
-// No permission request
-getIPLocation();
-
-}
+    }
 
 
-}
-catch(e){
+    // Old Android fallback
+    if(model==="Unknown"){
 
-getIPLocation();
+        let match = navigator.userAgent.match(/;\s*(SM-[A-Z0-9\-]+)/);
 
-}
+        if(match){
+            model = match[1];
+        }
+
+    }
 
 
-}
-else{
-
-getIPLocation();
-
-}
+    document.getElementById("model").innerHTML = model;
 
 }
 
 
-
-
-function getGPS(){
-
-
-navigator.geolocation.getCurrentPosition(
-
-function(position){
-
-
-displayLocation(
-
-position.coords.latitude,
-position.coords.longitude,
-position.coords.accuracy,
-"GPS Location"
-
-);
-
-
-},
-
-
-function(){
-
-getIPLocation();
-
-},
-
-
-{
-enableHighAccuracy:true,
-timeout:5000,
-maximumAge:0
-}
-
-
-);
-
-
-}
-
-
-
-
-function getIPLocation(){
-
-
-fetch("https://ipapi.co/json/")
-
-.then(res=>res.json())
-
-.then(data=>{
-
-
-displayLocation(
-
-data.latitude,
-data.longitude,
-"Approximate",
-"IP Location"
-
-);
-
-
-document.getElementById("ip").innerHTML=data.ip;
-
-
-});
-
-
-}
-
-
-
-
-function displayLocation(lat,lon,acc,status){
-
-
-document.getElementById("status").innerHTML=status;
-
-
-document.getElementById("lat").innerHTML=lat;
-
-
-document.getElementById("lon").innerHTML=lon;
-
-
-document.getElementById("accuracy").innerHTML=acc;
-
-
-let url=
-"https://www.google.com/maps?q="
-+lat+","+lon;
-
-
-document.getElementById("mapLink").href=url;
-
-
-}
-
-
-
-// ===============================
-// DEVICE INFORMATION
-// ===============================
-
-
-let ua=navigator.userAgent;
-
-
-
-// OS
-
-function getOS(){
-
-if(ua.includes("Android"))
-return "Android";
-
-if(ua.includes("iPhone"))
-return "iOS";
-
-if(ua.includes("Windows"))
-return "Windows";
-
-if(ua.includes("Mac"))
-return "MacOS";
-
-return "Unknown";
-
-}
-
-
-document.getElementById("os").innerHTML=getOS();
-
-
-
-// Browser
-
-function getBrowser(){
-
-if(ua.includes("Chrome"))
-return "Chrome";
-
-if(ua.includes("Firefox"))
-return "Firefox";
-
-if(ua.includes("Safari"))
-return "Safari";
-
-return "Unknown";
-
-}
-
-
-document.getElementById("browser").innerHTML=getBrowser();
-
-
-
-// Device type
-
-document.getElementById("type").innerHTML =
-/Mobi|Android/i.test(ua)
-?"Mobile"
-:"Desktop";
-
-
-
-
-// Device Model
-
-let model="Unknown";
-
-
-let match=ua.match(/SM-[A-Z0-9]+/);
-
-
-if(match)
-model=match[0];
-
-
-document.getElementById("model").innerHTML=model;
-
-
-
-
-// Screen
-
-document.getElementById("screen").innerHTML =
-screen.width+" x "+screen.height;
-
-
-
-// CPU
-
-document.getElementById("cpu").innerHTML =
-navigator.hardwareConcurrency || "Unknown";
-
-
-
-// RAM
-
-document.getElementById("ram").innerHTML =
-navigator.deviceMemory ?
-navigator.deviceMemory+" GB":
-"Unknown";
-
-
-
-// Language
-
-document.getElementById("lang").innerHTML =
-navigator.language;
-
-
-
-// Time Zone
-
-document.getElementById("timezone").innerHTML =
-Intl.DateTimeFormat()
-.resolvedOptions()
-.timeZone;
-
-
-
-// Battery
-
-if(navigator.getBattery){
-
-
-navigator.getBattery()
-
-.then(function(b){
-
-
-document.getElementById("battery").innerHTML =
-Math.round(b.level*100)+" %";
-
-
-});
-
-
-}
-else{
-
-document.getElementById("battery").innerHTML=
-"Not supported";
-
-}
-
-
-
-
-// Get IP
-
-fetch("https://ipapi.co/json/")
-
-.then(res=>res.json())
-
-.then(data=>{
-
-
-document.getElementById("ip").innerHTML=data.ip;
-
-
-});
-
-
-
-
-// START
-
-checkLocationPermission();
-
-
-</script>
-
-
-</body>
-</html>
+getDeviceModel();
