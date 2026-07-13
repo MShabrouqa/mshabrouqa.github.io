@@ -1,47 +1,413 @@
-// ===============================
-// DEVICE MODEL
-// ===============================
+<!DOCTYPE html>
+<html>
+<head>
+<title>Device Information & Location</title>
 
-async function getDeviceModel(){
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    let model = "Unknown";
+<style>
+
+body{
+    font-family:Arial;
+    text-align:center;
+    margin:30px;
+}
+
+.box{
+    background:#f2f2f2;
+    padding:20px;
+    border-radius:10px;
+    max-width:600px;
+    margin:auto;
+}
+
+table{
+    width:100%;
+    text-align:left;
+}
+
+td{
+    padding:8px;
+}
+
+a{
+    color:blue;
+}
+
+</style>
+
+</head>
 
 
-    // New Chrome Android method
-    if(navigator.userAgentData){
-
-        try{
-
-            let info = await navigator.userAgentData.getHighEntropyValues(
-                ["model"]
-            );
+<body>
 
 
-            if(info.model){
-                model = info.model;
-            }
+<div class="box">
 
-        }
-        catch(e){}
+<h2>Device Information</h2>
 
-    }
+<table>
+
+<tr><td>Status</td><td id="status">Checking...</td></tr>
+
+<tr><td>IP Address</td><td id="ip">-</td></tr>
+
+<tr><td>Location Source</td><td id="source">-</td></tr>
+
+<tr><td>Latitude</td><td id="lat">-</td></tr>
+
+<tr><td>Longitude</td><td id="lon">-</td></tr>
+
+<tr><td>Accuracy</td><td id="accuracy">-</td></tr>
+
+<tr><td>Operating System</td><td id="os">-</td></tr>
+
+<tr><td>Device Type</td><td id="device">-</td></tr>
+
+<tr><td>Browser</td><td id="browser">-</td></tr>
+
+<tr><td>Screen Size</td><td id="screen">-</td></tr>
+
+<tr><td>Language</td><td id="language">-</td></tr>
+
+<tr><td>Time Zone</td><td id="timezone">-</td></tr>
+
+<tr><td>CPU Cores</td><td id="cpu">-</td></tr>
+
+<tr><td>RAM</td><td id="ram">-</td></tr>
+
+<tr><td>Online</td><td id="online">-</td></tr>
 
 
-    // Old Android fallback
-    if(model==="Unknown"){
-
-        let match = navigator.userAgent.match(/;\s*(SM-[A-Z0-9\-]+)/);
-
-        if(match){
-            model = match[1];
-        }
-
-    }
+</table>
 
 
-    document.getElementById("model").innerHTML = model;
+<br>
+
+<a id="mapLink" target="_blank">
+Google Maps Location
+</a>
+
+
+</div>
+
+
+
+<script>
+
+
+// -------------------------
+// Device information
+// -------------------------
+
+function getDeviceInfo(){
+
+
+let ua = navigator.userAgent;
+
+
+// OS
+
+let os="Unknown";
+
+
+if(/Android/i.test(ua))
+    os="Android";
+
+else if(/iPhone|iPad/i.test(ua))
+    os="iOS";
+
+else if(/Windows/i.test(ua))
+    os="Windows";
+
+else if(/Mac/i.test(ua))
+    os="MacOS";
+
+else if(/Linux/i.test(ua))
+    os="Linux";
+
+
+
+document.getElementById("os").innerHTML=os;
+
+
+
+// Device Type
+
+let device="PC";
+
+
+if(/Mobile/i.test(ua))
+    device="Mobile";
+
+else if(/Tablet|iPad/i.test(ua))
+    device="Tablet";
+
+
+document.getElementById("device").innerHTML=device;
+
+
+
+// Browser
+
+document.getElementById("browser").innerHTML =
+ua;
+
+
+
+// Screen
+
+document.getElementById("screen").innerHTML =
+screen.width+" x "+screen.height;
+
+
+
+// Language
+
+document.getElementById("language").innerHTML =
+navigator.language;
+
+
+
+// Time zone
+
+document.getElementById("timezone").innerHTML =
+Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+
+// CPU
+
+document.getElementById("cpu").innerHTML =
+navigator.hardwareConcurrency || "Unknown";
+
+
+
+// RAM
+
+document.getElementById("ram").innerHTML =
+(navigator.deviceMemory || "Unknown")+" GB";
+
+
+
+// Online
+
+document.getElementById("online").innerHTML =
+navigator.onLine ? "Yes":"No";
+
 
 }
 
 
-getDeviceModel();
+
+// -------------------------
+// IP Information
+// -------------------------
+
+function getIPInfo(){
+
+
+fetch("https://ipapi.co/json/")
+
+
+.then(response=>response.json())
+
+
+.then(data=>{
+
+
+document.getElementById("ip").innerHTML =
+data.ip;
+
+
+if(!gpsAvailable){
+
+displayLocation(
+
+data.latitude,
+data.longitude,
+"Approximate",
+"IP Location"
+
+);
+
+}
+
+
+})
+
+
+.catch(()=>{
+
+document.getElementById("ip").innerHTML =
+"Unavailable";
+
+});
+
+
+}
+
+
+
+// -------------------------
+// GPS without asking
+// -------------------------
+
+let gpsAvailable=false;
+
+
+
+async function checkGPS(){
+
+
+if(navigator.permissions){
+
+
+try{
+
+
+let permission =
+await navigator.permissions.query(
+{name:"geolocation"}
+);
+
+
+
+if(permission.state==="granted"){
+
+
+gpsAvailable=true;
+
+getGPS();
+
+
+}
+
+else{
+
+
+getIPInfo();
+
+
+}
+
+
+}
+
+catch(e){
+
+getIPInfo();
+
+}
+
+
+}
+
+else{
+
+getIPInfo();
+
+}
+
+
+}
+
+
+
+
+function getGPS(){
+
+
+navigator.geolocation.getCurrentPosition(
+
+function(pos){
+
+
+displayLocation(
+
+pos.coords.latitude,
+pos.coords.longitude,
+pos.coords.accuracy+" meters",
+"GPS"
+
+);
+
+
+},
+
+
+function(){
+
+getIPInfo();
+
+},
+
+
+{
+enableHighAccuracy:true,
+timeout:5000
+}
+
+
+);
+
+
+}
+
+
+
+
+// -------------------------
+// Display Location
+// -------------------------
+
+function displayLocation(lat,lon,acc,source){
+
+
+document.getElementById("source").innerHTML=
+source;
+
+
+document.getElementById("lat").innerHTML=
+lat;
+
+
+document.getElementById("lon").innerHTML=
+lon;
+
+
+document.getElementById("accuracy").innerHTML=
+acc;
+
+
+
+document.getElementById("status").innerHTML=
+"Complete";
+
+
+
+document.getElementById("mapLink").href =
+"https://www.google.com/maps?q="+lat+","+lon;
+
+
+
+document.getElementById("mapLink").innerHTML =
+"Open in Google Maps";
+
+
+}
+
+
+
+// Start
+
+getDeviceInfo();
+
+checkGPS();
+
+
+</script>
+
+
+</body>
+</html>
