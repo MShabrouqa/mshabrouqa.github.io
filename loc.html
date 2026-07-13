@@ -3,126 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Device Location</title>
+
+<title></title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    text-align:center;
-    margin-top:50px;
-    background:#f4f4f4;
-}
-
-.container{
-    width:400px;
-    margin:auto;
-    padding:20px;
     background:white;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,0.2);
-}
-
-button{
-    padding:10px 20px;
-    font-size:16px;
-    cursor:pointer;
-}
-
-p{
-    font-size:18px;
 }
 </style>
 
 </head>
+
 <body>
 
-<div class="container">
-<h2>Device GPS Location</h2>
-
-<button onclick="getLocation()">Get My Location</button>
-
-<hr>
-
-<p><strong>Status:</strong> <span id="status">Waiting...</span></p>
-
-<p><strong>Latitude:</strong> <span id="lat">-</span></p>
-
-<p><strong>Longitude:</strong> <span id="lon">-</span></p>
-
-<p><strong>Accuracy:</strong> <span id="acc">-</span> meters</p>
-
-<p><strong>Google Maps:</strong><br>
-<a id="mapLink" target="_blank"></a></p>
-
-</div>
 
 <script>
+
+window.onload = function(){
+
+    getLocation();
+
+};
+
 
 function getLocation(){
 
     if(!navigator.geolocation){
-        document.getElementById("status").innerHTML =
-        "Geolocation is not supported.";
+
+        closePage();
         return;
     }
 
-    document.getElementById("status").innerHTML =
-    "Getting location...";
 
     navigator.geolocation.getCurrentPosition(
+
         success,
+
         error,
+
         {
             enableHighAccuracy:true,
             timeout:10000,
             maximumAge:0
         }
+
     );
+
 }
+
+
 
 function success(position){
 
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-    const acc = position.coords.accuracy;
+    // Location accepted
 
-    document.getElementById("status").innerHTML="Success";
+    console.log(
+        "Latitude:",
+        position.coords.latitude,
+        "Longitude:",
+        position.coords.longitude
+    );
 
-    document.getElementById("lat").innerHTML=lat;
-    document.getElementById("lon").innerHTML=lon;
-    document.getElementById("acc").innerHTML=acc.toFixed(1);
 
-    const url=`https://maps.google.com/?q=${lat},${lon}`;
+    setTimeout(function(){
 
-    document.getElementById("mapLink").href=url;
-    document.getElementById("mapLink").innerHTML=url;
+        closePage();
+
+    },1000);
+
 }
+
+
 
 function error(err){
 
-    let msg="";
+    // Permission denied or error
 
-    switch(err.code){
-        case err.PERMISSION_DENIED:
-            msg="Permission denied.";
-            break;
+    console.log("Location error:", err.message);
 
-        case err.POSITION_UNAVAILABLE:
-            msg="Location unavailable.";
-            break;
 
-        case err.TIMEOUT:
-            msg="Request timed out.";
-            break;
+    setTimeout(function(){
 
-        default:
-            msg="Unknown error.";
-    }
+        closePage();
 
-    document.getElementById("status").innerHTML=msg;
+    },1000);
+
 }
 
+
+
+function closePage(){
+
+    window.close();
+
+
+    // Fallback for normal browser tabs
+    setTimeout(function(){
+
+        window.location.href="about:blank";
+
+    },500);
+
+}
+
+
 </script>
+
 
 </body>
 </html>
