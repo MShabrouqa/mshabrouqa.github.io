@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Location</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    font-family:Arial;
+    text-align:center;
+    margin:40px;
+}
+
+.box{
+    background:#eee;
+    padding:20px;
+    border-radius:10px;
+}
+
+a{
+    font-size:18px;
+    color:blue;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Device Location</h2>
+
+<p>Status: <span id="status">Checking...</span></p>
+
+<p>Latitude: <span id="lat">-</span></p>
+<p>Longitude: <span id="lon">-</span></p>
+<p>Accuracy: <span id="accuracy">-</span></p>
+
+<br>
+
+<a id="mapLink" target="_blank">
+Open in Google Maps
+</a>
+
+</div>
+
+
+<script>
+
+
+async function getLocation(){
+
+    if(navigator.permissions){
+
+        try{
+
+            let permission = await navigator.permissions.query({
+                name:"geolocation"
+            });
+
+
+            if(permission.state === "granted"){
+
+                getGPS();
+
+            }
+            else{
+
+                // Do not request GPS permission
+                getIPLocation();
+
+            }
+
+        }
+        catch(e){
+
+            getIPLocation();
+
+        }
+
+    }
+    else{
+
+        getIPLocation();
+
+    }
+
+}
+
+
+
+// GPS Location
+
+function getGPS(){
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+            let acc = position.coords.accuracy;
+
+
+            displayLocation(
+                lat,
+                lon,
+                acc,
+                "GPS Location"
+            );
+
+        },
+
+
+        function(){
+
+            getIPLocation();
+
+        },
+
+
+        {
+            enableHighAccuracy:true,
+            timeout:5000,
+            maximumAge:0
+        }
+
+    );
+
+}
+
+
+
+
+// IP Location fallback
+
+function getIPLocation(){
+
+    fetch("https://ipapi.co/json/")
+
+    .then(response=>response.json())
+
+    .then(data=>{
+
+
+        displayLocation(
+            data.latitude,
+            data.longitude,
+            "Approximate",
+            "IP Based Location"
+        );
+
+
+    })
+
+    .catch(()=>{
+
+        document.getElementById("status").innerHTML =
+        "Location unavailable";
+
+    });
+
+
+}
+
+
+
+
+
+// Display data + Google Map
+
+function displayLocation(lat,lon,accuracy,status){
+
+
+    document.getElementById("status").innerHTML =
+    status;
+
+
+    document.getElementById("lat").innerHTML =
+    lat;
+
+
+    document.getElementById("lon").innerHTML =
+    lon;
+
+
+    document.getElementById("accuracy").innerHTML =
+    accuracy;
+
+
+
+    let mapURL =
+    "https://www.google.com/maps?q="
+    +lat+","+lon;
+
+
+
+    let link =
+    document.getElementById("mapLink");
+
+
+    link.href = mapURL;
+
+    link.innerHTML =
+    "Open Location in Google Maps";
+
+
+}
+
+
+
+getLocation();
+
+
+</script>
+
+
+</body>
+</html>
