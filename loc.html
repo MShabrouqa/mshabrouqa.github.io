@@ -1,41 +1,30 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
-<title>Complete Device Information</title>
+<title>Device Information</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 
 body{
-font-family:Arial;
-margin:20px;
-background:#eee;
+    font-family:Arial;
+    text-align:center;
+    margin:30px;
 }
 
 .box{
-background:white;
-padding:20px;
-border-radius:10px;
-max-width:800px;
-margin:auto;
+    background:#eee;
+    padding:20px;
+    border-radius:10px;
+    text-align:left;
+    max-width:500px;
+    margin:auto;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-td{
-border-bottom:1px solid #ddd;
-padding:8px;
-word-break:break-all;
-}
-
-h2{
-text-align:center;
+p{
+    font-size:16px;
 }
 
 </style>
@@ -51,16 +40,69 @@ text-align:center;
 <h2>Device Information</h2>
 
 
-<table id="info">
+<p>Status:
+<span id="status">Loading...</span>
+</p>
 
-</table>
+
+<p>IP Address:
+<span id="ip">-</span>
+</p>
 
 
-<br>
+<p>Country:
+<span id="country">-</span>
+</p>
 
-<a id="map" target="_blank">
-Google Maps Location
-</a>
+
+<p>City:
+<span id="city">-</span>
+</p>
+
+
+<p>Operating System:
+<span id="os">-</span>
+</p>
+
+
+<p>Device Type:
+<span id="device">-</span>
+</p>
+
+
+<p>Browser:
+<span id="browser">-</span>
+</p>
+
+
+<p>Screen:
+<span id="screen">-</span>
+</p>
+
+
+<p>CPU Cores:
+<span id="cpu">-</span>
+</p>
+
+
+<p>RAM:
+<span id="ram">-</span>
+</p>
+
+
+<p>Language:
+<span id="lang">-</span>
+</p>
+
+
+<p>Time Zone:
+<span id="timezone">-</span>
+</p>
+
+
+<p>Battery:
+<span id="battery">-</span>
+</p>
 
 
 </div>
@@ -70,188 +112,171 @@ Google Maps Location
 <script>
 
 
-let data={};
+// Get IP information
+
+fetch("https://ipapi.co/json/")
+
+.then(response=>response.json())
+
+.then(data=>{
 
 
-// Add item to table
+document.getElementById("ip").innerHTML=data.ip;
 
-function add(name,value){
+document.getElementById("country").innerHTML=data.country_name;
 
-data[name]=value;
+document.getElementById("city").innerHTML=data.city;
 
-let row=
-`
-<tr>
-<td><b>${name}</b></td>
-<td>${value}</td>
-</tr>
-`;
 
-document
-.getElementById("info")
-.innerHTML+=row;
+})
+
+.catch(()=>{
+
+document.getElementById("ip").innerHTML="Unavailable";
+
+});
+
+
+
+
+// Operating System
+
+function getOS(){
+
+let ua=navigator.userAgent;
+
+
+if(ua.includes("Windows"))
+return "Windows";
+
+
+if(ua.includes("Android"))
+return "Android";
+
+
+if(ua.includes("iPhone"))
+return "iOS";
+
+
+if(ua.includes("Mac"))
+return "MacOS";
+
+
+if(ua.includes("Linux"))
+return "Linux";
+
+
+return "Unknown";
 
 }
 
 
+document.getElementById("os").innerHTML=getOS();
 
 
-// Browser data
-
-add(
-"User Agent",
-navigator.userAgent
-);
 
 
-add(
-"Platform",
-navigator.platform
-);
+// Device type
+
+function getDevice(){
+
+let ua=navigator.userAgent;
 
 
-add(
-"Language",
-navigator.language
-);
+if(/Mobi|Android/i.test(ua))
+return "Mobile";
 
 
-add(
-"Languages",
-navigator.languages
-);
+if(/Tablet/i.test(ua))
+return "Tablet";
 
 
-add(
-"Cookies Enabled",
-navigator.cookieEnabled
-);
+return "PC";
+
+}
 
 
-add(
-"Do Not Track",
-navigator.doNotTrack
-);
+document.getElementById("device").innerHTML=getDevice();
 
 
-add(
-"Online Status",
-navigator.onLine
-);
+
+
+// Browser
+
+document.getElementById("browser").innerHTML =
+navigator.userAgent;
+
 
 
 
 // Screen
 
-add(
-"Screen Resolution",
-screen.width+" x "+screen.height
-);
-
-
-add(
-"Available Screen",
-screen.availWidth+" x "+screen.availHeight
-);
-
-
-add(
-"Color Depth",
-screen.colorDepth
-);
-
-
-add(
-"Pixel Depth",
-screen.pixelDepth
-);
+document.getElementById("screen").innerHTML =
+screen.width+" x "+screen.height;
 
 
 
-// Hardware
 
+// CPU
 
-add(
-"CPU Cores",
-navigator.hardwareConcurrency || "Unknown"
-);
-
-
-add(
-"RAM",
-(navigator.deviceMemory || "Unknown")+" GB"
-);
-
-
-add(
-"Touch Points",
-navigator.maxTouchPoints
-);
+document.getElementById("cpu").innerHTML =
+navigator.hardwareConcurrency || "Not available";
 
 
 
-// Time
 
+// RAM
 
-add(
-"Time Zone",
-Intl.DateTimeFormat()
-.resolvedOptions()
-.timeZone
-);
-
-
-add(
-"Local Time",
-new Date()
-);
+document.getElementById("ram").innerHTML =
+navigator.deviceMemory ?
+navigator.deviceMemory+" GB":
+"Not available";
 
 
 
-// Connection
 
-if(navigator.connection){
+// Language
 
-add(
-"Network Type",
-navigator.connection.effectiveType
-);
+document.getElementById("lang").innerHTML =
+navigator.language;
 
 
-add(
-"Downlink",
-navigator.connection.downlink+" Mbps"
-);
 
 
-add(
-"RTT",
-navigator.connection.rtt+" ms"
-);
+// Timezone
 
-}
+document.getElementById("timezone").innerHTML =
+Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
 
 
 // Battery
-
 
 if(navigator.getBattery){
 
 
 navigator.getBattery()
 
-.then(function(b){
+.then(function(battery){
 
 
-add(
-"Battery Level",
-Math.round(b.level*100)+"%"
-);
+function updateBattery(){
 
 
-add(
-"Charging",
-b.charging
+document.getElementById("battery").innerHTML =
+Math.round(battery.level*100)+"%";
+
+
+}
+
+
+updateBattery();
+
+
+battery.addEventListener(
+"levelchange",
+updateBattery
 );
 
 
@@ -259,201 +284,22 @@ b.charging
 
 
 }
-
-
-
-// Location
-
-
-async function locationCheck(){
-
-
-if(navigator.permissions){
-
-
-try{
-
-
-let p=
-await navigator.permissions.query(
-{name:"geolocation"}
-);
-
-
-
-if(p.state==="granted"){
-
-
-navigator.geolocation.getCurrentPosition(
-
-function(pos){
-
-
-showLocation(
-
-pos.coords.latitude,
-pos.coords.longitude,
-"GPS"
-
-);
-
-
-}
-
-);
-
-
-}
-
 else{
 
 
-ipLocation();
-
-
-}
-
-
-}
-
-catch{
-
-ipLocation();
-
-}
-
-
-}
-
-else{
-
-ipLocation();
-
-}
+document.getElementById("battery").innerHTML =
+"Not supported";
 
 
 }
 
 
 
-
-// IP location
-
-
-function ipLocation(){
-
-
-fetch(
-"https://ipapi.co/json/"
-)
-
-.then(r=>r.json())
-
-.then(d=>{
-
-
-add(
-"Public IP",
-d.ip
-);
-
-
-add(
-"ISP",
-d.org
-);
-
-
-add(
-"Country",
-d.country_name
-);
-
-
-add(
-"City",
-d.city
-);
-
-
-
-showLocation(
-
-d.latitude,
-d.longitude,
-"IP"
-
-);
-
-
-});
-
-
-}
-
-
-
-
-
-function showLocation(lat,lon,type){
-
-
-add(
-"Location Source",
-type
-);
-
-
-add(
-"Latitude",
-lat
-);
-
-
-add(
-"Longitude",
-lon
-);
-
-
-document
-.getElementById("map")
-.href=
-"https://www.google.com/maps?q="
-+lat+","+lon;
-
-
-}
-
-
-
-// Start
-
-locationCheck();
-
-
-// Plugins
-
-let plugins=[];
-
-for(let i=0;i<navigator.plugins.length;i++){
-
-plugins.push(
-navigator.plugins[i].name
-);
-
-}
-
-add(
-"Plugins",
-plugins.join(", ")
-);
-
+document.getElementById("status").innerHTML="Ready";
 
 
 </script>
 
 
 </body>
-
 </html>
