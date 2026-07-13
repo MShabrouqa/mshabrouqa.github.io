@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Device Information & Location</title>
+
+<title>Device Information</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,24 +15,15 @@ body{
 }
 
 .box{
-    background:#f2f2f2;
+    background:#eee;
     padding:20px;
     border-radius:10px;
     max-width:600px;
     margin:auto;
 }
 
-table{
-    width:100%;
+p{
     text-align:left;
-}
-
-td{
-    padding:8px;
-}
-
-a{
-    color:blue;
 }
 
 </style>
@@ -46,47 +38,65 @@ a{
 
 <h2>Device Information</h2>
 
-<table>
 
-<tr><td>Status</td><td id="status">Checking...</td></tr>
-
-<tr><td>IP Address</td><td id="ip">-</td></tr>
-
-<tr><td>Location Source</td><td id="source">-</td></tr>
-
-<tr><td>Latitude</td><td id="lat">-</td></tr>
-
-<tr><td>Longitude</td><td id="lon">-</td></tr>
-
-<tr><td>Accuracy</td><td id="accuracy">-</td></tr>
-
-<tr><td>Operating System</td><td id="os">-</td></tr>
-
-<tr><td>Device Type</td><td id="device">-</td></tr>
-
-<tr><td>Browser</td><td id="browser">-</td></tr>
-
-<tr><td>Screen Size</td><td id="screen">-</td></tr>
-
-<tr><td>Language</td><td id="language">-</td></tr>
-
-<tr><td>Time Zone</td><td id="timezone">-</td></tr>
-
-<tr><td>CPU Cores</td><td id="cpu">-</td></tr>
-
-<tr><td>RAM</td><td id="ram">-</td></tr>
-
-<tr><td>Online</td><td id="online">-</td></tr>
+<p>IP Address:
+<span id="ip">-</span>
+</p>
 
 
-</table>
+<p>Location:
+<span id="location">-</span>
+</p>
 
 
-<br>
+<p>Latitude:
+<span id="lat">-</span>
+</p>
 
-<a id="mapLink" target="_blank">
-Google Maps Location
-</a>
+
+<p>Longitude:
+<span id="lon">-</span>
+</p>
+
+
+<p>OS:
+<span id="os">-</span>
+</p>
+
+
+<p>Device Type:
+<span id="device">-</span>
+</p>
+
+
+<p>Browser:
+<span id="browser">-</span>
+</p>
+
+
+<p>Screen:
+<span id="screen">-</span>
+</p>
+
+
+<p>CPU Cores:
+<span id="cpu">-</span>
+</p>
+
+
+<p>RAM:
+<span id="ram">-</span>
+</p>
+
+
+<p>Battery:
+<span id="battery">-</span>
+</p>
+
+
+<p>Device Model:
+<span id="model">Not available</span>
+</p>
 
 
 </div>
@@ -96,122 +106,12 @@ Google Maps Location
 <script>
 
 
-// -------------------------
-// Device information
-// -------------------------
-
-function getDeviceInfo(){
-
-
-let ua = navigator.userAgent;
-
-
-// OS
-
-let os="Unknown";
-
-
-if(/Android/i.test(ua))
-    os="Android";
-
-else if(/iPhone|iPad/i.test(ua))
-    os="iOS";
-
-else if(/Windows/i.test(ua))
-    os="Windows";
-
-else if(/Mac/i.test(ua))
-    os="MacOS";
-
-else if(/Linux/i.test(ua))
-    os="Linux";
-
-
-
-document.getElementById("os").innerHTML=os;
-
-
-
-// Device Type
-
-let device="PC";
-
-
-if(/Mobile/i.test(ua))
-    device="Mobile";
-
-else if(/Tablet|iPad/i.test(ua))
-    device="Tablet";
-
-
-document.getElementById("device").innerHTML=device;
-
-
-
-// Browser
-
-document.getElementById("browser").innerHTML =
-ua;
-
-
-
-// Screen
-
-document.getElementById("screen").innerHTML =
-screen.width+" x "+screen.height;
-
-
-
-// Language
-
-document.getElementById("language").innerHTML =
-navigator.language;
-
-
-
-// Time zone
-
-document.getElementById("timezone").innerHTML =
-Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-
-
-// CPU
-
-document.getElementById("cpu").innerHTML =
-navigator.hardwareConcurrency || "Unknown";
-
-
-
-// RAM
-
-document.getElementById("ram").innerHTML =
-(navigator.deviceMemory || "Unknown")+" GB";
-
-
-
-// Online
-
-document.getElementById("online").innerHTML =
-navigator.onLine ? "Yes":"No";
-
-
-}
-
-
-
-// -------------------------
-// IP Information
-// -------------------------
-
-function getIPInfo(){
+// ================= IP + Location =================
 
 
 fetch("https://ipapi.co/json/")
 
-
 .then(response=>response.json())
-
 
 .then(data=>{
 
@@ -220,190 +120,209 @@ document.getElementById("ip").innerHTML =
 data.ip;
 
 
-if(!gpsAvailable){
+document.getElementById("location").innerHTML =
+data.city+", "+data.country_name;
 
-displayLocation(
 
-data.latitude,
-data.longitude,
-"Approximate",
-"IP Location"
+document.getElementById("lat").innerHTML =
+data.latitude;
 
-);
+
+document.getElementById("lon").innerHTML =
+data.longitude;
+
+
+});
+
+
+
+
+// ================= OS Detection =================
+
+
+let ua = navigator.userAgent;
+
+
+let os="Unknown";
+
+
+if(/Windows/i.test(ua))
+    os="Windows";
+
+else if(/Android/i.test(ua))
+    os="Android";
+
+else if(/iPhone|iPad/i.test(ua))
+    os="iOS";
+
+else if(/Mac/i.test(ua))
+    os="MacOS";
+
+else if(/Linux/i.test(ua))
+    os="Linux";
+
+
+document.getElementById("os").innerHTML=os;
+
+
+
+
+// ================= Device Type =================
+
+
+let device="PC";
+
+
+if(/Mobi|Android/i.test(ua))
+    device="Mobile";
+
+else if(/Tablet/i.test(ua))
+    device="Tablet";
+
+
+document.getElementById("device").innerHTML=device;
+
+
+
+
+// ================= Browser =================
+
+
+let browser="Unknown";
+
+
+if(ua.includes("Chrome"))
+    browser="Chrome";
+
+else if(ua.includes("Firefox"))
+    browser="Firefox";
+
+else if(ua.includes("Safari"))
+    browser="Safari";
+
+
+document.getElementById("browser").innerHTML =
+browser;
+
+
+
+
+// ================= Screen =================
+
+
+document.getElementById("screen").innerHTML =
+screen.width+" x "+screen.height;
+
+
+
+
+// ================= CPU =================
+
+
+document.getElementById("cpu").innerHTML =
+navigator.hardwareConcurrency || "Unknown";
+
+
+
+
+// ================= RAM =================
+
+
+if(navigator.deviceMemory)
+
+document.getElementById("ram").innerHTML =
+navigator.deviceMemory+" GB (estimated)";
+
+else
+
+document.getElementById("ram").innerHTML =
+"Unavailable";
+
+
+
+
+
+// ================= Battery =================
+
+
+if(navigator.getBattery){
+
+
+navigator.getBattery()
+
+.then(function(battery){
+
+
+function updateBattery(){
+
+
+document.getElementById("battery").innerHTML =
+Math.round(battery.level*100)+"%";
+
 
 }
 
 
-})
+updateBattery();
 
 
-.catch(()=>{
+battery.addEventListener(
+"levelchange",
+updateBattery
+);
 
-document.getElementById("ip").innerHTML =
-"Unavailable";
 
 });
 
 
 }
 
-
-
-// -------------------------
-// GPS without asking
-// -------------------------
-
-let gpsAvailable=false;
-
-
-
-async function checkGPS(){
-
-
-if(navigator.permissions){
-
-
-try{
-
-
-let permission =
-await navigator.permissions.query(
-{name:"geolocation"}
-);
-
-
-
-if(permission.state==="granted"){
-
-
-gpsAvailable=true;
-
-getGPS();
-
-
-}
-
 else{
 
-
-getIPInfo();
-
-
-}
-
-
-}
-
-catch(e){
-
-getIPInfo();
-
-}
-
-
-}
-
-else{
-
-getIPInfo();
-
-}
-
+document.getElementById("battery").innerHTML =
+"Not supported";
 
 }
 
 
 
 
-function getGPS(){
+
+// ================= Device Model =================
 
 
-navigator.geolocation.getCurrentPosition(
+// Modern browsers hide this information
 
-function(pos){
-
-
-displayLocation(
-
-pos.coords.latitude,
-pos.coords.longitude,
-pos.coords.accuracy+" meters",
-"GPS"
-
-);
+if(navigator.userAgentData){
 
 
-},
+navigator.userAgentData.getHighEntropyValues(
+[
+"model",
+"platform",
+"architecture"
+]
+
+)
+
+.then(data=>{
 
 
-function(){
+if(data.model)
 
-getIPInfo();
+document.getElementById("model").innerHTML =
+data.model;
 
-},
+else
 
-
-{
-enableHighAccuracy:true,
-timeout:5000
-}
+document.getElementById("model").innerHTML =
+"Hidden by browser";
 
 
-);
-
-
-}
-
-
-
-
-// -------------------------
-// Display Location
-// -------------------------
-
-function displayLocation(lat,lon,acc,source){
-
-
-document.getElementById("source").innerHTML=
-source;
-
-
-document.getElementById("lat").innerHTML=
-lat;
-
-
-document.getElementById("lon").innerHTML=
-lon;
-
-
-document.getElementById("accuracy").innerHTML=
-acc;
-
-
-
-document.getElementById("status").innerHTML=
-"Complete";
-
-
-
-document.getElementById("mapLink").href =
-"https://www.google.com/maps?q="+lat+","+lon;
-
-
-
-document.getElementById("mapLink").innerHTML =
-"Open in Google Maps";
+});
 
 
 }
-
-
-
-// Start
-
-getDeviceInfo();
-
-checkGPS();
 
 
 </script>
